@@ -29,7 +29,7 @@ version= '{0}.{1}'.format(str(VERSION),str(build))
 
 def readme():
     """print long description"""
-    with open('README.rst') as f:
+    with open('README.md') as f:
         return f.read()
 
 
