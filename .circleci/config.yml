@@ -32,6 +32,7 @@ jobs:
           command: |
             python -m venv venv
             . venv/bin/activate
+            cd forumsentry
             pip install -r requirements.txt
 
       - save_cache:
@@ -44,6 +45,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
+            cd forumsentry
             python manage.py test
 
       - store_artifacts:
