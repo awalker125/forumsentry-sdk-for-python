@@ -70,6 +70,7 @@ jobs:
           name: create packages
           command: |
             make package
+            
 
       - run:
           name: upload to pypi

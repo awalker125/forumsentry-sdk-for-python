@@ -56,7 +56,7 @@ setup(
     author_email="awalker125@users.noreply.github.com",
     license="MIT",
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 5 - Development",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
         "License :: OSI Approved :: MIT License",
