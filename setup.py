@@ -67,7 +67,7 @@ setup(
         "Programming Language :: Python :: 2.7"
     ],
     keywords='forumsentry automation api sdk',
-    packages=find_packages(),
+    packages=['forumsentry'],
     install_requires=['futures'],
     python_requires='>=2.7',
     include_package_data=True,
