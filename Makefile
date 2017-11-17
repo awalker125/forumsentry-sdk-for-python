@@ -9,10 +9,12 @@ help:
 
 clean:
 	${INFO} "clean..."
+	pwd
 	rm -rf dist/*
 
 dev:
 	${INFO} "dev..."
+	pwd
 	pip install coverage
 	pip install codecov
 	pip install pylint
@@ -24,15 +26,18 @@ dev:
 
 docs:
 	${INFO} "docs..."
+	pwd
 	$(MAKE) -C docs html
 
 package:
 	${INFO} "package..."
+	pwd
 	python setup.py sdist
 	python setup.py bdist_wheel
 
 test:
 	${INFO} "test..."
+	pwd
 	coverage run -m unittest discover
 	coverage html
 	
