@@ -1,12 +1,12 @@
 forumsentry
 ===========
 
-.. image:: https://circleci.com/gh/awalker125/https://github.com/awalker125/forumsentry-sdk-for-python.svg?style=shield
-    :target: https://circleci.com/gh/awalker125/https://github.com/awalker125/forumsentry-sdk-for-python
+.. image:: https://circleci.com/gh/awalker125/forumsentry-sdk-for-python.svg?style=shield
+    :target: https://circleci.com/gh/awalker125/forumsentry-sdk-for-python
     :alt: CI Status
 
-.. image:: https://codecov.io/gh/awalker125/https://github.com/awalker125/forumsentry-sdk-for-python/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/awalker125/https://github.com/awalker125/forumsentry-sdk-for-python
+.. image:: https://codecov.io/gh/awalker125/forumsentry-sdk-for-python/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/awalker125/forumsentry-sdk-for-python
     :alt: Code Coverage
 
 .. image:: https://badge.fury.io/py/circleci.svg
