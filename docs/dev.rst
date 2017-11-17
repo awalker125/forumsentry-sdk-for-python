@@ -36,6 +36,27 @@ Code Coverage
 
 This project attempts to have 100% code coverage. when you run ``make test`` code coverage is automatically ran. You can view the code coverage report locally by opening up the index.html file in the ``htmlcov`` directory that gets created when you run ``make test``. 
 
+
+Swagger
+------------
+
+The forumsentry provide swagger documentation. A tools directory is provided with a script to generate python models from the swagger api.
+
+To run this
+	
+.. code:: bash
+
+	cd tools
+	export REST_API_HOST=xxxxxxxxxxxxx
+	export REST_API_USER=xxxxxxxxxxxxx
+	export REST_API_PASSWORD=xxxxxxxxxxx
+	./generate_code.sh
+
+This will place the models swagger generated code in a folder _build
+
+* Note: _build is listed in the .gitignore file. For now you will need to manually merge/extract anything useful from there. *
+
+
 Documentation
 -------------
 
