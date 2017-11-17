@@ -1,3 +1,4 @@
 eclipse.preferences.version=1
 encoding//docs/conf.py=utf-8
 encoding//forumsentry/models/xml_policy.py=utf-8
+encoding//tests/generated/test_active_mq_listener_policy.py=utf-8
