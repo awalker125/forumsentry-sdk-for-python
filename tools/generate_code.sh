@@ -53,4 +53,5 @@ java -jar swagger-codegen-cli-2.2.1.jar generate \
 	--output ${WHEREAMI}/_build \
 	--config ${WHEREAMI}/config.json \
 	-i ${REST_API_PROTOCOL}://${REST_API_HOST}:${REST_API_PORT}/restApi/v1.0/api-docs/ \
-	-l python --auth "Authorization: Basic ${AUTH}"
+	-l python --auth "Authorization: Basic ${AUTH}" \
+	--template-dir ${WHEREAMI}/templates/python
