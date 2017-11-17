@@ -22,6 +22,7 @@ dev:
 	pip install sphinx
 	pip install sphinx-autobuild
 	pip install sphinx_rtd_theme
+	pip install mock
 	pip install -e .
 
 docs:
