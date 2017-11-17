@@ -13,8 +13,8 @@ forumsentry
     :target: https://badge.fury.io/py/forumsentry
     :alt: PyPi PAckage
 
-.. image:: https://readthedocs.org/projects/forumsentry/badge/?version=latest
-    :target: http://forumsentry.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/forumsentry-sdk-for-python/badge/?version=latest
+    :target: http://forumsentry-sdk-for-python.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
 This project provides an sdk for configuring a forum sentry device via the REST api.
