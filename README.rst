@@ -9,12 +9,12 @@ forumsentry
     :target: https://codecov.io/gh/awalker125/forumsentry-sdk-for-python
     :alt: Code Coverage
 
-.. image:: https://badge.fury.io/py/circleci.svg
-    :target: https://badge.fury.io/py/circleci
+.. image:: https://badge.fury.io/py/forumsentry.svg
+    :target: https://badge.fury.io/py/forumsentry
     :alt: PyPi PAckage
 
-.. image:: https://readthedocs.org/projects/circlecipy/badge/?version=latest
-    :target: http://circlecipy.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/forumsentry/badge/?version=latest
+    :target: http://forumsentry.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
 This project provides an sdk for configuring a forum sentry device via the REST api.
