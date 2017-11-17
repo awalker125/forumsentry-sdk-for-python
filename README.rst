@@ -1,0 +1,66 @@
+forumsentry
+===========
+
+.. image:: https://circleci.com/gh/awalker125/https://github.com/awalker125/forumsentry-sdk-for-python.svg?style=shield
+    :target: https://circleci.com/gh/awalker125/https://github.com/awalker125/forumsentry-sdk-for-python
+    :alt: CI Status
+
+.. image:: https://codecov.io/gh/awalker125/https://github.com/awalker125/forumsentry-sdk-for-python/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/awalker125/https://github.com/awalker125/forumsentry-sdk-for-python
+    :alt: Code Coverage
+
+.. image:: https://badge.fury.io/py/circleci.svg
+    :target: https://badge.fury.io/py/circleci
+    :alt: PyPi PAckage
+
+.. image:: https://readthedocs.org/projects/circlecipy/badge/?version=latest
+    :target: http://circlecipy.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+This project provides an sdk for configuring a forum sentry device via the REST api.
+
+This project is not an official forum sentry project and is not supported by them in anyway.
+
+As per the LICENSE
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+Requirements.
+-----------------
+
+Python 2.7 and 3.4+
+
+Installation & Usage
+-----------------
+
+.. code:: bash
+
+	pip install forumsentry
+
+
+Then import the package:
+
+.. code:: bash
+	
+	python
+	import forumsentry
+
+
+
+
+
+
+
+Author
+-----------------
+
+	awalker125
+	automation1002
+	partis
