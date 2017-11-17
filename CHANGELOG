@@ -1,0 +1,19 @@
+Changelog
+=========
+
+Here you can see the full list of changes between each forumsentry-sdk-for-python release.
+
+
+Version 0.1
+-------------
+
+Released on Novemeber 17, 2017
+
+- Basic project setup.
+
+    - Continuous Integration with CircleCI
+    - Packaging and uploading to PyPI
+    - Code Coverage
+    - Testing with unittest
+
+- Basic Documentation in place

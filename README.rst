@@ -43,7 +43,8 @@ Then import the package:
 	import forumsentry
 
 
-
+* You can read the `general documentation <https://forumsentry-sdk-for-python.readthedocs.io/en/latest/?badge=latest>`_ for more information about using circleci.py.
+* If you are interesting in hacking on this library, check out the `developer documentation <https://forumsentry-sdk-for-python.readthedocs.io/en/latest/dev.html>`_. 
 
 
 
