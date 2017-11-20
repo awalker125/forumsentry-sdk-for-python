@@ -56,6 +56,22 @@ This will place the models swagger generated code in a folder _build
 
 * Note: _build is listed in the .gitignore file. For now you will need to manually merge/extract anything useful from there. *
 
+If you are 100% sure that no manual edits have been made to the code in the forumsentry_api or tests/forumsentry_api folder you can use the update flag to automatically copy the generate templates into the main project. This may be useful if/when forum release new versions of the REST API.
+
+
+.. code:: bash
+
+	cd tools
+	export REST_API_HOST=xxxxxxxxxxxxx
+	export REST_API_USER=xxxxxxxxxxxxx
+	export REST_API_PASSWORD=xxxxxxxxxxx
+	./generate_code.sh update
+	
+* Note: this will rm -rf  forumsentry-sdk-for-python/forumsentry_api/ and forumsentry-sdk-for-python/tests/forumsentry_api/
+
+If you need to make changes to the generate code first see if it can be made in the templates under tools/templates/python.
+
+This will have the advantage of persisting on a regen above in future.	
 
 Documentation
 -------------
