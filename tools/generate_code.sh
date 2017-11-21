@@ -48,17 +48,24 @@ rm -rf ${WHEREAMI}/_build
 
 mkdir ${WHEREAMI}/_build
 
+# java -jar \
+	# -Dmodels -DmodelDocs=false \
+	# -Dapis -DapiDocs=false \
+	# -DsupportingFiles=configuration.py,__init__.py,rest.py,api_client.py \
+	# swagger-codegen-cli-2.2.1.jar generate \
+	# --output ${WHEREAMI}/_build \
+	# --config ${WHEREAMI}/config.json \
+	# -i ${REST_API_PROTOCOL}://${REST_API_HOST}:${REST_API_PORT}/restApi/v1.0/api-docs/ \
+	# -l python --auth "Authorization: Basic ${AUTH}" \
+	# --template-dir ${WHEREAMI}/templates/python
+
 java -jar \
-	-Dmodels -DmodelDocs=false \
-	-Dapis -DapiDocs=false \
-	-DsupportingFiles=configuration.py,__init__.py,rest.py,api_client.py \
 	swagger-codegen-cli-2.2.1.jar generate \
 	--output ${WHEREAMI}/_build \
 	--config ${WHEREAMI}/config.json \
 	-i ${REST_API_PROTOCOL}://${REST_API_HOST}:${REST_API_PORT}/restApi/v1.0/api-docs/ \
 	-l python --auth "Authorization: Basic ${AUTH}" \
 	--template-dir ${WHEREAMI}/templates/python
-	
 	
 if [ "$1" == "update" ]
 then

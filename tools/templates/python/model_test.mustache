@@ -4,17 +4,19 @@
 
 from __future__ import absolute_import
 
+import os
+import sys
 import unittest
 
 {{#models}}
 {{#model}}
 import {{packageName}}
-from {{modelPackage}}.{{classFilename}} import {{classname}}  # noqa: E501
 from {{packageName}}.rest import ApiException
+from {{packageName}}.models.{{classFilename}} import {{classname}}
 
 
 class Test{{classname}}(unittest.TestCase):
-    """{{classname}} unit test stubs"""
+    """ {{classname}} unit test stubs """
 
     def setUp(self):
         pass
@@ -23,10 +25,10 @@ class Test{{classname}}(unittest.TestCase):
         pass
 
     def test{{classname}}(self):
-        """Test {{classname}}"""
-        # FIXME: construct object with mandatory attributes with example values
-        # model = {{packageName}}.models.{{classFilename}}.{{classname}}()  # noqa: E501
-        pass
+        """
+        Test {{classname}}
+        """
+        model = {{packageName}}.models.{{classFilename}}.{{classname}}()
 
 {{/model}}
 {{/models}}
