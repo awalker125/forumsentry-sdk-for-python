@@ -16,7 +16,7 @@ class Helper(object):
         '''
         
     def stark(self):
-        return "Winter is comming"
+        return "Winter is coming"
     
     def lanister(self):
         return "A Lanister always pays his debts"
