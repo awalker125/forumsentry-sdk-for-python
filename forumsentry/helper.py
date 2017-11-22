@@ -10,7 +10,7 @@ class Helper(object):
     '''
 
 
-    def __init__(self, params):
+    def __init__(self, params=None):
         '''
         Constructor
         '''
