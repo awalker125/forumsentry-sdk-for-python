@@ -8,7 +8,7 @@ from setuptools import find_packages
 #Change this on major/minor version number change. You must create a git tag at the same tag called with the same value
 # git tag "0.1"
 # git push --tags
-VERSION = "0.3"
+VERSION = "0.4"
 
 
 def __path(filename):
@@ -56,14 +56,14 @@ setup(
     author_email="awalker125@users.noreply.github.com",
     license="MIT",
     classifiers=[
-        "Development Status :: 5 - Development",
+        "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Build Tools",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        "Topic :: Internet",
+        "Topic :: Utilities",
         "Programming Language :: Python :: 2.7"
     ],
     keywords='forumsentry automation api sdk',
