@@ -8,14 +8,14 @@ from setuptools import find_packages
 #Change this on major/minor version number change. You must create a git tag at the same tag called with the same value
 # git tag "0.1"
 # git push --tags
-VERSION = "0.1"
+VERSION = "0.2"
 
 
 def __path(filename):
     return os.path.join(os.path.dirname(__file__),filename)
 
 #Change this on major version number
-major_minor_version = 1.0
+#major_minor_version = 1.0
 #This will be overriden if build.info exists
 build = os.getenv('CIRCLE_BUILD_NUM',0)
 
