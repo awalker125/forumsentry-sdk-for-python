@@ -28,7 +28,7 @@ Requirements.
 Python 2.7 and 3.4+
 
 Installation & Usage
------------------
+--------------------
 
 .. code:: bash
 
@@ -52,6 +52,6 @@ Then import the package:
 Author
 -----------------
 
-	awalker125
-	automation1002
-	partis
+* awalker125
+* automation1002
+* partis
