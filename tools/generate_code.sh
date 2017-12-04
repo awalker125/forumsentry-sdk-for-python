@@ -1,7 +1,10 @@
 #!/bin/bash
 
+set -x 
 
-export SWAGGER_CODEGEN_VERSION=2.2.1
+export SWAGGER_CODEGEN_VERSION=2.2.3
+#export SWAGGER_CODEGEN_VERSION=2.2.3
+
 
 export WHEREAMI=$(dirname $0)
 
@@ -60,12 +63,27 @@ mkdir ${WHEREAMI}/_build
 	# --template-dir ${WHEREAMI}/templates/python
 
 java -jar \
-	swagger-codegen-cli-2.2.1.jar generate \
+	-Dmodels -DmodelDocs=false \
+	-DsupportingFiles=configuration.py,__init__.py,rest.py,api_client.py \
+	swagger-codegen-cli-${SWAGGER_CODEGEN_VERSION}.jar generate \
 	--output ${WHEREAMI}/_build \
 	--config ${WHEREAMI}/config.json \
-	-i ${REST_API_PROTOCOL}://${REST_API_HOST}:${REST_API_PORT}/restApi/v1.0/api-docs/ \
+	-i ${REST_API_PROTOCOL}://${REST_API_HOST}:${REST_API_PORT}/restApi/v1.0/api-docs \
 	-l python --auth "Authorization: Basic ${AUTH}" \
-	--template-dir ${WHEREAMI}/templates/python
+	--template-dir ${WHEREAMI}/templates/python	
+
+
+	
+# java -jar \
+	# swagger-codegen-cli-${SWAGGER_CODEGEN_VERSION}.jar generate \
+	# --output ${WHEREAMI}/_build \
+	# --config ${WHEREAMI}/config.json \
+	# -i ${REST_API_PROTOCOL}://${REST_API_HOST}:${REST_API_PORT}/restApi/v1.0/api-docs \
+	# -l python --auth "Authorization: Basic ${AUTH}" \
+	# --template-dir ${WHEREAMI}/templates/python
+
+
+
 	
 if [ "$1" == "update" ]
 then
