@@ -16,7 +16,6 @@ import unittest
 
 import forumsentry_api
 from forumsentry_api.models.http_listener_policy import HttpListenerPolicy  # noqa: E501
-from forumsentry_api.rest import ApiException
 
 
 class TestHttpListenerPolicy(unittest.TestCase):

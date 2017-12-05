@@ -16,7 +16,6 @@ import unittest
 
 import forumsentry_api
 from forumsentry_api.models.http_remote_policy import HttpRemotePolicy  # noqa: E501
-from forumsentry_api.rest import ApiException
 
 
 class TestHttpRemotePolicy(unittest.TestCase):

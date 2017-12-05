@@ -10,7 +10,7 @@ import unittest
 {{#model}}
 import {{packageName}}
 from {{modelPackage}}.{{classFilename}} import {{classname}}  # noqa: E501
-from {{packageName}}.rest import ApiException
+#from {{packageName}}.rest import ApiException
 
 
 class Test{{classname}}(unittest.TestCase):
