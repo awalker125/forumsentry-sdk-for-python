@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.sun_mq_remote_policy1 import SunMqRemotePolicy1  # noqa: E501
+from .sun_mq_remote_policy1 import SunMqRemotePolicy1  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

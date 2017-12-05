@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.sftp_policy1 import SftpPolicy1  # noqa: E501
+from .sftp_policy1 import SftpPolicy1  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.html_policies import HtmlPolicies  # noqa: E501
+from .html_policies import HtmlPolicies  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

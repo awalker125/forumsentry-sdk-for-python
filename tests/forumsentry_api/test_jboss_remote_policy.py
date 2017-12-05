@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.jboss_remote_policy import JbossRemotePolicy  # noqa: E501
+from .jboss_remote_policy import JbossRemotePolicy  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

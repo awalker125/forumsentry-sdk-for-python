@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.task_list import TaskList  # noqa: E501
+from .task_list import TaskList  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

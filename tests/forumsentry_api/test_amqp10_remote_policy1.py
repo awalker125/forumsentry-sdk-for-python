@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.amqp10_remote_policy1 import Amqp10RemotePolicy1  # noqa: E501
+from .amqp10_remote_policy1 import Amqp10RemotePolicy1  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

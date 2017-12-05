@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.json_policies import JsonPolicies  # noqa: E501
+from .json_policies import JsonPolicies  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

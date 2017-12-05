@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.ssl_termination_policy import SslTerminationPolicy  # noqa: E501
+from .ssl_termination_policy import SslTerminationPolicy  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

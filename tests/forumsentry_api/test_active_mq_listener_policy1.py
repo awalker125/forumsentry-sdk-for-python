@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.active_mq_listener_policy1 import ActiveMqListenerPolicy1  # noqa: E501
+from .active_mq_listener_policy1 import ActiveMqListenerPolicy1  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

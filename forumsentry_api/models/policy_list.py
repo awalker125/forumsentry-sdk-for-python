@@ -15,7 +15,7 @@ import re  # noqa: F401
 
 import six
 
-from forumsentry_api.models.policy import Policy  # noqa: F401,E501
+forumsentry_api/models.Policy  # noqa: F401,E501
 
 
 class PolicyList(object):

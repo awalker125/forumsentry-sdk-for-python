@@ -15,7 +15,7 @@ import re  # noqa: F401
 
 import six
 
-from forumsentry_api.models.json_array import JSONArray  # noqa: F401,E501
+forumsentry_api/models.JSONArray  # noqa: F401,E501
 
 
 class WsdlPolicyUpgrade(object):

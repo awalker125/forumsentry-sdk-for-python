@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.tib_listener_policy import TibListenerPolicy  # noqa: E501
+from .tib_listener_policy import TibListenerPolicy  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 

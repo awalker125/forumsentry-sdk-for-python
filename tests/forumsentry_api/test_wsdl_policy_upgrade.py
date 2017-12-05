@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import unittest
 
 import forumsentry_api
-from forumsentry_api.models.wsdl_policy_upgrade import WsdlPolicyUpgrade  # noqa: E501
+from .wsdl_policy_upgrade import WsdlPolicyUpgrade  # noqa: E501
 from forumsentry_api.rest import ApiException
 
 
