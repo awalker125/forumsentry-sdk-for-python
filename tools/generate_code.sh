@@ -77,7 +77,6 @@ java -jar \
 
 
 
-
 	
 if [ "$1" == "update" ]
 then
