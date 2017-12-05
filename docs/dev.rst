@@ -38,7 +38,7 @@ This project attempts to have 100% code coverage. when you run ``make test`` cod
 
 
 Swagger
-------------
+-------
 
 The forumsentry provide swagger documentation. A tools directory is provided with a script to generate python models from the swagger api.
 
@@ -71,7 +71,9 @@ If you are 100% sure that no manual edits have been made to the code in the foru
 
 If you need to make changes to the generate code first see if it can be made in the templates under tools/templates/python.
 
-This will have the advantage of persisting on a regen above in future.	
+This will have the advantage of persisting on a regen above in future.
+
+* Note: with version 8.7 of the forum there are exceptions on code gen on the api classes. With version 2.3.0-20171129.164117-307 this does complete and generate most classes.	
 
 Documentation
 -------------
