@@ -1,13 +1,27 @@
 API
-==========
+===
 
 .. note::
     Unless otherwise noted all arguments are of the :class:`str` type.
 
-helper Object
----------------
+forumsentry
+-----------
 
-.. automodule:: forumsentry.models.xml_policy
+.. automodule:: forumsentry
     :members:
     :private-members:
 
+
+forumsentry.api
+---------------
+
+.. automodule:: forumsentry.api
+    :members:
+    :private-members:
+    
+forumsentry.helper
+------------------
+
+.. automodule:: forumsentry.helper
+    :members:
+    :private-members:

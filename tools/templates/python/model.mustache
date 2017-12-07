@@ -68,7 +68,7 @@ class {{classname}}(object):
 {{/required}}
 {{^required}}
         if {{name}} is not None:
-            self.{{name}} = {{name}}
+            self._{{name}} = {{name}}
 {{/required}}
 {{/vars}}
 

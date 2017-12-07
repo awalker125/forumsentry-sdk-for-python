@@ -2,9 +2,9 @@ Quickstart
 ==========
 
 Installation
--------------
+------------
 
-You can install the latest version of circleci.py with: 
+You can install the latest version of forumsentry with: 
 
 ::
 

@@ -13,6 +13,8 @@
 from __future__ import absolute_import
 
 import unittest
+import string
+import random
 
 import forumsentry_api
 from forumsentry_api.models.http_listener_policy import HttpListenerPolicy  # noqa: E501
@@ -21,7 +23,11 @@ from forumsentry_api.models.http_listener_policy import HttpListenerPolicy  # no
 class TestHttpListenerPolicy(unittest.TestCase):
     """HttpListenerPolicy unit test stubs"""
 
+    def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
+
     def setUp(self):
+        self._test_id = self.id_generator()
         pass
 
     def tearDown(self):
@@ -30,7 +36,10 @@ class TestHttpListenerPolicy(unittest.TestCase):
     def testHttpListenerPolicy(self):
         """Test HttpListenerPolicy"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = forumsentry_api.models.http_listener_policy.HttpListenerPolicy()  # noqa: E501
+        model = HttpListenerPolicy()  # noqa: E501
+        model.name = self._test_id
+        
+        
         pass
 
 

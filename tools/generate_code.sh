@@ -57,7 +57,7 @@ mkdir ${WHEREAMI}/_build
 
 java -jar \
 	-Dmodels -DmodelDocs=false \
-	-DsupportingFiles=__init__.py \
+	-DsupportingFiles=configuration.py,__init__.py,rest.py,api_client.py \
 	swagger-codegen-cli-${SWAGGER_CODEGEN_VERSION}.jar generate \
 	--output ${WHEREAMI}/_build \
 	--config ${WHEREAMI}/config.json \
