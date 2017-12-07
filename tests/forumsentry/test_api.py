@@ -18,9 +18,6 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-
-    def testhelloWorld(self):
-        self.assertEqual("helloWorld", self._api.helloWorld())
     
 
 

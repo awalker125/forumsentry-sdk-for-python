@@ -22,10 +22,10 @@ jobs:
             - "venv"
 
       - run:
-          name: run tests
+          name: run unit tests
           command: |
             . venv/bin/activate
-            make test
+            make unit
             codecov
 
       - store_artifacts:

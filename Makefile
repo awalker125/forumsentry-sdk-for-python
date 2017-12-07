@@ -1,4 +1,4 @@
-.PHONY: help clean dev docs package test
+.PHONY: help clean dev docs package test unit int
 
 help:
 	@echo "This project assumes that an active Python virtualenv is present."
@@ -42,8 +42,19 @@ test:
 	pwd
 	coverage run -m unittest discover
 	coverage html
-	
-	
+
+unit:
+	${INFO} "unit..."
+	pwd
+	coverage run -m unittest discover -s tests/forumsentry_api
+	coverage html	
+
+int:
+	${INFO} "int..."
+	pwd
+	coverage run -m unittest discover -s tests/forumsentry
+	coverage html
+			
 # Cosmetics
 YELLOW := "\e[1;33m"
 NC := "\e[0m"
