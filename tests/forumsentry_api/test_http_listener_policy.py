@@ -11,6 +11,7 @@ from __future__ import absolute_import
 import unittest
 import string
 import random
+import copy
 
 import forumsentry_api
 from forumsentry_api.models.http_listener_policy import HttpListenerPolicy  # noqa: E501
@@ -45,7 +46,7 @@ class TestHttpListenerPolicy(unittest.TestCase):
         self._model.listener_ssl_policy = self._unique_id
         self._model.username_parameter = self._unique_id
         self._model.enabled = self._unique_id
-        self._model.interface = "WAN"
+        self._model.interface = self._unique_id
         self._model.error_template = self._unique_id
         self._model.listener_host = self._unique_id
         self._model.listener_ssl_enabled = self._unique_id
@@ -133,9 +134,9 @@ class TestHttpListenerPolicy(unittest.TestCase):
         self.assertEqual(self._model.enabled,new_unique_id)
         self.assertNotEqual(self._model.enabled,self._unique_id)
          
-        self._model.interface = "LAN"
-        self.assertEqual(self._model.interface,"LAN")
-        self.assertNotEqual(self._model.interface,"WAN")
+        self._model.interface = new_unique_id
+        self.assertEqual(self._model.interface,new_unique_id)
+        self.assertNotEqual(self._model.interface,self._unique_id)
          
         self._model.error_template = new_unique_id
         self.assertEqual(self._model.error_template,new_unique_id)
@@ -161,6 +162,42 @@ class TestHttpListenerPolicy(unittest.TestCase):
         self.assertEqual(self._model.use_kerberos_authentication,new_unique_id)
         self.assertNotEqual(self._model.use_kerberos_authentication,self._unique_id)
          
+
+
+    def testHttpListenerPolicy_compare(self):
+        """Test HttpListenerPolicy"""
+        
+        
+        new_unique_id = self.id_generator()
+        
+        model_copy = copy.deepcopy(self._model)
+        
+        #check out compare works
+        self.assertEqual(model_copy,self._model)
+        
+        #change something on the model
+        model_copy.name = new_unique_id 
+        
+        #check our compare detects they arent equal
+        self.assertNotEqual(model_copy,self._model)
+
+
+    def testHttpListenerPolicy_to_dict(self):
+        """Test HttpListenerPolicy"""
+        
+        to_dict_object = self._model.to_dict()        
+
+        self.assertTrue(isinstance(to_dict_object,dict))
+        
+    def testHttpListenerPolicy_to_str(self):
+        """Test HttpListenerPolicy"""
+        
+        to_str_object = self._model.to_str()        
+
+        self.assertTrue(isinstance(to_str_object,str))
+        
+
+
 
 
 if __name__ == '__main__':

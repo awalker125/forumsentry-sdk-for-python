@@ -7,6 +7,7 @@ from __future__ import absolute_import
 import unittest
 import string
 import random
+import copy
 
 {{#models}}
 {{#model}}
@@ -53,6 +54,42 @@ class Test{{classname}}(unittest.TestCase):
         self.assertNotEqual(self._model.{{name}},self._unique_id)
          
 		{{/vars}}
+
+
+    def test{{classname}}_compare(self):
+        """Test {{classname}}"""
+        
+        
+        new_unique_id = self.id_generator()
+        
+        model_copy = copy.deepcopy(self._model)
+        
+        #check out compare works
+        self.assertEqual(model_copy,self._model)
+        
+        #change something on the model
+        model_copy.name = new_unique_id 
+        
+        #check our compare detects they arent equal
+        self.assertNotEqual(model_copy,self._model)
+
+
+    def test{{classname}}_to_dict(self):
+        """Test {{classname}}"""
+        
+        to_dict_object = self._model.to_dict()        
+
+        self.assertTrue(isinstance(to_dict_object,dict))
+        
+    def test{{classname}}_to_str(self):
+        """Test {{classname}}"""
+        
+        to_str_object = self._model.to_str()        
+
+        self.assertTrue(isinstance(to_str_object,str))
+        
+
+
 
 {{/model}}
 {{/models}}

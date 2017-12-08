@@ -11,6 +11,7 @@ from __future__ import absolute_import
 import unittest
 import string
 import random
+import copy
 
 import forumsentry_api
 from forumsentry_api.models.http_remote_policy import HttpRemotePolicy  # noqa: E501
@@ -38,7 +39,7 @@ class TestHttpRemotePolicy(unittest.TestCase):
         self._model.tcp_read_timeout = self._unique_id
         self._model.name = self._unique_id
         self._model.enable_ssl = self._unique_id
-        self._model.remote_authentication = "NONE"
+        self._model.remote_authentication = self._unique_id
         self._model.remote_port = self._unique_id
         self._model.enabled = self._unique_id
         self._model.remote_server = self._unique_id
@@ -96,9 +97,9 @@ class TestHttpRemotePolicy(unittest.TestCase):
         self.assertEqual(self._model.enable_ssl,new_unique_id)
         self.assertNotEqual(self._model.enable_ssl,self._unique_id)
          
-        self._model.remote_authentication = "DYNAMIC"
-        self.assertEqual(self._model.remote_authentication,"DYNAMIC")
-        self.assertNotEqual(self._model.remote_authentication,"NONE")
+        self._model.remote_authentication = new_unique_id
+        self.assertEqual(self._model.remote_authentication,new_unique_id)
+        self.assertNotEqual(self._model.remote_authentication,self._unique_id)
          
         self._model.remote_port = new_unique_id
         self.assertEqual(self._model.remote_port,new_unique_id)
@@ -116,6 +117,42 @@ class TestHttpRemotePolicy(unittest.TestCase):
         self.assertEqual(self._model.process_response,new_unique_id)
         self.assertNotEqual(self._model.process_response,self._unique_id)
          
+
+
+    def testHttpRemotePolicy_compare(self):
+        """Test HttpRemotePolicy"""
+        
+        
+        new_unique_id = self.id_generator()
+        
+        model_copy = copy.deepcopy(self._model)
+        
+        #check out compare works
+        self.assertEqual(model_copy,self._model)
+        
+        #change something on the model
+        model_copy.name = new_unique_id 
+        
+        #check our compare detects they arent equal
+        self.assertNotEqual(model_copy,self._model)
+
+
+    def testHttpRemotePolicy_to_dict(self):
+        """Test HttpRemotePolicy"""
+        
+        to_dict_object = self._model.to_dict()        
+
+        self.assertTrue(isinstance(to_dict_object,dict))
+        
+    def testHttpRemotePolicy_to_str(self):
+        """Test HttpRemotePolicy"""
+        
+        to_str_object = self._model.to_str()        
+
+        self.assertTrue(isinstance(to_str_object,str))
+        
+
+
 
 
 if __name__ == '__main__':
