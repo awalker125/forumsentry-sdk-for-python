@@ -5,6 +5,8 @@
 from __future__ import absolute_import
 
 import unittest
+import string
+import random
 
 {{#models}}
 {{#model}}
@@ -16,17 +18,41 @@ from {{modelPackage}}.{{classFilename}} import {{classname}}  # noqa: E501
 class Test{{classname}}(unittest.TestCase):
     """{{classname}} unit test stubs"""
 
+    def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
+
     def setUp(self):
-        pass
+        # FIXME: update assignements for none string types e.g boolean and int
+        self._unique_id = self.id_generator()
+        self._model = {{classname}}()  # noqa: E501
+        
+        {{#vars}}{{#-first}}
+		{{/-first}}
+        self._model.{{name}} = self._unique_id
+		{{/vars}}
 
     def tearDown(self):
         pass
 
     def test{{classname}}(self):
         """Test {{classname}}"""
-        # FIXME: construct object with mandatory attributes with example values
-        # model = {{packageName}}.models.{{classFilename}}.{{classname}}()  # noqa: E501
-        pass
+        
+        model = {{classname}}()  # noqa: E501
+        self.assertTrue(isinstance(model, {{classname}}))
+        
+    def test{{classname}}_properties(self):
+        """Test {{classname}}"""
+        # FIXME: update assignements for none string types e.g boolean and int
+        
+        new_unique_id = self.id_generator()
+        
+        {{#vars}}{{#-first}}
+		{{/-first}}
+        self._model.{{name}} = new_unique_id
+        self.assertEqual(self._model.{{name}},new_unique_id)
+        self.assertNotEqual(self._model.{{name}},self._unique_id)
+         
+		{{/vars}}
 
 {{/model}}
 {{/models}}
