@@ -39,7 +39,7 @@ class TestHttpRemotePolicy(unittest.TestCase):
         self._model.tcp_read_timeout = self._unique_id
         self._model.name = self._unique_id
         self._model.enable_ssl = self._unique_id
-        self._model.remote_authentication = self._unique_id
+        self._model.remote_authentication = "NONE"
         self._model.remote_port = self._unique_id
         self._model.enabled = self._unique_id
         self._model.remote_server = self._unique_id
@@ -53,6 +53,21 @@ class TestHttpRemotePolicy(unittest.TestCase):
         
         model = HttpRemotePolicy()  # noqa: E501
         self.assertTrue(isinstance(model, HttpRemotePolicy))
+
+    def testHttpRemotePolicy_constructor(self):
+        """Test HttpRemotePolicy"""
+        # FIXME: update assignements for none string types e.g boolean and int
+        
+        model = HttpRemotePolicy(use_basic_auth=None, proxy_policy=None, ssl_initiation_policy=None, tcp_connection_timeout=None, http_authentication_user_policy=None, use_chunking=None, tcp_read_timeout=None, name=None, enable_ssl=None, remote_authentication=None, remote_port=None, enabled=None, remote_server=None, process_response=None)  # noqa: E501
+        self.assertTrue(isinstance(model, HttpRemotePolicy))
+
+    def testHttpRemotePolicy_constructor_none_default(self):
+        """Test HttpRemotePolicy"""
+        # FIXME: update assignements for none string types e.g boolean and int
+        
+        model = HttpRemotePolicy(use_basic_auth=self._unique_id, proxy_policy=self._unique_id, ssl_initiation_policy=self._unique_id, tcp_connection_timeout=self._unique_id, http_authentication_user_policy=self._unique_id, use_chunking=self._unique_id, tcp_read_timeout=self._unique_id, name=self._unique_id, enable_ssl=self._unique_id, remote_authentication=self._unique_id, remote_port=self._unique_id, enabled=self._unique_id, remote_server=self._unique_id, process_response=self._unique_id)  # noqa: E501
+        self.assertTrue(isinstance(model, HttpRemotePolicy))
+
         
     def testHttpRemotePolicy_properties(self):
         """Test HttpRemotePolicy"""
@@ -97,8 +112,8 @@ class TestHttpRemotePolicy(unittest.TestCase):
         self.assertEqual(self._model.enable_ssl,new_unique_id)
         self.assertNotEqual(self._model.enable_ssl,self._unique_id)
          
-        self._model.remote_authentication = new_unique_id
-        self.assertEqual(self._model.remote_authentication,new_unique_id)
+        self._model.remote_authentication = "NONE"
+        self.assertEqual(self._model.remote_authentication,"NONE")
         self.assertNotEqual(self._model.remote_authentication,self._unique_id)
          
         self._model.remote_port = new_unique_id

@@ -40,6 +40,21 @@ class Test{{classname}}(unittest.TestCase):
         
         model = {{classname}}()  # noqa: E501
         self.assertTrue(isinstance(model, {{classname}}))
+
+    def test{{classname}}_constructor(self):
+        """Test {{classname}}"""
+        # FIXME: update assignements for none string types e.g boolean and int
+        
+        model = {{classname}}({{#vars}}{{name}}={{#defaultValue}}{{{defaultValue}}}{{/defaultValue}}{{^defaultValue}}None{{/defaultValue}}{{^-last}}, {{/-last}}{{/vars}})  # noqa: E501
+        self.assertTrue(isinstance(model, {{classname}}))
+
+    def test{{classname}}_constructor_none_default(self):
+        """Test {{classname}}"""
+        # FIXME: update assignements for none string types e.g boolean and int
+        
+        model = {{classname}}({{#vars}}{{name}}=self._unique_id{{^-last}}, {{/-last}}{{/vars}})  # noqa: E501
+        self.assertTrue(isinstance(model, {{classname}}))
+
         
     def test{{classname}}_properties(self):
         """Test {{classname}}"""

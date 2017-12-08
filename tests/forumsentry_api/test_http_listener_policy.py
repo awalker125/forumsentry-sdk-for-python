@@ -46,7 +46,7 @@ class TestHttpListenerPolicy(unittest.TestCase):
         self._model.listener_ssl_policy = self._unique_id
         self._model.username_parameter = self._unique_id
         self._model.enabled = self._unique_id
-        self._model.interface = self._unique_id
+        self._model.interface = "WAN"
         self._model.error_template = self._unique_id
         self._model.listener_host = self._unique_id
         self._model.listener_ssl_enabled = self._unique_id
@@ -62,6 +62,21 @@ class TestHttpListenerPolicy(unittest.TestCase):
         
         model = HttpListenerPolicy()  # noqa: E501
         self.assertTrue(isinstance(model, HttpListenerPolicy))
+
+    def testHttpListenerPolicy_constructor(self):
+        """Test HttpListenerPolicy"""
+        # FIXME: update assignements for none string types e.g boolean and int
+        
+        model = HttpListenerPolicy(use_cookie_authentication=None, use_basic_authentication=None, acl_policy=None, ip_acl_policy=None, read_timeout_millis=None, password_parameter=None, use_digest_authentication=None, use_chunking=None, port=None, use_device_ip=None, name=None, description=None, use_form_post_authentication=None, listener_ssl_policy=None, username_parameter=None, enabled=None, interface=None, error_template=None, listener_host=None, listener_ssl_enabled=None, password_authentication_realm=None, require_password_authentication=None, use_kerberos_authentication=None)  # noqa: E501
+        self.assertTrue(isinstance(model, HttpListenerPolicy))
+
+    def testHttpListenerPolicy_constructor_none_default(self):
+        """Test HttpListenerPolicy"""
+        # FIXME: update assignements for none string types e.g boolean and int
+        
+        model = HttpListenerPolicy(use_cookie_authentication=self._unique_id, use_basic_authentication=self._unique_id, acl_policy=self._unique_id, ip_acl_policy=self._unique_id, read_timeout_millis=self._unique_id, password_parameter=self._unique_id, use_digest_authentication=self._unique_id, use_chunking=self._unique_id, port=self._unique_id, use_device_ip=self._unique_id, name=self._unique_id, description=self._unique_id, use_form_post_authentication=self._unique_id, listener_ssl_policy=self._unique_id, username_parameter=self._unique_id, enabled=self._unique_id, interface=self._unique_id, error_template=self._unique_id, listener_host=self._unique_id, listener_ssl_enabled=self._unique_id, password_authentication_realm=self._unique_id, require_password_authentication=self._unique_id, use_kerberos_authentication=self._unique_id)  # noqa: E501
+        self.assertTrue(isinstance(model, HttpListenerPolicy))
+
         
     def testHttpListenerPolicy_properties(self):
         """Test HttpListenerPolicy"""
@@ -134,8 +149,8 @@ class TestHttpListenerPolicy(unittest.TestCase):
         self.assertEqual(self._model.enabled,new_unique_id)
         self.assertNotEqual(self._model.enabled,self._unique_id)
          
-        self._model.interface = new_unique_id
-        self.assertEqual(self._model.interface,new_unique_id)
+        self._model.interface = "WAN"
+        self.assertEqual(self._model.interface,"WAN")
         self.assertNotEqual(self._model.interface,self._unique_id)
          
         self._model.error_template = new_unique_id
