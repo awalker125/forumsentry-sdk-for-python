@@ -1,0 +1,11 @@
+{
+	"useDeviceIp": true,
+	"useChunking": false,
+	"description": "bill",
+	"useDigestAuthentication": false,
+	"useBasicAuthentication": true,
+	"useCookieAuthentication": true,
+	"port": 80,
+	"readTimeoutMillis": 600,
+	"name": "bill"
+}

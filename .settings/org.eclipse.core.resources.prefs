@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//docs/conf.py=utf-8
+encoding//forumsentry/errors.py=utf-8
 encoding//forumsentry_api/__init__.py=utf-8
 encoding//forumsentry_api/models/__init__.py=utf-8
 encoding//forumsentry_api/models/http_listener_policy.py=utf-8

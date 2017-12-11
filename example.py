@@ -1,6 +1,7 @@
 import forumsentry_api
 import sys
 
+import json
 import logging
 import os
 import platform
@@ -8,6 +9,7 @@ import datetime
 import time
 from forumsentry.api import Api
 from forumsentry.config import Config
+from forumsentry_api.models.http_listener_policy import HttpListenerPolicy
 
 
 
@@ -51,12 +53,31 @@ def main():
     logging.info(fs.config.basic_authentication_header)
    # fs.testHarness()
     
-    copy = fs.getForumSentryPolicy("httpListenerPolicies", "bob")
     
-    copy.use_basic_authentication = True
-    copy.name = "bill"
+    bill = HttpListenerPolicy(use_cookie_authentication=True, 
+                              use_basic_authentication=True,
+                              acl_policy=None, 
+                              ip_acl_policy=None, 
+                              read_timeout_millis=600, 
+                              password_parameter=None, 
+                              use_digest_authentication=False, 
+                              use_chunking=False, 
+                              port=80, 
+                              use_device_ip=True, 
+                              name="bill", 
+                              description="bill"
+                              )
+    j = fs._serializer.serialize(bill)
+    print(type(j))
+    print(json.dumps(j))
     
-    fs.createForumSentryPolicy("httpListenerPolicies", "bill", copy)
+    #fs.getForumSentryPolicy("httpListenerPolicies", "doesntexist")
+    #copy = fs.getForumSentryPolicy("httpListenerPolicies", "bob")
+    
+    #copy.use_basic_authentication = True
+    #copy.name = "bill"
+    
+    #fs.createForumSentryPolicy("httpListenerPolicies", "bill", copy)
 
     end = time.time()
     elapse = end - start
