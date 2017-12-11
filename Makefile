@@ -43,20 +43,6 @@ test:
 	coverage run -m unittest discover
 	coverage html
 
-unit:
-	${INFO} "unit..."
-	pwd
-	coverage run -m unittest discover -s tests/forumsentry_api
-	coverage html
-	coverage report	
-
-int:
-	${INFO} "int..."
-	pwd
-	coverage run -m unittest discover -s tests/forumsentry
-	coverage html
-	coverage report	
-			
 # Cosmetics
 YELLOW := "\e[1;33m"
 NC := "\e[0m"
