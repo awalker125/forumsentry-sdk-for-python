@@ -31,6 +31,15 @@ This project has two main types of tests.
 * Unit tests. These are tests of specific functions using mocked API data.
 * Integration tests. These are tests that actually hit a forum sentry device. Unfortunately, this will need to be setup by the developer and conectivity from the machine running the tests established. 
 
+In order to run the intergration tests then setup the following environment variables.
+
+:: 
+   export FORUM_REST_API_HOST=forumsentry-dev
+   export FORUM_REST_API_PORT=8081
+   export FORUM_REST_API_USER=admin
+   export FORUM_REST_API_PASSWORD=*******    
+
+
 Code Coverage
 ~~~~~~~~~~~~~
 
