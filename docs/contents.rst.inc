@@ -22,6 +22,18 @@ method, this part of the documentation is for you.
 
     api
 
+
+Models Reference
+-------------
+
+List of models which are currently supported
+
+.. toctree::
+    :maxdepth: 2
+
+    models
+
+
 Developer Documentation
 -----------------------
 
