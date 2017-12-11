@@ -56,7 +56,7 @@ class TestIntegration(unittest.TestCase):
         pass
 
 
-    def test_integration_get_http_listener(self, mock_get):
+    def test_integration_get_http_listener(self):
         '''
             This needs a listner policy on the forum call test_integration_get_http_listener
         '''

@@ -67,13 +67,6 @@ class Api(object):
     def config(self, config):
         self._config = config
 
-    def _update_session(self):
-        
-        auth = HTTPBasicAuth(self.config.username, self.config.password)
-        self._session.auth = auth
-        self._session.verify = self.config.verify_ssl
-        self._session.headers.update({'Accept':'application/json'})
-    
     
     def _request(self, verb, endpoint, data=None):
         """Request a url.
@@ -84,9 +77,7 @@ class Api(object):
         :raises requests.exceptions.HTTPError: When response code is not successful.
         :returns: A JSON object with the response from the API.
         """
-            
-        # set headers and auth
-        #self._update_session()
+
         
         auth = HTTPBasicAuth(self.config.username, self.config.password)
         headers = {
@@ -111,7 +102,7 @@ class Api(object):
         resp.raise_for_status()
         
         self._logger.debug(resp.json())
-        print(resp.json())
+        
         return resp.json()
       
 
@@ -120,7 +111,7 @@ class Api(object):
         if policy_type not in self.policy_types:
             raise Exception("policy_type: {0} not supported".format(policy_type))
         
-        self._update_session()
+        #self._update_session()
         
         target_endpoint = "policies/{0}/{1}".format(policy_type, name)
         
@@ -129,11 +120,14 @@ class Api(object):
         try:
             # this method will be patched for unit test
             json = self._request("GET", target_endpoint)
-            print json
+            #print json
+            self._logger.debug("json returned from {0} >>>>".format(target_endpoint))
             self._logger.debug(json)
             
             obj = self._serializer.deserialize(json, self.policy_types[policy_type])
-            print obj
+            #print obj
+            self._logger.debug("object after deserialize >>>>")
+            
             if not isinstance(obj, self.str2Class(self.policy_types[policy_type])):
                 raise DeSerializationError(json)
             return obj
@@ -147,7 +141,6 @@ class Api(object):
                 self._logger.error("An unexpected HTTP response occurred: ", e)
                 raise e
         
-
     def createForumSentryPolicy(self, policy_type, name, obj):
         
         if policy_type not in self.policy_types:
@@ -157,7 +150,7 @@ class Api(object):
             raise InvalidTypeError(type(obj))
         
         
-        self._update_session()
+        #self._update_session()
         
         target_endpoint = "policies/{0}/{1}".format(policy_type, name)
         

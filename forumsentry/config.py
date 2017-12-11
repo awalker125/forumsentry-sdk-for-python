@@ -59,7 +59,7 @@ class Config(object):
         if password is not None:
             self._password = password
         if ssl_ca_file is not None:
-            self._ssl_ca_cert = ssl_ca_file
+            self._ssl_ca_file = ssl_ca_file
         
         self._verify_ssl = verify_ssl
     
