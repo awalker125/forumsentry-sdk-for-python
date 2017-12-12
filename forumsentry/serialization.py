@@ -9,8 +9,9 @@ import datetime
 import json
 import re
 import six
-import os
-import tempfile
+import sys
+#import os
+#import tempfile
 import logging
 from forumsentry.errors import DeSerializationError
 
@@ -46,7 +47,11 @@ class Serialization(object):
  
     def serialize(self,obj):  
         sanitized = self._serialize(obj)
-        return json.dumps(sanitized)
+        j = json.dumps(sanitized)
+#         print sys._getframe().f_code.co_name
+#         print j
+#         print type(j)
+        return j
  
     def _serialize(self, obj):
         """Builds a JSON POST object.
@@ -90,7 +95,6 @@ class Serialization(object):
         return {key: self._serialize(val)
                 for key, val in six.iteritems(obj_dict)}
 
-
     def deserialize(self, j, response_type):
         """Deserializes data into an object.
 
@@ -111,11 +115,16 @@ class Serialization(object):
         #    data = json.loads(response.text)
         #except ValueError:
         #    data = response.content
-
-        data = json.loads(j)
+#         print sys._getframe().f_code.co_name
+#         print j
+        try:
+            data = json.loads(j)
+            return self.__deserialize(data, response_type)
+        except TypeError as e:
+            raise DeSerializationError(e)
+        except Exception as ex:
+            raise DeSerializationError(ex)
         
-        return self.__deserialize(data, response_type)
-
     def __deserialize(self, data, klass):
         """Deserializes dict, list, str into an object.
 

@@ -1,0 +1,18 @@
+{
+	"useKerberosAuthentication": false,
+	"useDeviceIp": true,
+	"description": "test_createOrUpdateForumSentryPolicy1",
+	"useDigestAuthentication": false,
+	"useBasicAuthentication": false,
+	"enabled": true,
+	"useChunking": true,
+	"useCookieAuthentication": false,
+	"listenerSSLEnabled": false,
+	"interface": "WAN",
+	"useFormPostAuthentication": false,
+	"errorTemplate": "Default",
+	"requirePasswordAuthentication": false,
+	"port": 600,
+	"readTimeoutMillis": 600,
+	"name": "test_createOrUpdateForumSentryPolicy1"
+}

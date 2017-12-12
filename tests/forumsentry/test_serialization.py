@@ -65,7 +65,7 @@ class TestSerialization(unittest.TestCase):
         j = self._serialization.serialize(self._model)
 
         data = json.loads(j)
-        print j
+        #print j
         self.assertEqual(data['name'], self._unique_id)
         
     def test_deserializeHttpListenerPolicy(self):

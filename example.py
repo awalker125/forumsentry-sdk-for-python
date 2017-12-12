@@ -71,13 +71,13 @@ def main():
     print(type(j))
     print(json.dumps(j))
     
-    #fs.getForumSentryPolicy("httpListenerPolicies", "doesntexist")
-    #copy = fs.getForumSentryPolicy("httpListenerPolicies", "bob")
+    fs.getForumSentryPolicy("httpListenerPolicies", "doesntexist")
+    copy = fs.getForumSentryPolicy("httpListenerPolicies", "bob")
     
-    #copy.use_basic_authentication = True
-    #copy.name = "bill"
+    copy.use_basic_authentication = True
+    copy.name = "bill2"
     
-    #fs.createForumSentryPolicy("httpListenerPolicies", "bill", copy)
+    fs.createForumSentryPolicy("httpListenerPolicies", "bill2", copy)
 
     end = time.time()
     elapse = end - start

@@ -42,6 +42,7 @@ test:
 	pwd
 	coverage run -m unittest discover
 	coverage html
+	coverage report
 
 # Cosmetics
 YELLOW := "\e[1;33m"
