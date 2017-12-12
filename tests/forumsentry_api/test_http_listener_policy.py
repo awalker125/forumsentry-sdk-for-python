@@ -57,6 +57,22 @@ class TestHttpListenerPolicy(unittest.TestCase):
     def tearDown(self):
         pass
 
+    '''
+        >>>> custom tests
+    '''
+
+    def testHttpListenerPolicy_interface_setter(self):
+        
+        model = HttpListenerPolicy() 
+        with self.assertRaises(ValueError) as e:
+            model.interface = "BAD"
+
+        self.assertIn('Invalid value for', e.exception.message)
+
+    '''
+        <<<< custom tests
+    '''
+
     def testHttpListenerPolicy(self):
         """Test HttpListenerPolicy"""
         

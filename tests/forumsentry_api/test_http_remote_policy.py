@@ -48,6 +48,16 @@ class TestHttpRemotePolicy(unittest.TestCase):
     def tearDown(self):
         pass
 
+    '''
+        >>>> custom tests
+    '''
+    #    
+    #    Replace with custom tests to increase coverage to 100%. Typically this will be where a value error is thrown on a setter method. This is difficult to template.
+    #
+    '''
+        <<<< custom tests
+    '''
+
     def testHttpRemotePolicy(self):
         """Test HttpRemotePolicy"""
         
