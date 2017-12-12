@@ -69,12 +69,18 @@ class Config(object):
         # self._logger["urllib3_logger"] = logging.getLogger("urllib3")
         # Log format
         self._logger_format = '%(asctime)s %(levelname)s %(message)s'
+        
+        self._logger_formatter = logging.Formatter(self._logger_format)
         # Log stream handler
         self._logger_stream_handler = None
         # Log file handler
         self._logger_file_handler = None
         # Debug file location
         self._logger_file = None
+        
+        self._logger_stream = False
+        
+        self._setup_logging()
         # Debug switch
         self._debug = False
         
@@ -82,6 +88,35 @@ class Config(object):
             self._debug = True
             self._enable_debug()
  
+ 
+    def _setup_logging(self):
+        
+        if self._logger_file:
+            # If set logging file,
+            # then add file handler
+            self._logger_file_handler = logging.FileHandler(self._logger_file)
+            self._logger_file_handler.setFormatter(self._logger_formatter)
+            for k, l in six.iteritems(self._logger):
+                l.addHandler(self._logger_file_handler)
+        else:
+            if self._logger_file_handler:
+                for k, l in six.iteritems(self._logger):
+                    l.removeHandler(self._logger_file_handler)
+                self._logger_file_handler = None
+
+        if self.logger_stream:
+            # If stream logging is set then create a handler and add to each logger
+
+            self._logger_stream_handler = logging.StreamHandler()
+            self._logger_stream_handler.setFormatter(self._logger_formatter)
+            for k, l in six.iteritems(self._logger):
+                l.addHandler(self._logger_stream_handler)
+        else:
+            # If stream logging is not set then remove the handler from each logger and delete
+            if self._logger_stream_handler:
+                for k, l in six.iteritems(self._logger):
+                    l.removeHandler(self._logger_stream_handler)
+                self._logger_stream_handler = None
         
     @property
     def host(self):
@@ -269,6 +304,19 @@ class Config(object):
         return ba_auth_header
 
 
+    @property
+    def logger_stream(self):
+        return self._logger_stream
+    
+    @logger_stream.setter
+    def logger_stream(self, value):
+        """Enable stream logger
+
+        :param value: if stream logger should be enabled
+        :type: bool
+        """
+        self._logger_stream = value
+        self._setup_logging()
     
     
     @property
@@ -294,24 +342,8 @@ class Config(object):
         :type: str
         """
         self._logger_file = value
-        if self._logger_file:
-            # If set logging file,
-            # then add file handler and remove stream handler.
-            self._logger_file_handler = logging.FileHandler(self._logger_file)
-            self._logger_file_handler.setFormatter(self.logger_formatter)
-            for k, l in six.iteritems(self._logger):
-                l.addHandler(self._logger_file_handler)
-                if self._logger_stream_handler:
-                    l.removeHandler(self._logger_stream_handler)
-        else:
-            # If not set logging file,
-            # then add stream handler and remove file handler.
-            self._logger_stream_handler = logging.StreamHandler()
-            self._logger_stream_handler.setFormatter(self._logger_formatter)
-            for k, l in six.iteritems(self._logger):
-                l.addHandler(self._logger_stream_handler)
-                if self._logger_file_handler:
-                    l.removeHandler(self._logger_file_handler)
+        self._setup_logging()
+
 
     @property
     def debug(self):

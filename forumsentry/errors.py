@@ -13,8 +13,8 @@ class ConfigError(Exception):
 
     def __init__(self, argument):
         # Call the base class constructor with the parameters it needs
-        super(BadVerbError, self).__init__()
-        self.argument = argument
+        super(ConfigError, self).__init__()
+        self.argument = type(argument)
         self.message = ConfigError.message
 
     def __str__(self):
@@ -78,7 +78,7 @@ class NotSupportedError(Exception):
 
     def __init__(self, argument):
         # Call the base class constructor with the parameters it needs
-        super(DeSerializationError, self).__init__()
+        super(NotSupportedError, self).__init__()
         self.argument = argument
         self.message = NotSupportedError.message
 
@@ -95,7 +95,7 @@ class InvalidTypeError(Exception):
     def __init__(self, argument):
         # Call the base class constructor with the parameters it needs
         super(InvalidTypeError, self).__init__()
-        self.argument = argument
+        self.argument = type(argument)
         self.message = InvalidTypeError.message
 
     def __str__(self):

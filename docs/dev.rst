@@ -56,9 +56,9 @@ To run this
 .. code:: bash
 
 	cd tools
-	export REST_API_HOST=xxxxxxxxxxxxx
-	export REST_API_USER=xxxxxxxxxxxxx
-	export REST_API_PASSWORD=xxxxxxxxxxx
+	export FORUM_REST_API_HOST=xxxxxxxxxxxxx
+	export FORUM_REST_API_USER=xxxxxxxxxxxxx
+	export FORUM_REST_API_PASSWORD=xxxxxxxxxxx
 	./generate_code.sh
 
 This will place the models swagger generated code in a folder _build
