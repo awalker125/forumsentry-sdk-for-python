@@ -1,0 +1,15 @@
+{
+  "name": "change_me",
+  "enabled": true,
+  "remoteServer": "www.nufc.com",
+  "remotePort": 80,
+  "SSLInitiationPolicy": "",
+  "remoteAuthentication": "NONE",
+  "tcpConnectionTimeout": 10000,
+  "processResponse": false,
+  "proxyPolicy": "HPE",
+  "tcpReadTimeout": 600000,
+  "enableSSL": false,
+  "useBasicAuth": false,
+  "useChunking": false
+}

@@ -63,6 +63,10 @@ class Api(object):
     def str2Class(self, string):
         return getattr(forumsentry_api.models, string)
  
+    def class2String(self, klass):
+        return klass.__name__
+ 
+ 
     def _request(self, verb, endpoint, body=None):
         """Request a url.
         :param endpoint: The api endpoint we want to call.

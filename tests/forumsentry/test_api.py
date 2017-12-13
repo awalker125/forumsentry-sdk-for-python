@@ -25,6 +25,7 @@ from requests.exceptions import HTTPError
 from forumsentry.config import Config
 from forumsentry.api import Api
 from forumsentry.errors import ConfigError, NotSupportedError, InvalidTypeError
+from tests.forumsentry import helper
 
 
 
@@ -34,7 +35,7 @@ class TestApi(unittest.TestCase):
     def setUp(self):
         self._api = api.Api()
         
-        self._unique_id = self.id_generator()
+        self._unique_id = helper.id_generator()
         
         
         #We will use HttpListenerPolicy as our test model
