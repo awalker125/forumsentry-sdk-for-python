@@ -17,6 +17,7 @@ from requests.auth import HTTPBasicAuth
 import logging
 # import datetime
 import json
+import os.path
 # import re
 # import six
 # import os
@@ -70,7 +71,6 @@ class Api(object):
     def class2String(self, klass):
         return klass.__name__
  
- 
     def _request(self, verb, endpoint, body=None):
         """Request a url.
         :param endpoint: The api endpoint we want to call.
@@ -106,101 +106,42 @@ class Api(object):
         
         self._logger.debug(resp.text)
         return resp.text
-        #return resp.json()
-      
-    def getForumSentryPolicy(self, policy_type, name):
-        
-        if policy_type not in self.policy_types:
-            raise NotSupportedError(policy_type)
-        
-        #self._update_session()
-        
-        target_endpoint = "policies/{0}/{1}".format(policy_type, name)
-        
-        self._logger.debug("target_endpoint: {0}".format(target_endpoint))
 
-        try:
-            # this method will be patched for unit test
-            j = self._request("GET", target_endpoint)
-            #print j
-            self._logger.debug("json returned from {0} >>>>".format(target_endpoint))
-            self._logger.debug(j)
-            
-            obj = self._serializer.deserialize(j, self.policy_types[policy_type])
-            #print obj
-            self._logger.debug("object after deserialize >>>>")
-            
-            return obj
-           
-        except HTTPError as e:
-            self._logger.debug(e)
-            if e.response.status_code == 404:
-                self._logger.warn("{0} not found".format(name))
-                return None
+        
+    def _request_file(self,endpoint,filename, form_data=None):    
+        """Request a url.
+        :param endpoint: The api endpoint we want to call.
+        :param filename: Path to the file to upload
+        :param form_data: form data to submit. E.g password=password_123
+        :raises requests.exceptions.HTTPError: When response code is not successful.
+        :raises IOError: When file not found or unreadable
+        :returns: A JSON object with the response from the API.
+        """
+        
+        resp = None
+        
+        if not os.path.isfile(filename):
+            raise IOError("{0} not found".format(filename))   
+ 
+        files = {'file': (open(filename, 'rb'))}
+        
+        auth = HTTPBasicAuth(self.config.username, self.config.password)
+        
+        request_url = "{0}/{1}".format(self.config.forumsentry_url, endpoint)
+        
+        if form_data is not None:
+            if type(form_data) == type(dict()):
+                resp = requests.post(request_url, auth=auth, verify=False, files=files, data=form_data)
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
-                raise e
-    
-    def deleteForumSentryPolicy(self, policy_type, name):
-        
-        if policy_type not in self.policy_types:
-            raise NotSupportedError(policy_type)
-        
-        #self._update_session()
-        
-        target_endpoint = "policies/{0}/{1}".format(policy_type, name)
-        
-        self._logger.debug("target_endpoint: {0}".format(target_endpoint))
-
-        try:
-            # this method will be patched for unit test
-            #We dont expect any data back in a delete. If it fails we'll either get a 404 which means it doesnt exist or some other error which will be thrown up the stack.
-            self._request("DELETE", target_endpoint)
-            return True
-           
-        except HTTPError as e:
-            self._logger.debug(e)
-            if e.response.status_code == 404:
-                self._logger.warn("{0} not found".format(name))
-                return True
-            else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
-                raise e
-        
-    def createOrUpdateForumSentryPolicy(self, policy_type, name, obj):
-        
-        if policy_type not in self.policy_types:
-            raise NotSupportedError(policy_type)
-        
-        if not isinstance(obj, self.str2Class(self.policy_types[policy_type])):
-            raise InvalidTypeError(obj)
+                self._logger.error("Expected a dictionary of form params to post")
+                raise InvalidTypeError(form_data)
+        else:
+            resp = requests.post(request_url, auth=auth, verify=False, files=files)
         
         
-        #self._update_session()
+        resp.raise_for_status()
         
-        target_endpoint = "policies/{0}/{1}".format(policy_type, name)
-        
-        self._logger.debug("target_endpoint: {0}".format(target_endpoint))
-        
-        
-        serialized_json = self._serializer.serialize(obj)
-        
-        self._logger.debug("serialized_json: {0}".format(serialized_json))
-        
-        try:
-            # this method will be patched for unit test
-            j = self._request("PUT", target_endpoint, serialized_json)
-            
-            self._logger.debug(j)
-            
-            obj = self._serializer.deserialize(j, self.policy_types[policy_type])
-
-            return obj
-           
-        except HTTPError as e:
-            self._logger.debug(e)
-            self._logger.error("An unexpected HTTP response occurred: ", e)
-            raise e
-
+        self._logger.debug(resp.text)
+        return resp.text
             
 

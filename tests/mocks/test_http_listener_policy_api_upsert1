@@ -1,7 +1,7 @@
 {
 	"useKerberosAuthentication": false,
 	"useDeviceIp": true,
-	"description": "test_createOrUpdateForumSentryPolicy1",
+	"description": "test_http_listener_policy_api_upsert1",
 	"useDigestAuthentication": false,
 	"useBasicAuthentication": false,
 	"enabled": true,
@@ -14,5 +14,5 @@
 	"requirePasswordAuthentication": false,
 	"port": 600,
 	"readTimeoutMillis": 600,
-	"name": "test_createOrUpdateForumSentryPolicy1"
+	"name": "test_http_listener_policy_api_upsert1"
 }

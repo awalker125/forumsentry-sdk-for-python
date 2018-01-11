@@ -56,23 +56,14 @@ mkdir ${WHEREAMI}/_build
 
 
 java -jar \
+	-Dmodels -DmodelDocs=false \
+	-DsupportingFiles=configuration.py,__init__.py,rest.py,api_client.py \
 	swagger-codegen-cli-${SWAGGER_CODEGEN_VERSION}.jar generate \
 	--output ${WHEREAMI}/_build \
 	--config ${WHEREAMI}/config.json \
 	-i ${FORUM_REST_API_PROTOCOL}://${FORUM_REST_API_HOST}:${FORUM_REST_API_PORT}/restApi/v1.0/api-docs \
 	-l python --auth "Authorization: Basic ${AUTH}" \
 	--template-dir ${WHEREAMI}/templates/python	
-
-	
-# java -jar \
-	# -Dmodels -DmodelDocs=false \
-	# -DsupportingFiles=configuration.py,__init__.py,rest.py,api_client.py \
-	# swagger-codegen-cli-${SWAGGER_CODEGEN_VERSION}.jar generate \
-	# --output ${WHEREAMI}/_build \
-	# --config ${WHEREAMI}/config.json \
-	# -i ${FORUM_REST_API_PROTOCOL}://${FORUM_REST_API_HOST}:${FORUM_REST_API_PORT}/restApi/v1.0/api-docs \
-	# -l python --auth "Authorization: Basic ${AUTH}" \
-	# --template-dir ${WHEREAMI}/templates/python	
 	
 	
 	
