@@ -28,6 +28,12 @@ class TestIntegration(unittest.TestCase):
     On tear down we will attempt to delete these
     '''
 
+#     policy_types = {
+#         'httpListenerPolicies': 'HttpListenerPolicy',
+#         'httpRemotePolicies': 'HttpRemotePolicy',
+#         'htmlPolicies': 'HtmlPolicies'
+#     }
+    
     policy_types = {
         'httpListenerPolicies': 'HttpListenerPolicy',
         'httpRemotePolicies': 'HttpRemotePolicy'
@@ -94,7 +100,7 @@ class TestIntegration(unittest.TestCase):
         
         testdata_dir = '{0}/../testdata/'.format(self._whereami)
         
-        for f in os.listdir(testdata_dir):
+        for f in sorted(os.listdir(testdata_dir)):
             if f.startswith("test_integration"):
                 filename = os.path.join(testdata_dir, f)
                 parts = f.split("_")
@@ -257,45 +263,6 @@ class TestIntegration(unittest.TestCase):
         
         self.assertEqual(deleted, True)
  
-#     def test_integration_getForumSentryPolicy_httpListenerPolicies_HttpListenerPolicy_1(self):
-#         '''
-#             Tests getting httpListenerPolicy from forum
-#         '''
-#         test_id = 1
-#         
-#         self.generic_intergration_getForumSentryPolicy_policyType_policyObject_where_exists("httpListenerPolicies", HttpListenerPolicy, test_id)
-#                                 
-#     def test_integration_getForumSentryPolicy_httpListenerPolicies_HttpListenerPolicy_2(self):
-#         '''
-#             Tests getting httpListenerPolicy from forum that doesnt exist
-#         '''
-#         test_id = 2
-#         
-#         self.generic_intergration_getForumSentryPolicy_policyType_policyObject_where_doesnt_exist("httpListenerPolicies", HttpListenerPolicy, test_id)
-#                              
-#     def test_integration_deleteForumSentryPolicy_httpListenerPolicies_HttpListenerPolicy_3(self):
-#         '''
-#             Tests deleting an httpListenerPolicy from forum that doesnt exist
-#         '''
-#         test_id = 3
-#         self.generic_intergration_deleteForumSentryPolicy_policyType_policyObject_where_doesnt_exist("httpListenerPolicies", HttpListenerPolicy, test_id)
-# 
-#     def test_integration_deleteForumSentryPolicy_httpListenerPolicies_HttpListenerPolicy_4(self):
-#         '''
-#             Tests deleting an httpListenerPolicy from forum
-#         '''
-#         test_id = 4
-#         self.generic_intergration_deleteForumSentryPolicy_policyType_policyObject_where_exists("httpListenerPolicies", HttpListenerPolicy, test_id)
-# 
-#     def test_integration_createForumSentryPolicy_httpListenerPolicies_HttpListenerPolicy_5(self):
-#         '''
-#             Tests creating an httpListenerPolicy on the forum. Changing something and then deleting it
-#         '''
-#         test_id = 5
-#                 
-#         self.generic_intergration_createForumSentryPolicy_policyType_policyObject("httpListenerPolicies", HttpListenerPolicy, test_id)
-#         
-
 
 
 if __name__ == "__main__":

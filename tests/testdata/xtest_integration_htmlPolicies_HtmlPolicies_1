@@ -1,0 +1,13 @@
+{
+  "remotePath": "/",
+  "listenerPolicy": "change_me",
+  "name": "change_me",
+  "virtualPath": "/",
+  "remotePolicy": "change_me",
+  "description": "",
+  "requestProcessType": "TASK_LIST_GROUP",
+  "responseProcessType": "TASK_LIST_GROUP",
+  "idpGroup": "",
+  "requestProcess": "",
+  "responseProcess": ""
+}

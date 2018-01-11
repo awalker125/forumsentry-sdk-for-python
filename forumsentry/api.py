@@ -8,7 +8,10 @@ from forumsentry.config import Config
 from forumsentry.serialization import Serialization
 from forumsentry.errors import BadVerbError, DeSerializationError, NotSupportedError, InvalidTypeError, ConfigError
 
-from forumsentry_api.models import http_listener_policy, http_remote_policy
+from forumsentry_api.models import http_listener_policy
+from forumsentry_api.models import http_remote_policy
+from forumsentry_api.models import html_policies
+from forumsentry_api.models import html_policy
 import requests
 from requests.auth import HTTPBasicAuth
 import logging
@@ -28,7 +31,8 @@ class Api(object):
     # This map defines the policy types we currently support and the model they expect/return
     policy_types = {
         'httpListenerPolicies': 'HttpListenerPolicy',
-        'httpRemotePolicies': 'HttpRemotePolicy'
+        'httpRemotePolicies': 'HttpRemotePolicy',
+        'htmlPolicies': 'HtmlPolicies'
     }
 
     def __init__(self, config=None):
