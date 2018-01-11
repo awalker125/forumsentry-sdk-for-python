@@ -9,7 +9,7 @@ import sys
 import string
 import random
 
-from forumsentry import api, serialization, configuration_import_api
+from forumsentry import api, serialization
 from forumsentry_api import HttpListenerPolicy
 from forumsentry.config import Config
 from tests.forumsentry import helper
@@ -48,7 +48,6 @@ class TestIntegration(unittest.TestCase):
         'generic_intergration_createForumSentryPolicy_policyType_policyObject': 5,  
      
     }
-    
  
 
     def setUp(self):
@@ -63,7 +62,6 @@ class TestIntegration(unittest.TestCase):
         self._forum_rest_api_user = os.getenv("FORUM_REST_API_USER", None)
         self._forum_rest_api_password = os.getenv("FORUM_REST_API_PASSWORD", None)
         self._forum_rest_api_protocol = os.getenv("FORUM_REST_API_PROTOCOL", None)
-        self._forum_fsg_import_password = os.getenv("FORUM_FSG_IMPORT_PASSWORD", 'password')
         
         if self._forum_rest_api_host is None:
             self.skipTest("FORUM_REST_API_HOST not found. This is required for integration testing")
@@ -87,8 +85,7 @@ class TestIntegration(unittest.TestCase):
         conf.username = self._forum_rest_api_user
         conf.password = self._forum_rest_api_password
         conf.protocol = self._forum_rest_api_protocol
-        #self._api = api.Api(conf)
-        self._configuration_import_api = configuration_import_api.ConfigurationImportApi(conf)
+        self._api = api.Api(conf)
         self._serializer = serialization.Serialization()
 
         self.createTestData()
@@ -99,14 +96,36 @@ class TestIntegration(unittest.TestCase):
         #test_integration_<policy_type>_<model_type>_<test_id>
         #e.g
         #test_integration_httpListenerPolicies_HttpListenerPolicy_1
-        
+    
         
         testdata_dir = '{0}/../testdata/'.format(self._whereami)
         
         for f in sorted(os.listdir(testdata_dir)):
             if f.startswith("test_integration"):
                 filename = os.path.join(testdata_dir, f)
-                self._configuration_import_api.import_fsg(filename, self._forum_fsg_import_password)
+                parts = f.split("_")
+                prefix_a = parts[0]
+                prefix_b = parts[1]
+                policy_type = parts[2]
+                model_type = parts[3]
+                test_id = parts[4]
+                #uncomment for debug
+#                 print "filename: {0}".format(filename)     
+#                 print "prefix_a: {0}".format(prefix_a)
+#                 print "prefix_b: {0}".format(prefix_b)
+#                 print "policy_type: {0}".format(policy_type)
+#                 print "model_type: {0}".format(model_type)
+#                 print "test_id: {0}".format(test_id)
+
+                with open(filename, 'r') as f:
+                    to_serialize = f.read()
+                    model_type_class = self._api.str2Class(model_type)                
+                    model = self._serializer.deserialize(to_serialize, model_type_class)
+                    
+                    item_name = self.get_item_name(model_type,test_id)
+                    model.name = item_name
+                    
+                    self._api.createOrUpdateForumSentryPolicy(policy_type, item_name, model)
 
     def get_item_name(self,policy_object_name,test_id):
         
@@ -149,7 +168,6 @@ class TestIntegration(unittest.TestCase):
         '''
             This runs our generic tests against all of types
         '''
-        pass
         for policy_type, policy_object_name in self.policy_types.items():
             
             for generic_test_name, test_id  in self.tests.items():

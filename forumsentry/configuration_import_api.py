@@ -15,7 +15,7 @@ class ConfigurationImportApi(Api):
     classdocs
     '''
     
-    path = "/configuration/import?format=fsg"
+    path = "configuration/import?format=fsg"
 
     def __init__(self, config=None):
         '''

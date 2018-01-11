@@ -104,3 +104,6 @@ ENV/
 .vscode/
 *.DS_Store*
 /setup_shell.sh
+
+#fsg files
+tests/testdata/*.fsg
