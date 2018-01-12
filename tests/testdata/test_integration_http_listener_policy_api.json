@@ -1,0 +1,19 @@
+{
+  "name": "change_me",
+  "enabled": false,
+  "errorTemplate": "Default Template",
+  "interface": "WAN",
+  "port": 80,
+  "readTimeoutMillis": 0,
+  "useDeviceIp": true,
+  "ipAclPolicy": "Unrestricted",
+  "listenerSSLEnabled": false,
+  "passwordAuthenticationRealm": "",
+  "requirePasswordAuthentication": false,
+  "useBasicAuthentication": false,
+  "useChunking": true,
+  "useCookieAuthentication": false,
+  "useDigestAuthentication": false,
+  "useFormPostAuthentication": false,
+  "useKerberosAuthentication": false
+}

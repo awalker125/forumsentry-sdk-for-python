@@ -9,7 +9,8 @@ import sys
 import string
 import random
 
-from forumsentry import api, serialization, configuration_import_api
+from forumsentry import api, serialization, configuration_import_api,\
+    http_listener_policy_api
 from forumsentry_api import HttpListenerPolicy
 from forumsentry.config import Config
 from tests.forumsentry import helper
@@ -80,172 +81,105 @@ class TestIntegration(unittest.TestCase):
         if self._forum_rest_api_protocol is None:
             self.skipTest("FORUM_REST_API_PROTOCOL not found. This is required for integration testing")
         
-        conf = Config()
+        self._conf = Config()
         #conf.debug = True
-        conf.host = self._forum_rest_api_host
-        conf.port = self._forum_rest_api_port
-        conf.username = self._forum_rest_api_user
-        conf.password = self._forum_rest_api_password
-        conf.protocol = self._forum_rest_api_protocol
-        #self._api = api.Api(conf)
-        self._configuration_import_api = configuration_import_api.ConfigurationImportApi(conf)
+        self._conf.host = self._forum_rest_api_host
+        self._conf.port = self._forum_rest_api_port
+        self._conf.username = self._forum_rest_api_user
+        self._conf.password = self._forum_rest_api_password
+        self._conf.protocol = self._forum_rest_api_protocol
+        self._api = api.Api(self._conf)
+        #self._configuration_import_api = configuration_import_api.ConfigurationImportApi(self._conf)
         self._serializer = serialization.Serialization()
 
-        self.createTestData()
+        #self.createTestData()
         
-        
-    def createTestData(self):
-        
-        #test_integration_<policy_type>_<model_type>_<test_id>
-        #e.g
-        #test_integration_httpListenerPolicies_HttpListenerPolicy_1
-        
+    def loadModel(self, test_name, model_type):
         
         testdata_dir = '{0}/../testdata/'.format(self._whereami)
+        model_file = '{0}/{1}.json'.format(testdata_dir,test_name)
         
-        for f in sorted(os.listdir(testdata_dir)):
-            if f.startswith("test_integration"):
-                filename = os.path.join(testdata_dir, f)
-                self._configuration_import_api.import_fsg(filename, self._forum_fsg_import_password)
-
-    def get_item_name(self,policy_object_name,test_id):
-        
-        
-        return "{0}_{1}_{2}".format(self._unique_id,test_id,policy_object_name)
-
-    def removeTestData(self):    
-        #test_integration_<policy_type>_<model_type>_<test_id>
-        #e.g
-        #test_integration_httpListenerPolicies_HttpListenerPolicy_1
-    
-        
-        testdata_dir = '{0}/../testdata/'.format(self._whereami)
-        
-        for f in os.listdir(testdata_dir):
-            if f.startswith("test_integration"):
-                filename = os.path.join(testdata_dir, f)
-                parts = f.split("_")
-                prefix_a = parts[0]
-                prefix_b = parts[1]
-                policy_type = parts[2]
-                model_type = parts[3]
-                test_id = parts[4]
-                #uncomment for debug
-#                 print "filename: {0}".format(filename)     
-#                 print "prefix_a: {0}".format(prefix_a)
-#                 print "prefix_b: {0}".format(prefix_b)
-#                 print "policy_type: {0}".format(policy_type)
-#                 print "model_type: {0}".format(model_type)
-#                 print "test_id: {0}".format(test_id)
-                
-                item_name = self.get_item_name(model_type,test_id)
-                self._api.deleteForumSentryPolicy(policy_type, item_name)
-
+        with open(model_file, 'r') as f:
+            to_serialize = f.read()
+            #model_type_class = self._api.str2Class(model_type)                
+            model = self._serializer.deserialize(to_serialize, model_type)
+            
+            return model
+           
     def tearDown(self):
        # self.removeTestData()
        pass
 
-    def test_integration(self):
+    def test_integration_http_listener_policy_api(self):
         '''
-            This runs our generic tests against all of types
+            This runs our integration test for http_listener_policy_api
         '''
-        pass
-        for policy_type, policy_object_name in self.policy_types.items():
-            
-            for generic_test_name, test_id  in self.tests.items():
-            
-                policy_object = self._api.str2Class(policy_object_name)
-                test = getattr(self, generic_test_name)
-                test(policy_type,policy_object,test_id)
-                        
-    def generic_intergration_getForumSentryPolicy_policyType_policyObject_where_exists(self, policy_type, policy_object, test_id):
         
-        policy_object_name = self._api.class2String(policy_object)
+        #setup
+        test_name = sys._getframe().f_code.co_name
+        model = self.loadModel(test_name, HttpListenerPolicy)
+        name = test_name + self._unique_id
+        model.name = name
+        
+        #verify we loaded the right model
+        self.assertIsInstance(model, HttpListenerPolicy)
+        self.assertEqual(model.name, name)
+        
+        #create the api to test
+        api = http_listener_policy_api.HttpListenerPolicyApi(self._conf)
+        
+        #create a model on the forum
+        created = api.upsert(name, model)
+        
+        #check what we created is correct
+        self.assertIsInstance(created, HttpListenerPolicy)
+        self.assertEqual(created, model)
 
-        item_name = self.get_item_name(policy_object_name,str(test_id))        
+        #check we can retrieve the model
+        retrieved = api.get(name)
+        self.assertIsInstance(retrieved, HttpListenerPolicy)
+        self.assertEqual(retrieved, model)
+        
+        #check we can delete the model
+        deleted = api.delete(name)
+        self.assertTrue(deleted)
 
-        model = self._api.getForumSentryPolicy(policy_type, item_name)
-     
-        self.assertTrue(isinstance(model, policy_object))
-        self.assertEqual(model.name, item_name)
+        #Check its really gone  
+        notfound = api.get(name)
+        self.assertIsNone(notfound)
 
-    def generic_intergration_getForumSentryPolicy_policyType_policyObject_where_doesnt_exist(self, policy_type, policy_object, test_id):
+    def test_integration_configuration_import_api(self):
         
-        policy_object_name = self._api.class2String(policy_object)
+        #setup
+        test_name = sys._getframe().f_code.co_name
+        testdata_dir = '{0}/../testdata/'.format(self._whereami)
+        fsg_filename = '{0}/{1}.fsg'.format(testdata_dir,test_name)
 
-        item_name = self.get_item_name(policy_object_name,str(test_id))        
+        api = configuration_import_api.ConfigurationImportApi(self._conf)
         
-        model = self._api.getForumSentryPolicy(policy_type, item_name)
+        #Import our fsg file
+        import_result = api.import_fsg(fsg_filename,self._forum_fsg_import_password)
         
-        self.assertEqual(model, None)    
+        self.assertIn("FSG successfully imported", import_result)
 
-    def generic_intergration_deleteForumSentryPolicy_policyType_policyObject_where_doesnt_exist(self, policy_type, policy_object, test_id):
+        #our fsg has an http listener so we'll check its there and then delete
+        api2 = http_listener_policy_api.HttpListenerPolicyApi(self._conf)
+                #check we can retrieve the model
+        retrieved = api2.get(test_name)
+        self.assertIsInstance(retrieved, HttpListenerPolicy)
+        self.assertEqual(retrieved.name, test_name)
         
-        policy_object_name = self._api.class2String(policy_object)
+        
+        #check we can delete the model
+        deleted = api2.delete(test_name)
+        self.assertTrue(deleted)
 
-        item_name = self.get_item_name(policy_object_name,str(test_id))        
+        #Check its really gone  
+        notfound = api2.get(test_name)
+        self.assertIsNone(notfound)
         
-        deleted = self._api.deleteForumSentryPolicy(policy_type, item_name)
         
-        self.assertEqual(deleted, True)  
-
-    def generic_intergration_deleteForumSentryPolicy_policyType_policyObject_where_exists(self, policy_type, policy_object, test_id):
         
-        policy_object_name = self._api.class2String(policy_object)
-
-        item_name = self.get_item_name(policy_object_name,str(test_id))        
-        
-        #first check it exists
-        model = self._api.getForumSentryPolicy(policy_type, item_name)
-        
-        self.assertTrue(isinstance(model, policy_object))
-        self.assertEqual(model.name, item_name)
-        
-        #Next delete it
-        deleted = self._api.deleteForumSentryPolicy(policy_type, item_name)
-        
-        self.assertEqual(deleted, True)     
-    
-    def generic_intergration_createForumSentryPolicy_policyType_policyObject(self, policy_type, policy_object, test_id):
-        
-        policy_object_name = self._api.class2String(policy_object)
-
-        item_name = self.get_item_name(policy_object_name,str(test_id))        
-        
-        #first get our basic policy from the forum. This is created by createTestData on setup
-        initial_model = self._api.getForumSentryPolicy(policy_type, item_name)
-        
-        self.assertTrue(isinstance(initial_model, policy_object))
-        self.assertEqual(initial_model.name, item_name)
-        
-        new_item_name = item_name + "_NEW"
-        
-        initial_model.name = new_item_name
-        
-        #Next create a copy of it on forum
-        new_model = self._api.createOrUpdateForumSentryPolicy(policy_type,new_item_name, initial_model)
-        
-        self.assertEqual(initial_model, new_model)
-        
-        #Next check its there on the forum and we can read it
-        
-        retrieved_new_model = self._api.getForumSentryPolicy(policy_type, new_item_name)
-        
-        self.assertEqual(retrieved_new_model, new_model)
-        
-        #Next we modify the policy
-        
-        retrieved_new_model.enabled = False
-        
-        self._api.createOrUpdateForumSentryPolicy(policy_type,new_item_name, retrieved_new_model)
-        
-        #Clean up by deleting the policy we created and modified
-        
-        deleted = self._api.deleteForumSentryPolicy(policy_type, new_item_name)
-        
-        self.assertEqual(deleted, True)
- 
-
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testStart']

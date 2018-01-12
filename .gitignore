@@ -106,4 +106,4 @@ ENV/
 /setup_shell.sh
 
 #fsg files
-tests/testdata/*.fsg
+#tests/testdata/*.fsg
