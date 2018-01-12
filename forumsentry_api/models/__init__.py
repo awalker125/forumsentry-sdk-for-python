@@ -14,3 +14,4 @@ from forumsentry_api.models.http_listener_policy import HttpListenerPolicy
 from forumsentry_api.models.http_remote_policy import HttpRemotePolicy
 from forumsentry_api.models.html_policies import HtmlPolicies
 from forumsentry_api.models.html_policy import HtmlPolicy
+from forumsentry_api.models.task_list import TaskList

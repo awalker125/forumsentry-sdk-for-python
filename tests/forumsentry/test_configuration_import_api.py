@@ -6,28 +6,13 @@ Created on 20 Nov 2017
 import unittest
 import os
 import mock
-import forumsentry
 import sys
-
-import os
 import string
 import random
-import json
-import sys
 
-
-from mock import Mock
-
-from forumsentry import api, http_listener_policy_api, configuration_import_api
-from forumsentry.errors import BadVerbError
-from forumsentry_api import HttpListenerPolicy
+from forumsentry import configuration_import_api
 from requests.exceptions import HTTPError
-from forumsentry.config import Config
-from forumsentry.api import Api
-from forumsentry.errors import ConfigError, NotSupportedError, InvalidTypeError
 from tests.forumsentry import helper
-from forumsentry_api.models.http_remote_policy import HttpRemotePolicy
-
 
 
 
@@ -95,9 +80,9 @@ class TestApi(unittest.TestCase):
         
         filename = '{0}/../mocks/{1}'.format(whereami,test_name)
          
-        text = self._api.import_fsg(filename, password)
+        import_result = self._api.import_fsg(filename, password)
          
-        self.assertEqual(text, "FSG successfully imported")
+        self.assertTrue(import_result)
 
 
     def test_configuration_import_api_import_fsg2(self):

@@ -15,14 +15,10 @@ from forumsentry_api.models import html_policy
 import requests
 from requests.auth import HTTPBasicAuth
 import logging
-# import datetime
 import json
 import os.path
-# import re
-# import six
-# import os
-# import tempfile
-# import sys
+
+
 from requests.exceptions import HTTPError
  
 class Api(object):
@@ -106,42 +102,100 @@ class Api(object):
         
         self._logger.debug(resp.text)
         return resp.text
-
-        
-    def _request_file(self,endpoint,filename, form_data=None):    
+    
+    
+    def _request_file(self,verb, endpoint,filename, form_data=None):    
         """Request a url.
         :param endpoint: The api endpoint we want to call.
-        :param filename: Path to the file to upload
+        :param filename: Path to the file to upload/download
         :param form_data: form data to submit. E.g password=password_123
         :raises requests.exceptions.HTTPError: When response code is not successful.
         :raises IOError: When file not found or unreadable
-        :returns: A JSON object with the response from the API.
+        :returns: True/False
         """
         
         resp = None
         
-        if not os.path.isfile(filename):
-            raise IOError("{0} not found".format(filename))   
- 
-        files = {'file': (open(filename, 'rb'))}
-        
         auth = HTTPBasicAuth(self.config.username, self.config.password)
-        
         request_url = "{0}/{1}".format(self.config.forumsentry_url, endpoint)
         
-        if form_data is not None:
-            if type(form_data) == type(dict()):
-                resp = requests.post(request_url, auth=auth, verify=False, files=files, data=form_data)
-            else:
-                self._logger.error("Expected a dictionary of form params to post")
-                raise InvalidTypeError(form_data)
-        else:
-            resp = requests.post(request_url, auth=auth, verify=False, files=files)
-        
-        
-        resp.raise_for_status()
-        
-        self._logger.debug(resp.text)
-        return resp.text
+        if verb == 'GET':
+            #We are getting a file from a remote url
             
-
+            if form_data is not None:
+                if type(form_data) == type(dict()):
+                    resp = requests.get(request_url, auth=auth, verify=False, data=form_data)
+                else:
+                    self._logger.error("Expected a dictionary of form params to post")
+                    raise InvalidTypeError(form_data)
+            else:
+                resp = requests.get(request_url, auth=auth, verify=False,)
+            
+            resp.raise_for_status()
+            
+            with open(filename, 'wb') as f:
+                f.write(resp.content)
+            
+            return True
+        
+        elif verb == 'POST':
+            
+            if not os.path.isfile(filename):
+                raise IOError("{0} not found".format(filename)) 
+            
+            files = {'file': (open(filename, 'rb'))}
+            
+            if form_data is not None:
+                if type(form_data) == type(dict()):
+                    resp = requests.post(request_url, auth=auth, verify=False, files=files, data=form_data)
+                else:
+                    self._logger.error("Expected a dictionary of form params to post")
+                    raise InvalidTypeError(form_data)
+            else:
+                resp = requests.post(request_url, auth=auth, verify=False, files=files)
+            
+            resp.raise_for_status()
+            
+            self._logger.debug(resp.text)
+            
+            return True
+        
+        else:
+            raise BadVerbError(verb)     
+    
+    def _export_fsg(self,endpoint,fsg,password):
+        
+        
+        form_data = {}
+        form_data['password'] = password   
+        
+        try:
+            # this method will be patched for unit test
+            return self._request_file("GET",endpoint, fsg, form_data)
+            
+           
+        except HTTPError as e:
+            self._logger.debug(e)
+            self._logger.error("An unexpected HTTP response occurred: ", e)
+            raise e
+        
+            
+    def _import_fsg(self,fsg,password):
+        
+        target_endpoint = "configuration/import?format=fsg"
+        
+        self._logger.debug("target_endpoint: {0}".format(target_endpoint))
+        
+        form_data = {}
+        form_data['password'] = password
+        
+        try:
+            # this method will be patched for unit test
+            return self._request_file("POST",target_endpoint, fsg, form_data)
+            
+           
+        except HTTPError as e:
+            self._logger.debug(e)
+            self._logger.error("An unexpected HTTP response occurred: ", e)
+            raise e
+        

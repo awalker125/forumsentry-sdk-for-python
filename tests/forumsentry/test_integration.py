@@ -6,8 +6,8 @@ Created on 20 Nov 2017
 import unittest
 import os
 import sys
-import string
-import random
+#import string
+#import random
 
 from forumsentry import api, serialization, configuration_import_api,\
     http_listener_policy_api
@@ -19,37 +19,24 @@ from tests.forumsentry import helper
 
 class TestIntegration(unittest.TestCase):
     '''
-    tests data to be created during startup should be named as follows and placed in ../testdata
-    test_integration_<policy_type>_<model_type>_<test_id>
-    e.g
-    test_integration_httpListenerPolicies_HttpListenerPolicy_1
-    
-    We will load the json via the deserializer and change its name property to be a <unique_id>_<test_id>
-    
-    On tear down we will attempt to delete these
+        Each API will have its own intergration test. The process is
+        
+        None FSG
+        ========
+        
+        1) load a json representation of the model
+        2) use the create/upsert to create an object in forum
+        3) load the model from the api
+        4) delete the object from the api
+        
+        FSG
+        ======
+        1) use the create/upsert to create an object in forum via fsg import
+        3) load the model from the api
+        4) delete the object from the api
     '''
 
-#     policy_types = {
-#         'httpListenerPolicies': 'HttpListenerPolicy',
-#         'httpRemotePolicies': 'HttpRemotePolicy',
-#         'htmlPolicies': 'HtmlPolicies'
-#     }
-    
-    policy_types = {
-        'httpListenerPolicies': 'HttpListenerPolicy',
-        'httpRemotePolicies': 'HttpRemotePolicy'
-    }
-    
-    #The ids below relate to the names in the corresponding test data directory
-    tests = {
-        'generic_intergration_getForumSentryPolicy_policyType_policyObject_where_exists': 1,
-        'generic_intergration_getForumSentryPolicy_policyType_policyObject_where_doesnt_exist': 2,
-        'generic_intergration_deleteForumSentryPolicy_policyType_policyObject_where_doesnt_exist': 3,  
-        'generic_intergration_deleteForumSentryPolicy_policyType_policyObject_where_exists': 4,  
-        'generic_intergration_createForumSentryPolicy_policyType_policyObject': 5,  
-     
-    }
-    
+
  
 
     def setUp(self):
@@ -92,7 +79,7 @@ class TestIntegration(unittest.TestCase):
         #self._configuration_import_api = configuration_import_api.ConfigurationImportApi(self._conf)
         self._serializer = serialization.Serialization()
 
-        #self.createTestData()
+
         
     def loadModel(self, test_name, model_type):
         
@@ -105,10 +92,6 @@ class TestIntegration(unittest.TestCase):
             model = self._serializer.deserialize(to_serialize, model_type)
             
             return model
-           
-    def tearDown(self):
-       # self.removeTestData()
-       pass
 
     def test_integration_http_listener_policy_api(self):
         '''
@@ -160,7 +143,7 @@ class TestIntegration(unittest.TestCase):
         #Import our fsg file
         import_result = api.import_fsg(fsg_filename,self._forum_fsg_import_password)
         
-        self.assertIn("FSG successfully imported", import_result)
+        self.assertTrue(import_result)
 
         #our fsg has an http listener so we'll check its there and then delete
         api2 = http_listener_policy_api.HttpListenerPolicyApi(self._conf)
