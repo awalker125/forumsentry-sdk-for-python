@@ -103,7 +103,6 @@ class Api(object):
         self._logger.debug(resp.text)
         return resp.text
     
-    
     def _request_file(self,verb, endpoint,filename, form_data=None):    
         """Request a url.
         :param endpoint: The api endpoint we want to call.
@@ -178,8 +177,7 @@ class Api(object):
             self._logger.debug(e)
             self._logger.error("An unexpected HTTP response occurred: ", e)
             raise e
-        
-            
+                
     def _import_fsg(self,fsg,password):
         
         target_endpoint = "configuration/import?format=fsg"
