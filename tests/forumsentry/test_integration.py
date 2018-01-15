@@ -20,6 +20,8 @@ import tempfile
 
 class TestIntegration(unittest.TestCase):
     '''
+        This is the base intergration test class that all intergration tests will inherit from
+    
         Each API will have its own intergration test. The process is
         
         None FSG
@@ -93,89 +95,6 @@ class TestIntegration(unittest.TestCase):
             model = self._serializer.deserialize(to_serialize, model_type)
             
             return model
-
-    def test_integration_http_listener_policy_api(self):
-        '''
-            This runs our integration test for http_listener_policy_api
-        '''
-        
-        #setup
-        test_name = sys._getframe().f_code.co_name
-        model = self.loadModel(test_name, HttpListenerPolicy)
-        name = test_name + self._unique_id
-        model.name = name
-        
-        #verify we loaded the right model
-        self.assertIsInstance(model, HttpListenerPolicy)
-        self.assertEqual(model.name, name)
-        
-        #create the api to test
-        api = http_listener_policy_api.HttpListenerPolicyApi(self._conf)
-        
-        #create a model on the forum
-        created = api.upsert(name, model)
-        
-        #check what we created is correct
-        self.assertIsInstance(created, HttpListenerPolicy)
-        self.assertEqual(created, model)
-
-        #check we can retrieve the model
-        retrieved = api.get(name)
-        self.assertIsInstance(retrieved, HttpListenerPolicy)
-        self.assertEqual(retrieved, model)
-    
-        #check we can export the model    
-        export_filename = tempfile.mktemp()
-        
-        exported = api.export(name,export_filename, "password")
-        export_found = os.path.isfile(export_filename)
-        
-        self.assertTrue(exported)
-        self.assertTrue(export_found)
-        #cleanup
-        os.remove(export_filename)
-        
-        
-        
-        #check we can delete the model
-        deleted = api.delete(name)
-        self.assertTrue(deleted)
-
-        #Check its really gone  
-        notfound = api.get(name)
-        self.assertIsNone(notfound)
-
-    def test_integration_configuration_import_api(self):
-        
-        #setup
-        test_name = sys._getframe().f_code.co_name
-        testdata_dir = '{0}/../testdata/'.format(self._whereami)
-        fsg_filename = '{0}/{1}.fsg'.format(testdata_dir,test_name)
-
-        api = configuration_import_api.ConfigurationImportApi(self._conf)
-        
-        #Import our fsg file
-        import_result = api.import_fsg(fsg_filename,self._forum_fsg_import_password)
-        
-        self.assertTrue(import_result)
-
-        #our fsg has an http listener so we'll check its there and then delete
-        api2 = http_listener_policy_api.HttpListenerPolicyApi(self._conf)
-                #check we can retrieve the model
-        retrieved = api2.get(test_name)
-        self.assertIsInstance(retrieved, HttpListenerPolicy)
-        self.assertEqual(retrieved.name, test_name)
-        
-        
-        #check we can delete the model
-        deleted = api2.delete(test_name)
-        self.assertTrue(deleted)
-
-        #Check its really gone  
-        notfound = api2.get(test_name)
-        self.assertIsNone(notfound)
-        
-        
         
 
 if __name__ == "__main__":
