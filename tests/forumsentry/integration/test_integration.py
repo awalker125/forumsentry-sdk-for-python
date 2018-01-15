@@ -86,7 +86,7 @@ class TestIntegration(unittest.TestCase):
         
     def loadModel(self, test_name, model_type):
         
-        testdata_dir = '{0}/../testdata/'.format(self._whereami)
+        testdata_dir = '{0}/../../testdata/'.format(self._whereami)
         model_file = '{0}/{1}.json'.format(testdata_dir,test_name)
         
         with open(model_file, 'r') as f:
@@ -95,7 +95,11 @@ class TestIntegration(unittest.TestCase):
             model = self._serializer.deserialize(to_serialize, model_type)
             
             return model
-        
+    
+    def getFsgFileName(self,test_name):
+        testdata_dir = '{0}/../../testdata/'.format(self._whereami)
+        fsg_filename = '{0}/{1}.fsg'.format(testdata_dir,test_name)
+        return  fsg_filename   
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testStart']

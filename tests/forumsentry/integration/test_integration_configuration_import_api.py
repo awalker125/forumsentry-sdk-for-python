@@ -6,7 +6,7 @@ Created on 20 Nov 2017
 import unittest
 import os
 import sys
-from test_integration import TestIntegration
+from tests.forumsentry.integration.test_integration import TestIntegration
 #import string
 #import random
 
@@ -31,8 +31,8 @@ class TestIntegrationConfigurationImportApi(TestIntegration):
         
         #setup
         test_name = sys._getframe().f_code.co_name
-        testdata_dir = '{0}/../testdata/'.format(self._whereami)
-        fsg_filename = '{0}/{1}.fsg'.format(testdata_dir,test_name)
+       
+        fsg_filename = self.getFsgFileName(test_name)
 
         api = configuration_import_api.ConfigurationImportApi(self._conf)
         
