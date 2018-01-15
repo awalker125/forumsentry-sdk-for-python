@@ -14,6 +14,7 @@ from forumsentry import api, serialization, configuration_import_api,\
 from forumsentry_api import HttpListenerPolicy
 from forumsentry.config import Config
 from tests.forumsentry import helper
+import tempfile
 
 
 
@@ -122,6 +123,19 @@ class TestIntegration(unittest.TestCase):
         retrieved = api.get(name)
         self.assertIsInstance(retrieved, HttpListenerPolicy)
         self.assertEqual(retrieved, model)
+    
+        #check we can export the model    
+        export_filename = tempfile.mktemp()
+        
+        exported = api.export(name,export_filename, "password")
+        export_found = os.path.isfile(export_filename)
+        
+        self.assertTrue(exported)
+        self.assertTrue(export_found)
+        #cleanup
+        os.remove(export_filename)
+        
+        
         
         #check we can delete the model
         deleted = api.delete(name)

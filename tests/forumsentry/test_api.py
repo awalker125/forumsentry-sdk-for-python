@@ -87,15 +87,6 @@ class TestApi(unittest.TestCase):
         self.assertEqual('BAD', e.exception.argument)
         self.assertIn('DELETE', e.exception.message)
 
-    def test__request_file_bad_verb(self):
-        '''
-        Tests we get an excpetion on sending a bad verb to _requests_file
-        '''
-        with self.assertRaises(BadVerbError) as e:
-            self._api._request_file("BAD", "test", "test")
-
-        self.assertEqual('BAD', e.exception.argument)
-        self.assertIn('DELETE', e.exception.message)
 
     def test_Api_constructor(self):
         '''
@@ -170,8 +161,8 @@ class TestApi(unittest.TestCase):
         
         self.assertEqual(resp_text, "TEST")           
 
-    @mock.patch("forumsentry.api.requests.get")
-    def test__request_file_GET1(self, mock_get):
+    @mock.patch("forumsentry.api.requests.post")
+    def test__request_file_download1(self, mock_get):
         '''
             Tests _request_file successful response from forum
         '''
@@ -185,12 +176,12 @@ class TestApi(unittest.TestCase):
         
         mo = mock_open()
         with patch('forumsentry.api.open', mo):
-             downloaded = self._api._request_file("GET", "/test",filename)
+             downloaded = self._api._request_file("/test",filename,download=True)
         
         self.assertTrue(downloaded)
 
-    @mock.patch("forumsentry.api.requests.get")
-    def test__request_file_GET2(self, mock_get):
+    @mock.patch("forumsentry.api.requests.post")
+    def test__request_file_download2(self, mock_get):
         '''
             Tests _request_file where the form data isnt a dictionary
         '''
@@ -202,14 +193,14 @@ class TestApi(unittest.TestCase):
       
       
         with self.assertRaises(InvalidTypeError) as e:
-            downloaded = self._api._request_file("GET", "/test","test",form_data="astring")
+            downloaded = self._api._request_file("/test","test",form_data="astring",download=True)
 
         self.assertIn('object type does not match', e.exception.message)
       
 
 
     @mock.patch("forumsentry.api.requests.post")
-    def test__request_file_POST1(self, mock_post):
+    def test__request_file_upload1(self, mock_post):
         '''
             Tests _request_file successful response from forum
         '''
@@ -226,12 +217,12 @@ class TestApi(unittest.TestCase):
         
         mo = mock_open()
         with patch('forumsentry.api.open', mo):
-             uploaded = self._api._request_file("POST", "/test",filename)
+             uploaded = self._api._request_file("/test",filename,download=False)
         
         self.assertTrue(uploaded)        
 
     @mock.patch("forumsentry.api.requests.post")
-    def test__request_file_POST2(self, mock_post):
+    def test__request_file_upload2(self, mock_post):
         '''
             Tests _request_file where the form data isnt a dictionary
         '''
@@ -246,7 +237,7 @@ class TestApi(unittest.TestCase):
         filename = '{0}/../mocks/{1}'.format(whereami,test_name)
       
         with self.assertRaises(InvalidTypeError) as e:
-            downloaded = self._api._request_file("POST", "/test",filename,form_data="astring")
+            downloaded = self._api._request_file("/test",filename,form_data="astring",download=False)
 
         self.assertIn('object type does not match', e.exception.message)
 

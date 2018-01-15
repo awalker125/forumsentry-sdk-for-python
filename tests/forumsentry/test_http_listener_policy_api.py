@@ -233,15 +233,15 @@ class TestApi(unittest.TestCase):
         self.assertEqual(500, e.exception.response.status_code)
         self.assertIn('internal error', e.exception.message)
       
-    @mock.patch("forumsentry.api.requests.get")
-    def test_http_listener_policy_api_export1(self, mock_get):
+    @mock.patch("forumsentry.api.requests.post")
+    def test_http_listener_policy_api_export1(self, mock_post):
         '''
             Tests the when requests gets a successful response from forum
         '''
         test_name = sys._getframe().f_code.co_name
          
         mock_resp = helper._mock_response(test_name=test_name)
-        mock_get.return_value = mock_resp
+        mock_post.return_value = mock_resp
 
 
         filename = tempfile.mktemp()
@@ -254,15 +254,15 @@ class TestApi(unittest.TestCase):
         self.assertTrue(exported)
         
 
-    @mock.patch("forumsentry.api.requests.get")
-    def test_http_listener_policy_api_export2(self, mock_get):
+    @mock.patch("forumsentry.api.requests.post")
+    def test_http_listener_policy_api_export2(self, mock_post):
         '''
             Tests when requests gets a 404 response from forum
         '''
         test_name = sys._getframe().f_code.co_name
          
         mock_resp = helper._mock_response(status=404,raise_for_status="bill not found")
-        mock_get.return_value = mock_resp
+        mock_post.return_value = mock_resp
 
 
         filename = tempfile.mktemp()
@@ -275,8 +275,8 @@ class TestApi(unittest.TestCase):
         self.assertFalse(exported)
 
 
-    @mock.patch("forumsentry.api.requests.get")
-    def test_http_listener_policy_api_export3(self, mock_get):
+    @mock.patch("forumsentry.api.requests.post")
+    def test_http_listener_policy_api_export3(self, mock_post):
         '''
             Tests when requests gets a 500 response from forum
         '''
@@ -284,7 +284,7 @@ class TestApi(unittest.TestCase):
          
 
         mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
-        mock_get.return_value = mock_resp
+        mock_post.return_value = mock_resp
         
         filename = tempfile.mktemp()
          

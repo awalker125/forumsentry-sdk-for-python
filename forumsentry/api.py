@@ -103,11 +103,12 @@ class Api(object):
         self._logger.debug(resp.text)
         return resp.text
     
-    def _request_file(self,verb, endpoint,filename, form_data=None):    
-        """Request a url.
+    def _request_file(self,endpoint, filename,form_data=None, download=True):    
+        """
         :param endpoint: The api endpoint we want to call.
         :param filename: Path to the file to upload/download
         :param form_data: form data to submit. E.g password=password_123
+        :param download: If we should download default. Set to true to upload. In forum both export and import are http POST
         :raises requests.exceptions.HTTPError: When response code is not successful.
         :raises IOError: When file not found or unreadable
         :returns: True/False
@@ -118,17 +119,17 @@ class Api(object):
         auth = HTTPBasicAuth(self.config.username, self.config.password)
         request_url = "{0}/{1}".format(self.config.forumsentry_url, endpoint)
         
-        if verb == 'GET':
+        if download:
             #We are getting a file from a remote url
             
             if form_data is not None:
                 if type(form_data) == type(dict()):
-                    resp = requests.get(request_url, auth=auth, verify=False, data=form_data)
+                    resp = requests.post(request_url, auth=auth, verify=False, data=form_data)
                 else:
                     self._logger.error("Expected a dictionary of form params to post")
                     raise InvalidTypeError(form_data)
             else:
-                resp = requests.get(request_url, auth=auth, verify=False,)
+                resp = requests.post(request_url, auth=auth, verify=False)
             
             resp.raise_for_status()
             
@@ -137,7 +138,7 @@ class Api(object):
             
             return True
         
-        elif verb == 'POST':
+        else:
             
             if not os.path.isfile(filename):
                 raise IOError("{0} not found".format(filename)) 
@@ -157,10 +158,7 @@ class Api(object):
             
             self._logger.debug(resp.text)
             
-            return True
-        
-        else:
-            raise BadVerbError(verb)     
+            return True    
     
     def _export_fsg(self,endpoint,fsg,password):
         
@@ -170,7 +168,7 @@ class Api(object):
         
         try:
             # this method will be patched for unit test
-            return self._request_file("GET",endpoint, fsg, form_data)
+            return self._request_file(endpoint, fsg, form_data,download=True)
             
            
         except HTTPError as e:
@@ -189,7 +187,7 @@ class Api(object):
         
         try:
             # this method will be patched for unit test
-            return self._request_file("POST",target_endpoint, fsg, form_data)
+            return self._request_file(target_endpoint, fsg, form_data,download=False)
             
            
         except HTTPError as e:
