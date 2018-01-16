@@ -6,6 +6,7 @@ Created on 11 Jan 2018
 from forumsentry.api import Api
 from requests.exceptions import HTTPError
 from forumsentry_api.models.task_list import TaskList
+from forumsentry.errors import InvalidTypeError
 
 class TaskListsApi(Api):
     '''
@@ -78,7 +79,43 @@ class TaskListsApi(Api):
             else:
                 self._logger.error("An unexpected HTTP response occurred: ", e)
                 raise e
+ 
+    def set(self,name, obj):
+        '''
+        Creates/Updates a task list on the forum sentry. Unfortunately task lists updated using this method do not contain any tasks. It is recommended to use deploy for task lists
+        :param name: The name of the task list we want to create/update..
+        :param obj: The task list object to created/updated.
+        :raises requests.exceptions.HTTPError: When response code is not successful.
+        :returns: The TaskList object that was created/updated.
+        '''
+        
+        if not isinstance(obj, self.str2Class(self.policy_type)):
+            raise InvalidTypeError(obj)
+        
+        target_endpoint = "{0}/{1}".format(self.path, name)
+        
+        self._logger.debug("target_endpoint: {0}".format(target_endpoint))
+        
+        
+        serialized_json = self._serializer.serialize(obj)
+        
+        self._logger.debug("serialized_json: {0}".format(serialized_json))
+        
+        try:
+            # this method will be patched for unit test
+            j = self._request("PUT", target_endpoint, serialized_json)
             
+            self._logger.debug(j)
+            
+            obj = self._serializer.deserialize(j, self.policy_type)
+
+            return obj
+           
+        except HTTPError as e:
+            self._logger.debug(e)
+            self._logger.error("An unexpected HTTP response occurred: ", e)
+            raise e
+     
     def export(self,name,fsg,password):
         ''' export a task list to an fsg file
         :param name: The name of the task list we want to export.
@@ -104,10 +141,10 @@ class TaskListsApi(Api):
             else:
                 self._logger.error("An unexpected HTTP response occurred: ", e)
                 raise e
-
-    def upsert(self, fsg, password):
+        
+    def deploy(self, fsg, password):
         '''
-        Imports an fsg export of a task list.
+        Imports an fsg export. This will overwrite the configuration of the object contained within the export on the forum.
         '''
         return self._import_fsg(fsg, password)
         

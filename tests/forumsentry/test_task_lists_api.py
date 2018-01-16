@@ -89,10 +89,15 @@ class TestApi(unittest.TestCase):
        #print e.exception.message
         self.assertEqual(500, e.exception.response.status_code)
         self.assertIn('internal error', e.exception.message)
+ 
+ 
+ 
+ 
+ 
     
         
     @mock.patch("forumsentry.api.requests.post")
-    def test_task_lists_api_upsert1(self, mock_post):
+    def test_task_lists_api_deploy1(self, mock_post):
         '''
             Tests when requests gets a successful response from forum
         '''
@@ -107,14 +112,12 @@ class TestApi(unittest.TestCase):
         filename = '{0}/../mocks/{1}'.format(whereami,test_name)
          
          
-        created = self._api.upsert( filename, "password")
+        created = self._api.deploy( filename, "password")
          
         self.assertTrue(created)
 
-
-
     @mock.patch("forumsentry.api.requests.post")
-    def test_task_lists_api_upsert2(self, mock_post):
+    def test_task_lists_api_deploy2(self, mock_post):
         '''
             Tests when requests gets a 500 response from forum
         '''
@@ -128,7 +131,7 @@ class TestApi(unittest.TestCase):
         filename = '{0}/../mocks/{1}'.format(whereami,test_name) 
          
         with self.assertRaises(HTTPError) as e: 
-            created = self._api.upsert( filename, "password")
+            created = self._api.deploy( filename, "password")
          
        #print e.exception.message
         self.assertEqual(500, e.exception.response.status_code)

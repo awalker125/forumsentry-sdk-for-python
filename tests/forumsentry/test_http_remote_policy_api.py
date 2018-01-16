@@ -105,7 +105,7 @@ class TestApi(unittest.TestCase):
         self.assertIn('internal error', e.exception.message)
     
     @mock.patch("forumsentry.api.requests.put")
-    def test_http_remote_policy_api_upsert1(self, mock_put):
+    def test_http_remote_policy_api_set1(self, mock_put):
         '''
             Tests when requests gets a successful response from forum
         '''
@@ -122,7 +122,7 @@ class TestApi(unittest.TestCase):
         model.http_authentication_user_policy = ""
         model.use_chunking = False
         model.tcp_read_timeout = 0
-        model.name = "test_http_remote_policy_api_upsert1"
+        model.name = test_name
         model.enable_ssl = False
         model.remote_authentication = "NONE"
         model.remote_port = 0
@@ -130,14 +130,14 @@ class TestApi(unittest.TestCase):
         model.remote_server = ""
         model.process_response = False
          
-        created = self._api.upsert(test_name, model)
+        created = self._api.set(test_name, model)
          
         self.assertIsInstance(created, HttpRemotePolicy)
         self.assertEqual(created, model)
         self.assertEqual(created.name, test_name)
 
     @mock.patch("forumsentry.api.requests.put")
-    def test_http_remote_policy_api_upsert2(self, mock_put):
+    def test_http_remote_policy_api_set2(self, mock_put):
         '''
             Tests when requests gets a 500 response from forum
         '''
@@ -149,14 +149,14 @@ class TestApi(unittest.TestCase):
         mock_put.return_value = mock_resp
          
         with self.assertRaises(HTTPError) as e: 
-            httpRemotePolicy = self._api.upsert("bill",model)  
+            httpRemotePolicy = self._api.set("bill",model)  
          
        #print e.exception.message
         self.assertEqual(500, e.exception.response.status_code)
         self.assertIn('internal error', e.exception.message)
 
     @mock.patch("forumsentry.api.requests.put")
-    def test_http_remote_policy_api_upsert3(self, mock_put):
+    def test_http_remote_policy_api_set3(self, mock_put):
         '''
             Tests when an invalid object for type is passed
         '''
@@ -166,7 +166,7 @@ class TestApi(unittest.TestCase):
         invalid_object = HttpListenerPolicy("bill")
          
         with self.assertRaises(InvalidTypeError) as e: 
-            self._api.upsert("bill", invalid_object)  
+            self._api.set("bill", invalid_object)  
          
        #print e.exception.message
         self.assertEqual(HttpListenerPolicy, e.exception.argument)

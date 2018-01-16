@@ -39,7 +39,7 @@ class TestIntegrationtTaskListsApi(TestIntegration):
         api = task_lists_api.TaskListsApi(self._conf)
         
         #create a model on the forum
-        created = api.upsert(fsg_filename, self._forum_fsg_import_password)
+        created = api.deploy(fsg_filename, self._forum_fsg_import_password)
         
         #check what we created is correct
         self.assertTrue(created)

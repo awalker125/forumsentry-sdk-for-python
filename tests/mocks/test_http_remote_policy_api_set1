@@ -5,7 +5,7 @@
   "httpAuthenticationUserPolicy": "",
   "useChunking": false,
   "tcpReadTimeout": 0,
-  "name": "test_http_remote_policy_api_upsert1",
+  "name": "test_http_remote_policy_api_set1",
   "enableSSL": false,
   "remoteAuthentication": "NONE",
   "remotePort": 0,

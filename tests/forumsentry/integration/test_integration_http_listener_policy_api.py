@@ -39,7 +39,7 @@ class TestIntegration(TestIntegration):
         api = http_listener_policy_api.HttpListenerPolicyApi(self._conf)
         
         #create a model on the forum
-        created = api.upsert(name, model)
+        created = api.set(name, model)
         
         #check what we created is correct
         self.assertIsInstance(created, HttpListenerPolicy)
