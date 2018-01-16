@@ -6,21 +6,19 @@ Created on 8 Dec 2017
 import unittest
 
 import os
-import string
-import random
+#import string
+#import random
 import json
 import sys
 
 from forumsentry.serialization import Serialization
 from forumsentry_api.models.http_listener_policy import HttpListenerPolicy
+from tests.forumsentry import helper
 
 class TestSerialization(unittest.TestCase):
 
-    def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
-        return ''.join(random.choice(chars) for _ in range(size))
-
     def setUp(self):
-        self._unique_id = self.id_generator()
+        self._unique_id = helper.id_generator()
         self._serialization = Serialization()
         self._whereami = os.path.dirname(__file__)  
         

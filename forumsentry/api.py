@@ -8,17 +8,17 @@ from forumsentry.config import Config
 from forumsentry.serialization import Serialization
 from forumsentry.errors import BadVerbError, DeSerializationError, NotSupportedError, InvalidTypeError, ConfigError
 
-from forumsentry_api.models import http_listener_policy, http_remote_policy
+from forumsentry_api.models import http_listener_policy
+from forumsentry_api.models import http_remote_policy
+from forumsentry_api.models import html_policies
+from forumsentry_api.models import html_policy
 import requests
 from requests.auth import HTTPBasicAuth
 import logging
-# import datetime
 import json
-# import re
-# import six
-# import os
-# import tempfile
-# import sys
+import os.path
+
+
 from requests.exceptions import HTTPError
  
 class Api(object):
@@ -28,7 +28,8 @@ class Api(object):
     # This map defines the policy types we currently support and the model they expect/return
     policy_types = {
         'httpListenerPolicies': 'HttpListenerPolicy',
-        'httpRemotePolicies': 'HttpRemotePolicy'
+        'httpRemotePolicies': 'HttpRemotePolicy',
+        'htmlPolicies': 'HtmlPolicies'
     }
 
     def __init__(self, config=None):
@@ -62,6 +63,9 @@ class Api(object):
  
     def str2Class(self, string):
         return getattr(forumsentry_api.models, string)
+ 
+    def class2String(self, klass):
+        return klass.__name__
  
     def _request(self, verb, endpoint, body=None):
         """Request a url.
@@ -98,101 +102,96 @@ class Api(object):
         
         self._logger.debug(resp.text)
         return resp.text
-        #return resp.json()
-      
-    def getForumSentryPolicy(self, policy_type, name):
-        
-        if policy_type not in self.policy_types:
-            raise NotSupportedError(policy_type)
-        
-        #self._update_session()
-        
-        target_endpoint = "policies/{0}/{1}".format(policy_type, name)
-        
-        self._logger.debug("target_endpoint: {0}".format(target_endpoint))
-
-        try:
-            # this method will be patched for unit test
-            j = self._request("GET", target_endpoint)
-            #print j
-            self._logger.debug("json returned from {0} >>>>".format(target_endpoint))
-            self._logger.debug(j)
-            
-            obj = self._serializer.deserialize(j, self.policy_types[policy_type])
-            #print obj
-            self._logger.debug("object after deserialize >>>>")
-            
-            return obj
-           
-        except HTTPError as e:
-            self._logger.debug(e)
-            if e.response.status_code == 404:
-                self._logger.warn("{0} not found".format(name))
-                return None
-            else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
-                raise e
     
-    def deleteForumSentryPolicy(self, policy_type, name):
+    def _request_file(self,endpoint, filename,form_data=None, download=True):    
+        """
+        :param endpoint: The api endpoint we want to call.
+        :param filename: Path to the file to upload/download
+        :param form_data: form data to submit. E.g password=password_123
+        :param download: If we should download default. Set to true to upload. In forum both export and import are http POST
+        :raises requests.exceptions.HTTPError: When response code is not successful.
+        :raises IOError: When file not found or unreadable
+        :returns: True/False
+        """
         
-        if policy_type not in self.policy_types:
-            raise NotSupportedError(policy_type)
+        resp = None
         
-        #self._update_session()
+        auth = HTTPBasicAuth(self.config.username, self.config.password)
+        request_url = "{0}/{1}".format(self.config.forumsentry_url, endpoint)
         
-        target_endpoint = "policies/{0}/{1}".format(policy_type, name)
-        
-        self._logger.debug("target_endpoint: {0}".format(target_endpoint))
-
-        try:
-            # this method will be patched for unit test
-            #We dont expect any data back in a delete. If it fails we'll either get a 404 which means it doesnt exist or some other error which will be thrown up the stack.
-            self._request("DELETE", target_endpoint)
-            return True
-           
-        except HTTPError as e:
-            self._logger.debug(e)
-            if e.response.status_code == 404:
-                self._logger.warn("{0} not found".format(name))
-                return True
+        if download:
+            #We are getting a file from a remote url
+            
+            if form_data is not None:
+                if type(form_data) == type(dict()):
+                    resp = requests.post(request_url, auth=auth, verify=False, data=form_data)
+                else:
+                    self._logger.error("Expected a dictionary of form params to post")
+                    raise InvalidTypeError(form_data)
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
-                raise e
+                resp = requests.post(request_url, auth=auth, verify=False)
+            
+            resp.raise_for_status()
+            
+            with open(filename, 'wb') as f:
+                f.write(resp.content)
+            
+            return True
         
-    def createOrUpdateForumSentryPolicy(self, policy_type, name, obj):
+        else:
+            
+            if not os.path.isfile(filename):
+                raise IOError("{0} not found".format(filename)) 
+            
+            files = {'file': (open(filename, 'rb'))}
+            
+            if form_data is not None:
+                if type(form_data) == type(dict()):
+                    resp = requests.post(request_url, auth=auth, verify=False, files=files, data=form_data)
+                else:
+                    self._logger.error("Expected a dictionary of form params to post")
+                    raise InvalidTypeError(form_data)
+            else:
+                resp = requests.post(request_url, auth=auth, verify=False, files=files)
+            
+            resp.raise_for_status()
+            
+            self._logger.debug(resp.text)
+            
+            return True    
+    
+    def _export_fsg(self,endpoint,fsg,password):
         
-        if policy_type not in self.policy_types:
-            raise NotSupportedError(policy_type)
         
-        if not isinstance(obj, self.str2Class(self.policy_types[policy_type])):
-            raise InvalidTypeError(obj)
-        
-        
-        #self._update_session()
-        
-        target_endpoint = "policies/{0}/{1}".format(policy_type, name)
-        
-        self._logger.debug("target_endpoint: {0}".format(target_endpoint))
-        
-        
-        serialized_json = self._serializer.serialize(obj)
-        
-        self._logger.debug("serialized_json: {0}".format(serialized_json))
+        form_data = {}
+        form_data['password'] = password   
         
         try:
             # this method will be patched for unit test
-            j = self._request("PUT", target_endpoint, serialized_json)
+            return self._request_file(endpoint, fsg, form_data,download=True)
             
-            self._logger.debug(j)
-            
-            obj = self._serializer.deserialize(j, self.policy_types[policy_type])
-
-            return obj
            
         except HTTPError as e:
             self._logger.debug(e)
             self._logger.error("An unexpected HTTP response occurred: ", e)
             raise e
-
+                
+    def _import_fsg(self,fsg,password):
+        
+        target_endpoint = "configuration/import?format=fsg"
+        
+        self._logger.debug("target_endpoint: {0}".format(target_endpoint))
+        
+        form_data = {}
+        form_data['password'] = password
+        
+        try:
+            # this method will be patched for unit test
+            return self._request_file(target_endpoint, fsg, form_data,download=False)
             
-
+           
+        except HTTPError as e:
+            self._logger.debug(e)
+            self._logger.error("An unexpected HTTP response occurred: ", e)
+            raise e
+        

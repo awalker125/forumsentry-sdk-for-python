@@ -1,0 +1,15 @@
+{
+  "proxyPolicy": "",
+  "SSLInitiationPolicy": "",
+  "tcpConnectionTimeout": 0,
+  "httpAuthenticationUserPolicy": "",
+  "useChunking": false,
+  "tcpReadTimeout": 0,
+  "name": "test_http_remote_policy_api_upsert1",
+  "enableSSL": false,
+  "remoteAuthentication": "NONE",
+  "remotePort": 0,
+  "enabled": false,
+  "remoteServer": "",
+  "processResponse": false
+}

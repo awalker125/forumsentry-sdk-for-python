@@ -1,6 +1,6 @@
 {
   "name": "change_me",
-  "enabled": true,
+  "enabled": false,
   "errorTemplate": "Default Template",
   "interface": "WAN",
   "port": 80,
