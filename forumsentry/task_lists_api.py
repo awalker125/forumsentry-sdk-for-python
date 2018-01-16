@@ -9,7 +9,7 @@ from forumsentry_api.models.task_list import TaskList
 
 class TaskListsApi(Api):
     '''
-    classdocs
+    Api for working with TaskLists
     '''
     
     path = "policies/taskLists"

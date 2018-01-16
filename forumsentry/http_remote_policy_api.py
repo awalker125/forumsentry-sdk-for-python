@@ -5,22 +5,22 @@ Created on 11 Jan 2018
 '''
 from forumsentry.api import Api
 from requests.exceptions import HTTPError
-from forumsentry_api.models.http_listener_policy import HttpListenerPolicy
+from forumsentry_api.models.http_remote_policy import HttpRemotePolicy
 from forumsentry.errors import InvalidTypeError
 
-class HttpListenerPolicyApi(Api):
+class HttpRemotePolicyApi(Api):
     '''
-    Api for working with HttpListenerPolicies
+    Api for working with HttpRemotePolicies
     '''
     
-    path = "policies/httpListenerPolicies"
-    policy_type = "HttpListenerPolicy"
+    path = "policies/httpRemotePolicies"
+    policy_type = "HttpRemotePolicy"
 
     def __init__(self, config=None):
         '''
         Constructor
         '''
-        super(HttpListenerPolicyApi, self).__init__(config=config)
+        super(HttpRemotePolicyApi, self).__init__(config=config)
     
     def get(self, name):
         
@@ -102,7 +102,7 @@ class HttpListenerPolicyApi(Api):
 
     def export(self,name,fsg,password):
         ''' export a task list to an fsg file
-        :param name: The name of the HttpListenerPolicy we want to export.
+        :param name: The name of the HttpRemotePolicy we want to export.
         :param fsg: The file to save the export to.
         :param password: The password to encrypt the export with.
         :raises requests.exceptions.HTTPError: When response code is not successful.

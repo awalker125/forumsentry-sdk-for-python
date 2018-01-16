@@ -6,17 +6,14 @@ Created on 20 Nov 2017
 import unittest
 import os
 import sys
+import tempfile
 from tests.forumsentry.integration.test_integration import TestIntegration
 #import string
 #import random
 
-from forumsentry import api, serialization, configuration_import_api,\
-    http_listener_policy_api, task_lists_api
-from forumsentry_api import HttpListenerPolicy
-from forumsentry.config import Config
-from tests.forumsentry import helper
-import tempfile
+from forumsentry import   task_lists_api
 from forumsentry_api.models.task_list import TaskList
+
 
 
 
