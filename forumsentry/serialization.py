@@ -14,6 +14,7 @@ import sys
 #import tempfile
 import logging
 from forumsentry.errors import DeSerializationError
+from __builtin__ import str
 
 class Serialization(object):
     '''

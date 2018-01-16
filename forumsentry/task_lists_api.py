@@ -82,9 +82,9 @@ class TaskListsApi(Api):
  
     def set(self,name, obj):
         '''
-        Creates/Updates a task list on the forum sentry. Unfortunately task lists updated using this method do not contain any tasks. It is recommended to use deploy for task lists
-        :param name: The name of the task list we want to create/update..
-        :param obj: The task list object to created/updated.
+        Creates/Updates a TaskList on the forum sentry. Unfortunately task lists updated using this method do not contain any tasks. It is recommended to use deploy for task lists
+        :param name: The name of the TaskList we want to create/update..
+        :param obj: The TaskList object to created/updated.
         :raises requests.exceptions.HTTPError: When response code is not successful.
         :returns: The TaskList object that was created/updated.
         '''

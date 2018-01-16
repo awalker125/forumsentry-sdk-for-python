@@ -6,55 +6,55 @@ Created on 20 Nov 2017
 import unittest
 import os
 import sys
+import tempfile
 from tests.forumsentry.integration.test_integration import TestIntegration
-#from tests.forumsentry.integration.test_integration import TestIntegration
 #import string
 #import random
 
-from forumsentry import  http_remote_policy_api
-from forumsentry_api.models import HttpRemotePolicy
-import tempfile
+from forumsentry import   task_lists_api
+from forumsentry_api.models.task_list import TaskList
 
 
 
-class TestIntegration(TestIntegration):
+
+class TestIntegrationtTaskListsApi(TestIntegration):
+    '''
+        Intergration tests for TaskListsApi
+    '''
 
 
-    def test_integration_http_remote_policy_api(self):
+ 
+    def test_integration_task_lists_api(self):
         '''
-            Intergration tests for HttpRemotePolicyApi
+            This runs our integration test for http_listener_policy_api
         '''
         
         #setup
         test_name = sys._getframe().f_code.co_name
-        model = self.loadModel(test_name, HttpRemotePolicy)
-        name = test_name + self._unique_id
-        model.name = name
         
-        #verify we loaded the right model
-        self.assertIsInstance(model, HttpRemotePolicy)
-        self.assertEqual(model.name, name)
+        fsg_filename = self.getFsgFileName(test_name)
+    
         
         #create the api to test
-        api = http_remote_policy_api.HttpRemotePolicyApi(self._conf)
+        api = task_lists_api.TaskListsApi(self._conf)
         
         
-        #       _______. _______ .___________.
-        #      /       ||   ____||           |
-        #     |   (----`|  |__   `---|  |----`
-        #      \   \    |   __|      |  |     
-        #  .----)   |   |  |____     |  |     
-        #  |_______/    |_______|    |__|     
-        #                                     
+        
+        #   _______   _______ .______    __        ______   ____    ____ 
+        #  |       \ |   ____||   _  \  |  |      /  __  \  \   \  /   / 
+        #  |  .--.  ||  |__   |  |_)  | |  |     |  |  |  |  \   \/   /  
+        #  |  |  |  ||   __|  |   ___/  |  |     |  |  |  |   \_    _/   
+        #  |  '--'  ||  |____ |  |      |  `----.|  `--'  |     |  |     
+        #  |_______/ |_______|| _|      |_______| \______/      |__|     
+        #                                                                
 
-        
-        
         #create a model on the forum
-        created = api.set(name, model)
+        created = api.deploy(fsg_filename, self._forum_fsg_import_password)
         
         #check what we created is correct
-        self.assertIsInstance(created, HttpRemotePolicy)
-        self.assertEqual(created, model)
+        self.assertTrue(created)
+
+
 
         #    _______  _______ .___________.
         #   /  _____||   ____||           |
@@ -65,11 +65,11 @@ class TestIntegration(TestIntegration):
         #                                  
 
         #check we can retrieve the model
-        retrieved = api.get(name)
-        self.assertIsInstance(retrieved, HttpRemotePolicy)
-        self.assertEqual(retrieved, model)
+        retrieved = api.get(test_name)
+        self.assertIsInstance(retrieved, TaskList)
     
     
+        
         #   __________   ___ .______     ______   .______     .___________.
         #  |   ____\  \ /  / |   _  \   /  __  \  |   _  \    |           |
         #  |  |__   \  V  /  |  |_)  | |  |  |  | |  |_)  |   `---|  |----`
@@ -77,26 +77,19 @@ class TestIntegration(TestIntegration):
         #  |  |____ /  .  \  |  |      |  `--'  | |  |\  \----.   |  |     
         #  |_______/__/ \__\ | _|       \______/  | _| `._____|   |__|     
         #                                                                  
-    
+
         #check we can export the model    
         export_filename = tempfile.mktemp()
         
-        exported = api.export(name,export_filename, "password")
+        exported = api.export(test_name,export_filename, "password")
         export_found = os.path.isfile(export_filename)
         
         self.assertTrue(exported)
         self.assertTrue(export_found)
+        #cleanup
+        os.remove(export_filename)
         
         
-        #   _______   _______ .______    __        ______   ____    ____ 
-        #  |       \ |   ____||   _  \  |  |      /  __  \  \   \  /   / 
-        #  |  .--.  ||  |__   |  |_)  | |  |     |  |  |  |  \   \/   /  
-        #  |  |  |  ||   __|  |   ___/  |  |     |  |  |  |   \_    _/   
-        #  |  '--'  ||  |____ |  |      |  `----.|  `--'  |     |  |     
-        #  |_______/ |_______|| _|      |_______| \______/      |__|     
-        #                                                                
-        deployed = api.deploy(export_filename, "password")
-        self.assertTrue(deployed)
         
         #   _______   _______  __       _______ .___________. _______ 
         #  |       \ |   ____||  |     |   ____||           ||   ____|
@@ -105,7 +98,32 @@ class TestIntegration(TestIntegration):
         #  |  '--'  ||  |____ |  `----.|  |____     |  |     |  |____ 
         #  |_______/ |_______||_______||_______|    |__|     |_______|
         #                                                             
-            
+
+        #check we can delete the model
+        deleted = api.delete(test_name)
+        self.assertTrue(deleted)
+
+        #Check its really gone  
+        notfound = api.get(test_name)
+        self.assertIsNone(notfound)
+
+
+        #       _______. _______ .___________.
+        #      /       ||   ____||           |
+        #     |   (----`|  |__   `---|  |----`
+        #      \   \    |   __|      |  |     
+        #  .----)   |   |  |____     |  |     
+        #  |_______/    |_______|    |__|     
+        #                                     
+
+        model = self.loadModel(test_name, TaskList)
+        name = test_name + self._unique_id
+        model.name = name
+        
+        #verify we loaded the right model
+        self.assertIsInstance(model, TaskList)
+        self.assertEqual(model.name, name)
+        
         #check we can delete the model
         deleted = api.delete(name)
         self.assertTrue(deleted)
@@ -113,9 +131,6 @@ class TestIntegration(TestIntegration):
         #Check its really gone  
         notfound = api.get(name)
         self.assertIsNone(notfound)
-
-        #cleanup
-        os.remove(export_filename)
         
 
 if __name__ == "__main__":

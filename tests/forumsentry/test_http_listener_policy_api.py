@@ -12,7 +12,7 @@ import random
 from mock import mock_open
 
 from forumsentry import  http_listener_policy_api
-from forumsentry_api import HttpListenerPolicy
+from forumsentry_api.models import HttpListenerPolicy
 from requests.exceptions import HTTPError
 from forumsentry.errors import  InvalidTypeError
 from tests.forumsentry import helper
@@ -292,7 +292,46 @@ class TestApi(unittest.TestCase):
         self.assertEqual(500, e.exception.response.status_code)
         self.assertIn('internal error', e.exception.message)    
                  
+    @mock.patch("forumsentry.api.requests.post")
+    def test_http_listener_policy_api_deploy1(self, mock_post):
+        '''
+            Tests when requests gets a successful response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        #mock_get.return_value  = self.loadMock(test_name)
+        mock_resp = helper._mock_response(test_name=test_name)
+        mock_post.return_value = mock_resp
+        
+        whereami = os.path.dirname(__file__)  
+        
+        filename = '{0}/../mocks/{1}'.format(whereami,test_name)
+         
+         
+        created = self._api.deploy( filename, "password")
+         
+        self.assertTrue(created)
 
+    @mock.patch("forumsentry.api.requests.post")
+    def test_http_listener_policy_api_deploy2(self, mock_post):
+        '''
+            Tests when requests gets a 500 response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
+        mock_post.return_value = mock_resp
+       
+        whereami = os.path.dirname(__file__)  
+        
+        filename = '{0}/../mocks/{1}'.format(whereami,test_name) 
+         
+        with self.assertRaises(HTTPError) as e: 
+            created = self._api.deploy( filename, "password")
+         
+       #print e.exception.message
+        self.assertEqual(500, e.exception.response.status_code)
+        self.assertIn('internal error', e.exception.message)
         
 
         

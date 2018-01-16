@@ -15,7 +15,7 @@ from mock.mock import patch
 
 from forumsentry import api
 from forumsentry.errors import BadVerbError, InvalidTypeError
-from forumsentry_api import HttpListenerPolicy
+from forumsentry_api.models import HttpListenerPolicy
 from forumsentry.config import Config
 from forumsentry.api import Api
 from forumsentry.errors import ConfigError

@@ -91,7 +91,6 @@ class TaskListGroup(object):
         :param task_lists: The task_lists of this TaskListGroup.  # noqa: E501
         :type: str
         """
-
         self._task_lists = task_lists
 
     @property

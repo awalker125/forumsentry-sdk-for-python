@@ -11,8 +11,8 @@ from tests.forumsentry.integration.test_integration import TestIntegration
 #import string
 #import random
 
-from forumsentry import  http_remote_policy_api
-from forumsentry_api.models import HttpRemotePolicy
+from forumsentry import  task_list_groups_api
+from forumsentry_api.models import TaskListGroup
 import tempfile
 
 
@@ -20,23 +20,24 @@ import tempfile
 class TestIntegration(TestIntegration):
 
 
-    def test_integration_http_remote_policy_api(self):
+    def test_integration_task_list_groups_api(self):
         '''
-            Intergration tests for HttpRemotePolicyApi
+            Intergration tests for TaskListGroupsApi
         '''
         
         #setup
         test_name = sys._getframe().f_code.co_name
-        model = self.loadModel(test_name, HttpRemotePolicy)
+        model = self.loadModel(test_name, TaskListGroup)
         name = test_name + self._unique_id
         model.name = name
+
         
         #verify we loaded the right model
-        self.assertIsInstance(model, HttpRemotePolicy)
+        self.assertIsInstance(model, TaskListGroup)
         self.assertEqual(model.name, name)
         
         #create the api to test
-        api = http_remote_policy_api.HttpRemotePolicyApi(self._conf)
+        api = task_list_groups_api.TaskListGroupsApi(self._conf)
         
         
         #       _______. _______ .___________.
@@ -53,7 +54,7 @@ class TestIntegration(TestIntegration):
         created = api.set(name, model)
         
         #check what we created is correct
-        self.assertIsInstance(created, HttpRemotePolicy)
+        self.assertIsInstance(created, TaskListGroup)
         self.assertEqual(created, model)
 
         #    _______  _______ .___________.
@@ -66,7 +67,7 @@ class TestIntegration(TestIntegration):
 
         #check we can retrieve the model
         retrieved = api.get(name)
-        self.assertIsInstance(retrieved, HttpRemotePolicy)
+        self.assertIsInstance(retrieved, TaskListGroup)
         self.assertEqual(retrieved, model)
     
     
