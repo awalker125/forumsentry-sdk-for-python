@@ -11,7 +11,7 @@ from tests.forumsentry.integration.test_integration import TestIntegration
 
 from forumsentry import  configuration_import_api,\
     http_listener_policy_api
-from forumsentry_api import HttpListenerPolicy
+from forumsentry_api.models import HttpListenerPolicy
 
 
 

@@ -5,29 +5,30 @@ Created on 11 Jan 2018
 '''
 from forumsentry.api import Api
 from requests.exceptions import HTTPError
-from forumsentry_api.models.http_remote_policy import HttpRemotePolicy
+from forumsentry_api.models.task_list import TaskList
 from forumsentry.errors import InvalidTypeError
 
-class HttpRemotePolicyApi(Api):
+class TaskListGroupsApi(Api):
     '''
-    Api for working with HttpRemotePolicies
+    Api for working with TaskListGroups
     '''
     
-    path = "policies/httpRemotePolicies"
-    policy_type = "HttpRemotePolicy"
+    path = "policies/taskListGroups"
+    policy_type = "TaskListGroup"
 
     def __init__(self, config=None):
         '''
         Constructor
         '''
-        super(HttpRemotePolicyApi, self).__init__(config=config)
+        super(TaskListGroupsApi, self).__init__(config=config)
     
     def get(self, name):
-        ''' gets a HttpRemotePolicy
-        :param name: The name of the HttpRemotePolicy we want to get.
+        ''' gets a TaskListGroup
+        :param name: The name of the TaskListGroup we want to get.
         :raises requests.exceptions.HTTPError: When response code is not successful.
-        :returns: A HttpRemotePolicy object.
+        :returns: A TaskListGroup object.
         '''
+        
         target_endpoint = "{0}/{1}".format(self.path, name)
         
         self._logger.debug("target_endpoint: {0}".format(target_endpoint))
@@ -43,6 +44,10 @@ class HttpRemotePolicyApi(Api):
             #print obj
             self._logger.debug("object after deserialize >>>>")
             
+            #Forum throws a 400 error if you set the taskLists to '' but forum return taskLists: '' if taskList is None :-(
+            if not obj.task_lists:
+                obj.task_lists = None
+            
             return obj
            
         except HTTPError as e:
@@ -55,8 +60,8 @@ class HttpRemotePolicyApi(Api):
                 raise e
 
     def delete(self,name):
-        ''' delete a HttpRemotePolicy
-        :param name: The name of the HttpRemotePolicy we want to delete.
+        ''' delete a TaskListGroup
+        :param name: The name of the TaskListGroup we want to delete.
         :raises requests.exceptions.HTTPError: When response code is not successful.
         :returns: True/False.
         '''
@@ -78,17 +83,23 @@ class HttpRemotePolicyApi(Api):
             else:
                 self._logger.error("An unexpected HTTP response occurred: ", e)
                 raise e
-
+     
     def set(self,name, obj):
         '''
-        Creates/Updates a HttpRemotePolicy on the forum sentry.
-        :param name: The name of the HttpRemotePolicy we want to create/update..
-        :param obj: The HttpRemotePolicy object to created/updated.
+        Creates/Updates a TaskListGroup on the forum sentry. 
+        :param name: The name of the TaskListGroup we want to create/update..
+        :param obj: The TaskListGroup object to created/updated.
         :raises requests.exceptions.HTTPError: When response code is not successful.
-        :returns: The HttpRemotePolicy object that was created/updated.
-        '''        
+        :returns: The TaskListGroup object that was created/updated.
+        '''
+        
         if not isinstance(obj, self.str2Class(self.policy_type)):
             raise InvalidTypeError(obj)
+        
+        if obj.task_lists is not None:
+            if not obj.task_lists:
+                self._logger.warn("task_lists cannot be set to an empty string. It must be a valid comma separated list of task lists that exist in the forum")
+                obj.task_lists = None
         
         target_endpoint = "{0}/{1}".format(self.path, name)
         
@@ -106,6 +117,10 @@ class HttpRemotePolicyApi(Api):
             self._logger.debug(j)
             
             obj = self._serializer.deserialize(j, self.policy_type)
+            
+            #Forum throws a 400 error if you set the taskLists to '' but forum return taskLists: '' if taskList is None :-(
+            if not obj.task_lists:
+                obj.task_lists = None
 
             return obj
            
@@ -113,10 +128,10 @@ class HttpRemotePolicyApi(Api):
             self._logger.debug(e)
             self._logger.error("An unexpected HTTP response occurred: ", e)
             raise e
-
+        
     def export(self,name,fsg,password):
-        ''' export a HttpRemotePolicy to an fsg file
-        :param name: The name of the HttpRemotePolicy we want to export.
+        ''' export a TaskListGroup to an fsg file
+        :param name: The name of the task list group we want to export.
         :param fsg: The file to save the export to.
         :param password: The password to encrypt the export with.
         :raises requests.exceptions.HTTPError: When response code is not successful.
@@ -128,6 +143,7 @@ class HttpRemotePolicyApi(Api):
 
         try:
             # this method will be patched for unit test
+            #We dont expect any data back in a delete. If it fails we'll either get a 404 which means it doesnt exist or some other error which will be thrown up the stack.
             return self._export_fsg(target_endpoint, fsg, password)
            
         except HTTPError as e:
@@ -138,9 +154,11 @@ class HttpRemotePolicyApi(Api):
             else:
                 self._logger.error("An unexpected HTTP response occurred: ", e)
                 raise e
-    
+
     def deploy(self, fsg, password):
         '''
         Imports an fsg export. This will overwrite the configuration of the object contained within the export on the forum.
         '''
         return self._import_fsg(fsg, password)
+        
+    

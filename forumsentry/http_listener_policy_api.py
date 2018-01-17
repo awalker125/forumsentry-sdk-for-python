@@ -23,7 +23,11 @@ class HttpListenerPolicyApi(Api):
         super(HttpListenerPolicyApi, self).__init__(config=config)
     
     def get(self, name):
-        
+        ''' gets a HttpListenerPolicy
+        :param name: The name of the HttpListenerPolicywe want to get.
+        :raises requests.exceptions.HTTPError: When response code is not successful.
+        :returns: A HttpListenerPolicy object.
+        '''
         target_endpoint = "{0}/{1}".format(self.path, name)
         
         self._logger.debug("target_endpoint: {0}".format(target_endpoint))
@@ -51,7 +55,11 @@ class HttpListenerPolicyApi(Api):
                 raise e
 
     def delete(self,name):
-
+        ''' delete a HttpListenerPolicy
+        :param name: The name of the HttpListenerPolicy we want to delete.
+        :raises requests.exceptions.HTTPError: When response code is not successful.
+        :returns: True/False.
+        '''
         target_endpoint = "{0}/{1}".format(self.path, name)
         
         self._logger.debug("target_endpoint: {0}".format(target_endpoint))
@@ -71,8 +79,14 @@ class HttpListenerPolicyApi(Api):
                 self._logger.error("An unexpected HTTP response occurred: ", e)
                 raise e
 
-    def upsert(self,name, obj):
-        
+    def set(self,name, obj):
+        '''
+        Creates/Updates a HttpListenerPolicy the forum sentry.
+        :param name: The name of the HttpListenerPolicy we want to create/update..
+        :param obj: The HttpListenerPolicy  to created/updated.
+        :raises requests.exceptions.HTTPError: When response code is not successful.
+        :returns: The HttpListenerPolicy object that was created/updated.
+        '''
         if not isinstance(obj, self.str2Class(self.policy_type)):
             raise InvalidTypeError(obj)
         
@@ -101,7 +115,7 @@ class HttpListenerPolicyApi(Api):
             raise e
 
     def export(self,name,fsg,password):
-        ''' export a task list to an fsg file
+        ''' export a HttpListenerPolicy to an fsg file
         :param name: The name of the HttpListenerPolicy we want to export.
         :param fsg: The file to save the export to.
         :param password: The password to encrypt the export with.
@@ -124,3 +138,9 @@ class HttpListenerPolicyApi(Api):
             else:
                 self._logger.error("An unexpected HTTP response occurred: ", e)
                 raise e
+    
+    def deploy(self, fsg, password):
+        '''
+        Imports an fsg export. This will overwrite the configuration of the object contained within the export on the forum.
+        '''
+        return self._import_fsg(fsg, password)

@@ -9,12 +9,9 @@ import sys
 #import string
 #import random
 
-from forumsentry import api, serialization, configuration_import_api,\
-    http_listener_policy_api
-from forumsentry_api import HttpListenerPolicy
+from forumsentry import api, serialization
 from forumsentry.config import Config
 from tests.forumsentry import helper
-import tempfile
 
 
 

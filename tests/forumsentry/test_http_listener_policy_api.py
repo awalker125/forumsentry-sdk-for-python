@@ -12,7 +12,7 @@ import random
 from mock import mock_open
 
 from forumsentry import  http_listener_policy_api
-from forumsentry_api import HttpListenerPolicy
+from forumsentry_api.models import HttpListenerPolicy
 from requests.exceptions import HTTPError
 from forumsentry.errors import  InvalidTypeError
 from tests.forumsentry import helper
@@ -105,7 +105,7 @@ class TestApi(unittest.TestCase):
         self.assertIn('internal error', e.exception.message)
     
     @mock.patch("forumsentry.api.requests.put")
-    def test_http_listener_policy_api_upsert1(self, mock_put):
+    def test_http_listener_policy_api_set1(self, mock_put):
         '''
             Tests when requests gets a successful response from forum
         '''
@@ -140,14 +140,14 @@ class TestApi(unittest.TestCase):
         model.require_password_authentication = False
         model.use_kerberos_authentication = False
          
-        created = self._api.upsert(test_name, model)
+        created = self._api.set(test_name, model)
          
         self.assertIsInstance(created, HttpListenerPolicy)
         self.assertEqual(created, model)
         self.assertEqual(created.name, test_name)
 
     @mock.patch("forumsentry.api.requests.put")
-    def test_http_listener_policy_api_upsert2(self, mock_put):
+    def test_http_listener_policy_api_set2(self, mock_put):
         '''
             Tests when requests gets a 500 response from forum
         '''
@@ -159,14 +159,14 @@ class TestApi(unittest.TestCase):
         mock_put.return_value = mock_resp
          
         with self.assertRaises(HTTPError) as e: 
-            httpListenerPolicy = self._api.upsert("bill",model)  
+            httpListenerPolicy = self._api.set("bill",model)  
          
        #print e.exception.message
         self.assertEqual(500, e.exception.response.status_code)
         self.assertIn('internal error', e.exception.message)
 
     @mock.patch("forumsentry.api.requests.put")
-    def test_http_listener_policy_api_upsert3(self, mock_put):
+    def test_http_listener_policy_api_set3(self, mock_put):
         '''
             Tests when an invalid object for type is passed
         '''
@@ -176,7 +176,7 @@ class TestApi(unittest.TestCase):
         invalid_object = HttpRemotePolicy("bill")
          
         with self.assertRaises(InvalidTypeError) as e: 
-            self._api.upsert("bill", invalid_object)  
+            self._api.set("bill", invalid_object)  
          
        #print e.exception.message
         self.assertEqual(HttpRemotePolicy, e.exception.argument)
@@ -253,7 +253,6 @@ class TestApi(unittest.TestCase):
         
         self.assertTrue(exported)
         
-
     @mock.patch("forumsentry.api.requests.post")
     def test_http_listener_policy_api_export2(self, mock_post):
         '''
@@ -274,7 +273,6 @@ class TestApi(unittest.TestCase):
         
         self.assertFalse(exported)
 
-
     @mock.patch("forumsentry.api.requests.post")
     def test_http_listener_policy_api_export3(self, mock_post):
         '''
@@ -294,7 +292,46 @@ class TestApi(unittest.TestCase):
         self.assertEqual(500, e.exception.response.status_code)
         self.assertIn('internal error', e.exception.message)    
                  
+    @mock.patch("forumsentry.api.requests.post")
+    def test_http_listener_policy_api_deploy1(self, mock_post):
+        '''
+            Tests when requests gets a successful response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        #mock_get.return_value  = self.loadMock(test_name)
+        mock_resp = helper._mock_response(test_name=test_name)
+        mock_post.return_value = mock_resp
+        
+        whereami = os.path.dirname(__file__)  
+        
+        filename = '{0}/../mocks/{1}'.format(whereami,test_name)
+         
+         
+        created = self._api.deploy( filename, "password")
+         
+        self.assertTrue(created)
 
+    @mock.patch("forumsentry.api.requests.post")
+    def test_http_listener_policy_api_deploy2(self, mock_post):
+        '''
+            Tests when requests gets a 500 response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
+        mock_post.return_value = mock_resp
+       
+        whereami = os.path.dirname(__file__)  
+        
+        filename = '{0}/../mocks/{1}'.format(whereami,test_name) 
+         
+        with self.assertRaises(HTTPError) as e: 
+            created = self._api.deploy( filename, "password")
+         
+       #print e.exception.message
+        self.assertEqual(500, e.exception.response.status_code)
+        self.assertIn('internal error', e.exception.message)
         
 
         

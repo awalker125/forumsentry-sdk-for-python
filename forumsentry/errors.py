@@ -35,7 +35,6 @@ class BadVerbError(Exception):
 
     def __str__(self):
         return '{0} is invalid. {1}'.format(self.argument, self.message)
-
         
 class SerializationError(Exception):
     """Exception raises for serialization failures
@@ -99,4 +98,23 @@ class InvalidTypeError(Exception):
         self.message = InvalidTypeError.message
 
     def __str__(self):
-        return '{0} is invalid. {1}'.format(self.argument, self.message)          
+        return '{0} is invalid. {1}'.format(self.argument, self.message)
+    
+# class KnownAnomalyError(Exception):
+#     """
+#     Exception raised when an valid object is used with a particular policies/types where an anomaly exists which causes the forum to return an error. 
+#     An example is TaskListGroup which has an optional taskLists string field. If you send '' as the string the forum throws a 400 "Invalid parameter taskLists:" error.
+#     Unfortunately if you create an TaskListGroup with taskLists set to None forum return taskLists = '' in the json document.
+# 
+#     :param argument: The argument that was passed into the function.
+#     """
+#     message = "provided value is known to cause an exception"
+# 
+#     def __init__(self, argument, field):
+#         # Call the base class constructor with the parameters it needs
+#         super(KnownAnomalyError, self).__init__()
+#         self.argument = type(argument)
+#         self.message = KnownAnomalyError.message
+# 
+#     def __str__(self):
+#         return '{0} is invalid. {1}'.format(self.argument, self.message)              

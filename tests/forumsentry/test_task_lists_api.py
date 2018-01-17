@@ -12,13 +12,10 @@ import string
 import random
 
 
-from forumsentry import api, http_listener_policy_api, task_lists_api
-from forumsentry.errors import BadVerbError
-from forumsentry_api import HttpListenerPolicy
+from forumsentry import task_lists_api
+from forumsentry_api.models import HttpListenerPolicy
 from requests.exceptions import HTTPError
-from forumsentry.config import Config
-from forumsentry.api import Api
-from forumsentry.errors import ConfigError, NotSupportedError, InvalidTypeError
+from forumsentry.errors import InvalidTypeError
 from tests.forumsentry import helper
 from forumsentry_api.models.http_remote_policy import HttpRemotePolicy
 from forumsentry_api.models.task_list import TaskList
@@ -89,10 +86,15 @@ class TestApi(unittest.TestCase):
        #print e.exception.message
         self.assertEqual(500, e.exception.response.status_code)
         self.assertIn('internal error', e.exception.message)
+ 
+ 
+ 
+ 
+ 
     
         
     @mock.patch("forumsentry.api.requests.post")
-    def test_task_lists_api_upsert1(self, mock_post):
+    def test_task_lists_api_deploy1(self, mock_post):
         '''
             Tests when requests gets a successful response from forum
         '''
@@ -107,14 +109,12 @@ class TestApi(unittest.TestCase):
         filename = '{0}/../mocks/{1}'.format(whereami,test_name)
          
          
-        created = self._api.upsert( filename, "password")
+        created = self._api.deploy( filename, "password")
          
         self.assertTrue(created)
 
-
-
     @mock.patch("forumsentry.api.requests.post")
-    def test_task_lists_api_upsert2(self, mock_post):
+    def test_task_lists_api_deploy2(self, mock_post):
         '''
             Tests when requests gets a 500 response from forum
         '''
@@ -128,7 +128,7 @@ class TestApi(unittest.TestCase):
         filename = '{0}/../mocks/{1}'.format(whereami,test_name) 
          
         with self.assertRaises(HTTPError) as e: 
-            created = self._api.upsert( filename, "password")
+            created = self._api.deploy( filename, "password")
          
        #print e.exception.message
         self.assertEqual(500, e.exception.response.status_code)
@@ -247,6 +247,64 @@ class TestApi(unittest.TestCase):
         self.assertEqual(500, e.exception.response.status_code)
         self.assertIn('internal error', e.exception.message)    
 
+
+    @mock.patch("forumsentry.api.requests.put")
+    def test_task_lists_api_set1(self, mock_put):
+        '''
+            Tests when requests gets a successful response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        #mock_get.return_value  = self.loadMock(test_name)
+        mock_resp = helper._mock_response(test_name=test_name)
+        mock_put.return_value = mock_resp
+         
+        model = TaskList()  # noqa: E501
+        model.name = test_name
+        model.description = test_name
+        model.enabled = False
+         
+        created = self._api.set(test_name, model)
+         
+        self.assertIsInstance(created, TaskList)
+        self.assertEqual(created, model)
+        self.assertEqual(created.name, test_name)
+
+    @mock.patch("forumsentry.api.requests.put")
+    def test_task_lists_api_set2(self, mock_put):
+        '''
+            Tests when requests gets a 500 response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        model = TaskList()  # noqa: E501
+        model.name = "bill"
+        mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
+        mock_put.return_value = mock_resp
+         
+        with self.assertRaises(HTTPError) as e: 
+            httpListenerPolicy = self._api.set("bill",model)  
+         
+       #print e.exception.message
+        self.assertEqual(500, e.exception.response.status_code)
+        self.assertIn('internal error', e.exception.message)
+
+    @mock.patch("forumsentry.api.requests.put")
+    def test_task_lists_api_set3(self, mock_put):
+        '''
+            Tests when an invalid object for type is passed
+        '''
+        test_name = sys._getframe().f_code.co_name
+ 
+        
+        invalid_object = HttpRemotePolicy("bill")
+         
+        with self.assertRaises(InvalidTypeError) as e: 
+            self._api.set("bill", invalid_object)  
+         
+       #print e.exception.message
+        self.assertEqual(HttpRemotePolicy, e.exception.argument)
+        self.assertIn('object type does not match expected for type', e.exception.message)
 
 
 if __name__ == "__main__":
