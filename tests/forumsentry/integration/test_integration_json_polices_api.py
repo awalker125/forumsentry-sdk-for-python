@@ -11,33 +11,61 @@ from tests.forumsentry.integration.test_integration import TestIntegration
 #import string
 #import random
 
-from forumsentry import  http_listener_policy_api
-from forumsentry_api.models import HttpListenerPolicy
+from forumsentry import  json_policies_api
+from forumsentry_api.models import JsonPolicies
 import tempfile
 
 
 
-class TestIntegrationHttpListenerPolicyApi(TestIntegration):
+class TestIntegrationJsonPoliciesApi(TestIntegration):
 
 
-    def test_integration_http_listener_policy_api(self):
+    def test_integration_json_policies_api(self):
         '''
-            Intergration tests for HttpListenerPolicyApi
+            Intergration tests for JsonPoliciesApi
         '''
         
         #setup
         test_name = sys._getframe().f_code.co_name
-        model = self.loadModel(test_name, HttpListenerPolicy)
+        model = self.loadModel(test_name, JsonPolicies)
         name = test_name + self._unique_id
         model.name = name
         
         #verify we loaded the right model
-        self.assertIsInstance(model, HttpListenerPolicy)
+        self.assertIsInstance(model, JsonPolicies)
         self.assertEqual(model.name, name)
+  
+          #create the api to test
+        api = json_policies_api.JsonPoliciesApi(self._conf)      
         
-        #create the api to test
-        api = http_listener_policy_api.HttpListenerPolicyApi(self._conf)
 
+        #       _______. _______ .___________. __    __  .______   
+        #      /       ||   ____||           ||  |  |  | |   _  \  
+        #     |   (----`|  |__   `---|  |----`|  |  |  | |  |_)  | 
+        #      \   \    |   __|      |  |     |  |  |  | |   ___/  
+        #  .----)   |   |  |____     |  |     |  `--'  | |  |      
+        #  |_______/    |_______|    |__|      \______/  | _|      
+        #                                                          
+        
+        #We need listner to test the creation of json policy so we'll import them and then delete the json policy
+        
+        setup_fsg = self.getFsgFileName(test_name)
+        imported = api.deploy(setup_fsg, self._forum_fsg_import_password)
+        
+        self.assertTrue(imported)
+        
+        #delete the json policy we imported leaving the listner/remote
+        deleted = api.delete(test_name)
+        self.assertTrue(deleted)
+
+        #Check its really gone  
+        notfound = api.get(test_name)
+        self.assertIsNone(notfound)
+        
+        
+
+        
+        
         #       _______. _______ .___________.
         #      /       ||   ____||           |
         #     |   (----`|  |__   `---|  |----`
@@ -47,11 +75,12 @@ class TestIntegrationHttpListenerPolicyApi(TestIntegration):
         #                                     
 
         
+        
         #create a model on the forum
         created = api.set(name, model)
         
         #check what we created is correct
-        self.assertIsInstance(created, HttpListenerPolicy)
+        self.assertIsInstance(created, JsonPolicies)
         self.assertEqual(created, model)
 
         #    _______  _______ .___________.
@@ -64,8 +93,9 @@ class TestIntegrationHttpListenerPolicyApi(TestIntegration):
 
         #check we can retrieve the model
         retrieved = api.get(name)
-        self.assertIsInstance(retrieved, HttpListenerPolicy)
+        self.assertIsInstance(retrieved, JsonPolicies)
         self.assertEqual(retrieved, model)
+    
     
         #   __________   ___ .______     ______   .______     .___________.
         #  |   ____\  \ /  / |   _  \   /  __  \  |   _  \    |           |
@@ -83,7 +113,8 @@ class TestIntegrationHttpListenerPolicyApi(TestIntegration):
         
         self.assertTrue(exported)
         self.assertTrue(export_found)
-          
+        
+        
         #   _______   _______ .______    __        ______   ____    ____ 
         #  |       \ |   ____||   _  \  |  |      /  __  \  \   \  /   / 
         #  |  .--.  ||  |__   |  |_)  | |  |     |  |  |  |  \   \/   /  
@@ -94,7 +125,6 @@ class TestIntegrationHttpListenerPolicyApi(TestIntegration):
         deployed = api.deploy(export_filename, "password")
         self.assertTrue(deployed)
         
-        
         #   _______   _______  __       _______ .___________. _______ 
         #  |       \ |   ____||  |     |   ____||           ||   ____|
         #  |  .--.  ||  |__   |  |     |  |__   `---|  |----`|  |__   
@@ -102,7 +132,7 @@ class TestIntegrationHttpListenerPolicyApi(TestIntegration):
         #  |  '--'  ||  |____ |  `----.|  |____     |  |     |  |____ 
         #  |_______/ |_______||_______||_______|    |__|     |_______|
         #                                                             
-     
+            
         #check we can delete the model
         deleted = api.delete(name)
         self.assertTrue(deleted)
@@ -111,7 +141,6 @@ class TestIntegrationHttpListenerPolicyApi(TestIntegration):
         notfound = api.get(name)
         self.assertIsNone(notfound)
 
-    
         #cleanup
         os.remove(export_filename)
         

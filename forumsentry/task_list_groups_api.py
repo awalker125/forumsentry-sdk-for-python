@@ -56,7 +56,7 @@ class TaskListGroupsApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return None
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
+                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
                 raise e
 
     def delete(self,name):
@@ -81,7 +81,7 @@ class TaskListGroupsApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return True
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
+                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
                 raise e
      
     def set(self,name, obj):
@@ -125,8 +125,7 @@ class TaskListGroupsApi(Api):
             return obj
            
         except HTTPError as e:
-            self._logger.debug(e)
-            self._logger.error("An unexpected HTTP response occurred: ", e)
+            self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
             raise e
         
     def export(self,name,fsg,password):
@@ -152,7 +151,8 @@ class TaskListGroupsApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return False
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
+                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
+                #self._logger.error("An unexpected HTTP response occurred: ", e)
                 raise e
 
     def deploy(self, fsg, password):

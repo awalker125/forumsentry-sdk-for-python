@@ -6,6 +6,7 @@ Created on 8 Dec 2017
 import unittest
 from forumsentry.config import Config
 import os
+import logging
 
 class TestConfig(unittest.TestCase):
 
@@ -108,15 +109,17 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(config.logger_format,"test")       
         
 
-    def testConfig_FSSENTRY_DEBUG(self):
-        
-        os.environ["FSSENTRY_DEBUG"] = "true"
-        
-        conf = Config()
-        
-        os.unsetenv("FSSENTRY_DEBUG")
-        
-        self.assertTrue(conf.debug)
+#     def testConfig_FSSENTRY_DEBUG(self):
+# 
+#         os.environ["FSENTRY_DEBUG"] = "true"
+#         
+#         conf = Config()
+#         
+#         logger = logging.getLogger("forumsentry")
+#         
+#         
+#     
+#         self.assertEqual(logger.getEffectiveLevel(), logging.DEBUG)
         
         
         

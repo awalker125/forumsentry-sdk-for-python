@@ -1,0 +1,13 @@
+{
+  "remotePath": "test_json_policies_api_set1",
+  "listenerPolicy": "test_json_policies_api_set1",
+  "name": "test_json_policies_api_set1",
+  "virtualPath": "test_json_policies_api_set1",
+  "remotePolicy": "test_json_policies_api_set1",
+  "description": "test_json_policies_api_set1",
+  "requestProcessType": "TASK_LIST",
+  "responseProcessType": "TASK_LIST",
+  "idpGroup": "test_json_policies_api_set1",
+  "requestProcess": "test_json_policies_api_set1",
+  "responseProcess": "test_json_policies_api_set1"
+}

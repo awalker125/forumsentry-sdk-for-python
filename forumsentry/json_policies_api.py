@@ -5,28 +5,28 @@ Created on 11 Jan 2018
 '''
 from forumsentry.api import Api
 from requests.exceptions import HTTPError
-from forumsentry_api.models.http_listener_policy import HttpListenerPolicy
+from forumsentry_api.models import JsonPolicies
 from forumsentry.errors import InvalidTypeError
 
-class HttpListenerPolicyApi(Api):
+class JsonPoliciesApi(Api):
     '''
-    Api for working with HttpListenerPolicies
+    Api for working with HttpRemotePolicies
     '''
     
-    path = "policies/httpListenerPolicies"
-    policy_type = "HttpListenerPolicy"
+    path = "policies/jsonPolicies"
+    policy_type = "JsonPolicies"
 
     def __init__(self, config=None):
         '''
         Constructor
         '''
-        super(HttpListenerPolicyApi, self).__init__(config=config)
+        super(JsonPoliciesApi, self).__init__(config=config)
     
     def get(self, name):
-        ''' gets a HttpListenerPolicy
-        :param name: The name of the HttpListenerPolicywe want to get.
+        ''' gets a JsonPolicies
+        :param name: The name of the JsonPolicies we want to get.
         :raises requests.exceptions.HTTPError: When response code is not successful.
-        :returns: A HttpListenerPolicy object.
+        :returns: A JsonPolicies object.
         '''
         target_endpoint = "{0}/{1}".format(self.path, name)
         
@@ -55,8 +55,8 @@ class HttpListenerPolicyApi(Api):
                 raise e
 
     def delete(self,name):
-        ''' delete a HttpListenerPolicy
-        :param name: The name of the HttpListenerPolicy we want to delete.
+        ''' delete a JsonPolicies
+        :param name: The name of the JsonPolicies we want to delete.
         :raises requests.exceptions.HTTPError: When response code is not successful.
         :returns: True/False.
         '''
@@ -81,12 +81,12 @@ class HttpListenerPolicyApi(Api):
 
     def set(self,name, obj):
         '''
-        Creates/Updates a HttpListenerPolicy the forum sentry.
-        :param name: The name of the HttpListenerPolicy we want to create/update..
-        :param obj: The HttpListenerPolicy  to created/updated.
+        Creates/Updates a JsonPolicies on the forum sentry.
+        :param name: The name of the JsonPolicies we want to create/update..
+        :param obj: The JsonPolicies object to created/updated.
         :raises requests.exceptions.HTTPError: When response code is not successful.
-        :returns: The HttpListenerPolicy object that was created/updated.
-        '''
+        :returns: The JsonPolicies object that was created/updated.
+        '''        
         if not isinstance(obj, self.str2Class(self.policy_type)):
             raise InvalidTypeError(obj)
         
@@ -110,12 +110,15 @@ class HttpListenerPolicyApi(Api):
             return obj
            
         except HTTPError as e:
-            self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
+            if e.response.text:
+                self._logger.error("An unexpected HTTP response occurred: {0} - {1}".format(e.message,e.response.text))                
+            else:
+                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
             raise e
 
     def export(self,name,fsg,password):
-        ''' export a HttpListenerPolicy to an fsg file
-        :param name: The name of the HttpListenerPolicy we want to export.
+        ''' export a JsonPolicies to an fsg file
+        :param name: The name of the JsonPolicies we want to export.
         :param fsg: The file to save the export to.
         :param password: The password to encrypt the export with.
         :raises requests.exceptions.HTTPError: When response code is not successful.

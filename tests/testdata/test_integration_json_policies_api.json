@@ -1,0 +1,13 @@
+{
+  "remotePath": "",
+  "listenerPolicy": "test_integration_json_policies_api-listener",
+  "name": "",
+  "virtualPath": "/",
+  "remotePolicy": "test_integration_json_policies_api-remote",
+  "description": "",
+  "requestProcessType": "TASK_LIST_GROUP",
+  "responseProcessType": "TASK_LIST_GROUP",
+  "idpGroup": "Default HTML Policy Group",
+  "requestProcess": "",
+  "responseProcess": ""
+}

@@ -17,7 +17,7 @@ import tempfile
 
 
 
-class TestIntegration(TestIntegration):
+class TestIntegrationTaskListGroupsApi(TestIntegration):
 
 
     def test_integration_task_list_groups_api(self):

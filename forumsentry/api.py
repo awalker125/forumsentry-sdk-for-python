@@ -98,6 +98,7 @@ class Api(object):
         else:
             raise BadVerbError(verb)
 
+
         resp.raise_for_status()
         
         self._logger.debug(resp.text)
@@ -172,8 +173,7 @@ class Api(object):
             
            
         except HTTPError as e:
-            self._logger.debug(e)
-            self._logger.error("An unexpected HTTP response occurred: ", e)
+            self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
             raise e
                 
     def _import_fsg(self,fsg,password):
@@ -191,7 +191,6 @@ class Api(object):
             
            
         except HTTPError as e:
-            self._logger.debug(e)
-            self._logger.error("An unexpected HTTP response occurred: ", e)
+            self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
             raise e
         

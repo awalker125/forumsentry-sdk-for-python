@@ -107,3 +107,6 @@ ENV/
 
 #fsg files
 #tests/testdata/*.fsg
+
+#intergration test logs
+logs/

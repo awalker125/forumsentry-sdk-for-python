@@ -69,13 +69,26 @@ class TestIntegration(unittest.TestCase):
             self.skipTest("FORUM_REST_API_PROTOCOL not found. This is required for integration testing")
         
         self._conf = Config()
+        
+        test_log_location = "{0}/../../../logs".format(self._whereami)
+        
+        test_log = "{0}/{1}.txt".format(test_log_location, self.__class__.__name__)
+        
+        if not os.path.isdir(test_log_location):
+            os.mkdir(test_log_location)
+            
+        if os.path.isfile(test_log):
+            os.remove(test_log)
+            
+        self._conf.logger_file = test_log
+        
         #conf.debug = True
         self._conf.host = self._forum_rest_api_host
         self._conf.port = self._forum_rest_api_port
         self._conf.username = self._forum_rest_api_user
         self._conf.password = self._forum_rest_api_password
         self._conf.protocol = self._forum_rest_api_protocol
-        self._api = api.Api(self._conf)
+        #self._api = api.Api(self._conf)
         #self._configuration_import_api = configuration_import_api.ConfigurationImportApi(self._conf)
         self._serializer = serialization.Serialization()
 

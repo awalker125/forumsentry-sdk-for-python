@@ -52,7 +52,7 @@ class TaskListsApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return None
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
+                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
                 raise e
 
     def delete(self,name):
@@ -77,7 +77,7 @@ class TaskListsApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return True
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
+                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
                 raise e
  
     def set(self,name, obj):
@@ -113,7 +113,7 @@ class TaskListsApi(Api):
            
         except HTTPError as e:
             self._logger.debug(e)
-            self._logger.error("An unexpected HTTP response occurred: ", e)
+            self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
             raise e
      
     def export(self,name,fsg,password):
@@ -128,6 +128,7 @@ class TaskListsApi(Api):
         
         self._logger.debug("target_endpoint: {0}".format(target_endpoint))
 
+
         try:
             # this method will be patched for unit test
             #We dont expect any data back in a delete. If it fails we'll either get a 404 which means it doesnt exist or some other error which will be thrown up the stack.
@@ -139,7 +140,7 @@ class TaskListsApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return False
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
+                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
                 raise e
         
     def deploy(self, fsg, password):
