@@ -6,7 +6,7 @@ Created on 11 Jan 2018
 from forumsentry.api import Api
 from requests.exceptions import HTTPError
 from forumsentry_api.models.task_list import TaskList
-from forumsentry.errors import InvalidTypeError
+from forumsentry.errors import InvalidTypeError, ForumHTTPError
 
 class TaskListsApi(Api):
     '''
@@ -52,8 +52,9 @@ class TaskListsApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return None
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
-                raise e
+                wrapped_error = ForumHTTPError(e)
+                self._logger.error(wrapped_error)
+                raise wrapped_error
 
     def delete(self,name):
         ''' delete a task list
@@ -77,8 +78,9 @@ class TaskListsApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return True
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
-                raise e
+                wrapped_error = ForumHTTPError(e)
+                self._logger.error(wrapped_error)
+                raise wrapped_error
  
     def set(self,name, obj):
         '''
@@ -112,9 +114,9 @@ class TaskListsApi(Api):
             return obj
            
         except HTTPError as e:
-            self._logger.debug(e)
-            self._logger.error("An unexpected HTTP response occurred: ", e)
-            raise e
+            wrapped_error = ForumHTTPError(e)
+            self._logger.error(wrapped_error)
+            raise wrapped_error
      
     def export(self,name,fsg,password):
         ''' export a task list to an fsg file
@@ -128,6 +130,7 @@ class TaskListsApi(Api):
         
         self._logger.debug("target_endpoint: {0}".format(target_endpoint))
 
+
         try:
             # this method will be patched for unit test
             #We dont expect any data back in a delete. If it fails we'll either get a 404 which means it doesnt exist or some other error which will be thrown up the stack.
@@ -139,8 +142,9 @@ class TaskListsApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return False
             else:
-                self._logger.error("An unexpected HTTP response occurred: ", e)
-                raise e
+                wrapped_error = ForumHTTPError(e)
+                self._logger.error(wrapped_error)
+                raise wrapped_error
         
     def deploy(self, fsg, password):
         '''

@@ -17,7 +17,7 @@ import tempfile
 
 
 
-class TestIntegration(TestIntegration):
+class TestIntegrationHttpListenerPolicyApi(TestIntegration):
 
 
     def test_integration_http_listener_policy_api(self):

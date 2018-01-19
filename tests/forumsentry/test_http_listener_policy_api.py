@@ -13,7 +13,7 @@ from mock import mock_open
 
 from forumsentry import  http_listener_policy_api
 from forumsentry_api.models import HttpListenerPolicy
-from requests.exceptions import HTTPError
+from forumsentry.errors import ForumHTTPError
 from forumsentry.errors import  InvalidTypeError
 from tests.forumsentry import helper
 from forumsentry_api.models.http_remote_policy import HttpRemotePolicy
@@ -97,11 +97,11 @@ class TestApi(unittest.TestCase):
         mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
         mock_get.return_value = mock_resp
          
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
             httpListenerPolicy = self._api.get("bill")  
          
        #print e.exception.message
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
     
     @mock.patch("forumsentry.api.requests.put")
@@ -158,11 +158,11 @@ class TestApi(unittest.TestCase):
         mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
         mock_put.return_value = mock_resp
          
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
             httpListenerPolicy = self._api.set("bill",model)  
          
        #print e.exception.message
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
 
     @mock.patch("forumsentry.api.requests.put")
@@ -226,11 +226,11 @@ class TestApi(unittest.TestCase):
         mock_delete.return_value = mock_resp
         
       
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
             deleted = self._api.delete("bill")  
          
         #print e.exception.message
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
       
     @mock.patch("forumsentry.api.requests.post")
@@ -286,10 +286,10 @@ class TestApi(unittest.TestCase):
         
         filename = tempfile.mktemp()
          
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
            exported = self._api.export("bill", filename, "bob") 
         
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)    
                  
     @mock.patch("forumsentry.api.requests.post")
@@ -326,11 +326,11 @@ class TestApi(unittest.TestCase):
         
         filename = '{0}/../mocks/{1}'.format(whereami,test_name) 
          
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
             created = self._api.deploy( filename, "password")
          
        #print e.exception.message
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
         
 

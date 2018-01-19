@@ -1,0 +1,56 @@
+---
+
+#https://docs.python.org/2/library/logging.config.html#logging-config-dictschema
+
+version: 1
+disable_existing_loggers: False
+formatters:
+    simple:
+        format: "%(asctime)s - %(levelname)s - %(name)s - %(module)s.%(funcName)s: %(message)s"
+
+handlers:
+    console:
+        class: logging.StreamHandler
+        level: ERROR
+        formatter: simple
+        stream: ext://sys.stdout
+
+
+    debug_file_handler:
+        class: logging.handlers.RotatingFileHandler
+        level: DEBUG
+        formatter: simple
+        filename: logs/debug.log
+        maxBytes: 10485760 # 10MB
+        backupCount: 20
+        encoding: utf8
+
+    info_file_handler:
+        class: logging.handlers.RotatingFileHandler
+        level: INFO
+        formatter: simple
+        filename: logs/info.log
+        maxBytes: 10485760 # 10MB
+        backupCount: 20
+        encoding: utf8
+
+    error_file_handler:
+        class: logging.handlers.RotatingFileHandler
+        level: ERROR
+        formatter: simple
+        filename: logs/errors.log
+        maxBytes: 10485760 # 10MB
+        backupCount: 20
+        encoding: utf8
+
+loggers:
+    forumsentry:
+        level: DEBUG
+        handlers: [console, debug_file_handler, info_file_handler, error_file_handler]
+        propagate: false
+    urllib3:
+        level: CRITICAL
+        handlers: [console, info_file_handler, error_file_handler]
+root:
+    level: CRITICAL
+    handlers: [console, info_file_handler, error_file_handler]

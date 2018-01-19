@@ -17,7 +17,7 @@ import tempfile
 
 
 
-class TestIntegration(TestIntegration):
+class TestIntegrationHttpRemotePolicyApi(TestIntegration):
 
 
     def test_integration_http_remote_policy_api(self):

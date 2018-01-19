@@ -11,7 +11,8 @@ clean:
 	${INFO} "clean..."
 	pwd
 	rm -rf dist/*
-
+	if [ -d logs/ ]; then rm -rf logs/*; fi
+	
 dev:
 	${INFO} "dev..."
 	pwd
@@ -41,6 +42,13 @@ test:
 	${INFO} "test..."
 	pwd
 	coverage run -m unittest discover
+	coverage html
+	coverage report
+
+int:
+	${INFO} "test..."
+	pwd
+	coverage run -m unittest discover -s tests/forumsentry/integration/
 	coverage html
 	coverage report
 

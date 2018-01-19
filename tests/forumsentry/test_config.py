@@ -6,6 +6,10 @@ Created on 8 Dec 2017
 import unittest
 from forumsentry.config import Config
 import os
+import logging
+import mock
+from mock.mock import patch
+import forumsentry
 
 class TestConfig(unittest.TestCase):
 
@@ -107,18 +111,26 @@ class TestConfig(unittest.TestCase):
         config.logger_format = "test"
         self.assertEqual(config.logger_format,"test")       
         
-
-    def testConfig_FSSENTRY_DEBUG(self):
-        
-        os.environ["FSSENTRY_DEBUG"] = "true"
-        
+  
+    @mock.patch("forumsentry.config.logging")
+    def testConfig_FSSENTRY_DEBUG(self, mock_logger):
+ 
+        os.environ["FSENTRY_DEBUG"] = "true"
+         
         conf = Config()
         
-        os.unsetenv("FSSENTRY_DEBUG")
+        mock_logger.debug.asser_called_with("logging init complete")
+  
+    @mock.patch("forumsentry.config.logging")
+    def testConfig_FSENTRY_LOG_YAML(self, mock_logger):
+        '''
+        Tests when FSENTRY_LOG_YAML points to an invalid location that we get a basic logging config
+        '''
+        os.environ["FSENTRY_LOG_YAML"] = "doesntexist"
+         
+        conf = Config()
         
-        self.assertTrue(conf.debug)
-        
-        
+        mock_logger.debug.asser_called_with("logging init complete")
         
 
 if __name__ == "__main__":

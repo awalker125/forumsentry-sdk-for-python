@@ -3,6 +3,7 @@
 Forumsentry Error Module
 
 """
+from requests.exceptions import HTTPError
 
 class ConfigError(Exception):
     """Exception raises for bad config
@@ -99,6 +100,23 @@ class InvalidTypeError(Exception):
 
     def __str__(self):
         return '{0} is invalid. {1}'.format(self.argument, self.message)
+
+
+class ForumHTTPError(Exception):
+    """
+    Exception raised when forum sends a none 2XX HTTP Error code
+    :param cause: The request HTTPError that caused this exception
+    """
+
+    def __init__(self, cause):
+        # Call the base class constructor with the parameters it needs
+        super(ForumHTTPError, self).__init__()
+        self.cause = cause
+        self.message = "{0} - {1}".format(cause.message, cause.response.text)
+
+    def __str__(self):
+        return self.message
+
     
 # class KnownAnomalyError(Exception):
 #     """
