@@ -6,7 +6,7 @@ Created on 11 Jan 2018
 from forumsentry.api import Api
 from requests.exceptions import HTTPError
 from forumsentry_api.models.http_remote_policy import HttpRemotePolicy
-from forumsentry.errors import InvalidTypeError
+from forumsentry.errors import InvalidTypeError, ForumHTTPError
 
 class HttpRemotePolicyApi(Api):
     '''
@@ -51,8 +51,9 @@ class HttpRemotePolicyApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return None
             else:
-                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
-                raise e
+                wrapped_error = ForumHTTPError(e)
+                self._logger.error(wrapped_error)
+                raise wrapped_error
 
     def delete(self,name):
         ''' delete a HttpRemotePolicy
@@ -76,8 +77,9 @@ class HttpRemotePolicyApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return True
             else:
-                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
-                raise e
+                wrapped_error = ForumHTTPError(e)
+                self._logger.error(wrapped_error)
+                raise wrapped_error
 
     def set(self,name, obj):
         '''
@@ -110,8 +112,9 @@ class HttpRemotePolicyApi(Api):
             return obj
            
         except HTTPError as e:
-            self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
-            raise e
+            wrapped_error = ForumHTTPError(e)
+            self._logger.error(wrapped_error)
+            raise wrapped_error
 
     def export(self,name,fsg,password):
         ''' export a HttpRemotePolicy to an fsg file
@@ -135,8 +138,9 @@ class HttpRemotePolicyApi(Api):
                 self._logger.warn("{0} not found".format(name))
                 return False
             else:
-                self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
-                raise e
+                wrapped_error = ForumHTTPError(e)
+                self._logger.error(wrapped_error)
+                raise wrapped_error
     
     def deploy(self, fsg, password):
         '''

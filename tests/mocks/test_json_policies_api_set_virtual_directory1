@@ -1,0 +1,18 @@
+{
+  "aclPolicy": "",
+  "remotePath": "",
+  "virtualHost": "",
+  "name": "test_json_policies_api_set_virtual_directory1",
+  "enabled": false,
+  "listenerPolicy": "",
+  "description": "",
+  "requestProcessType": "TASK_LIST",
+  "virtualPath": "/bob",
+  "errorTemplate": "",
+  "useRemotePolicy": false,
+  "responseProcessType": "TASK_LIST",
+  "remotePolicy": "",
+  "requestProcess": "",
+  "requestFilterPolicy": "",
+  "responseProcess": ""
+}

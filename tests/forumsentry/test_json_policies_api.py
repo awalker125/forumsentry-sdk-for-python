@@ -15,11 +15,13 @@ from forumsentry import  json_policies_api
 from forumsentry_api.models import JsonPolicies
 from requests.exceptions import HTTPError
 from forumsentry.errors import  InvalidTypeError
+from forumsentry.errors import ForumHTTPError
 from tests.forumsentry import helper
 from forumsentry_api.models.json_policies import JsonPolicies
 import tempfile
 from mock.mock import patch
 from forumsentry_api.models.http_listener_policy import HttpListenerPolicy
+from forumsentry_api.models.virtual_directory import VirtualDirectory
 
 
 class TestApi(unittest.TestCase):
@@ -70,11 +72,11 @@ class TestApi(unittest.TestCase):
         mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
         mock_get.return_value = mock_resp
          
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
             jsonPolices = self._api.get("bill")  
          
        #print e.exception.message
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
     
     @mock.patch("forumsentry.api.requests.put")
@@ -119,11 +121,11 @@ class TestApi(unittest.TestCase):
         mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
         mock_put.return_value = mock_resp
          
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
             jsonPolices = self._api.set("bill",model)  
          
        #print e.exception.message
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
 
     @mock.patch("forumsentry.api.requests.put")
@@ -187,11 +189,11 @@ class TestApi(unittest.TestCase):
         mock_delete.return_value = mock_resp
         
       
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
             deleted = self._api.delete("bill")  
          
         #print e.exception.message
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
       
     @mock.patch("forumsentry.api.requests.post")
@@ -249,10 +251,10 @@ class TestApi(unittest.TestCase):
         
         filename = tempfile.mktemp()
          
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
            exported = self._api.export("bill", filename, "bob") 
         
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)    
                  
 
@@ -290,14 +292,182 @@ class TestApi(unittest.TestCase):
         
         filename = '{0}/../mocks/{1}'.format(whereami,test_name) 
          
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
             created = self._api.deploy( filename, "password")
          
        #print e.exception.message
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
         
 
+    @mock.patch("forumsentry.api.requests.get")
+    def test_json_policies_api_get_virtual_directory1(self, mock_get):
+        '''
+            Tests the when requests gets a successful response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        
+        mock_resp = helper._mock_response(test_name=test_name)
+        mock_get.return_value = mock_resp
+      
+        virtual_directory = self._api.get_virtual_directory('bill', 'bob')
+        
+        self.assertTrue(isinstance(virtual_directory, VirtualDirectory))
+        self.assertEqual(virtual_directory.name, "bob")
+
+    @mock.patch("forumsentry.api.requests.get")
+    def test_json_policies_api_get_virtual_directory2(self, mock_get):
+        '''
+            Tests when requests gets a 404 response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+        
+        mock_resp = helper._mock_response(status=404,raise_for_status="bob not found")
+        mock_get.return_value = mock_resp
+        
+        virtual_directory = self._api.get_virtual_directory('bill', 'bob')
+        
+        self.assertEqual(virtual_directory, None)
+      
+    @mock.patch("forumsentry.api.requests.get")
+    def test_json_policies_api_get_virtual_directory3(self, mock_get):
+        '''
+            Tests when requests gets a 500 response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
+        mock_get.return_value = mock_resp
+         
+        with self.assertRaises(ForumHTTPError) as e: 
+            virtual_directory = self._api.get_virtual_directory('bill', 'bob')
+         
+       #print e.exception.message
+        self.assertEqual(500, e.exception.cause.response.status_code)
+        self.assertIn('internal error', e.exception.message)
+    
+    @mock.patch("forumsentry.api.requests.put")
+    def test_json_policies_api_set_virtual_directory1(self, mock_put):
+        '''
+            Tests when requests gets a successful response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        #mock_get.return_value  = self.loadMock(test_name)
+        mock_resp = helper._mock_response(test_name=test_name)
+        mock_put.return_value = mock_resp
+         
+        model = VirtualDirectory()  # noqa: E501
+        model.name = test_name
+        model.acl_policy = ""
+        model.description = ""
+        model.enabled = False
+        model.error_template = ""
+        model.listener_policy = ""
+        model.remote_path = ""
+        model.remote_policy = ""
+        model.request_filter_policy = ""
+        model.request_process = ""
+        model.request_process_type = "TASK_LIST"
+        model.response_process = ""
+        model._response_process_type = "TASK_LIST"
+        model.use_remote_policy = False
+        model.virtual_host = ""
+        model.virtual_path = "/bob"
+                 
+        created = self._api.set_virtual_directory('bill', 'bob',model)
+         
+        self.assertIsInstance(created, VirtualDirectory)
+        self.assertEqual(created, model)
+        self.assertEqual(created.name, test_name)
+
+    @mock.patch("forumsentry.api.requests.put")
+    def test_json_policies_api_set_virtual_directory2(self, mock_put):
+        '''
+            Tests when requests gets a 500 response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        model = VirtualDirectory()  # noqa: E501
+        model.name = "bill"
+        mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
+        mock_put.return_value = mock_resp
+         
+        with self.assertRaises(ForumHTTPError) as e: 
+            created = self._api.set_virtual_directory('bill', 'bob',model)
+         
+       #print e.exception.message
+        self.assertEqual(500, e.exception.cause.response.status_code)
+        self.assertIn('internal error', e.exception.message)
+
+    @mock.patch("forumsentry.api.requests.put")
+    def test_json_policies_api_set_virtual_directory3(self, mock_put):
+        '''
+            Tests when an invalid object for type is passed
+        '''
+        test_name = sys._getframe().f_code.co_name
+ 
+        
+        invalid_object = HttpListenerPolicy("bill")
+         
+        with self.assertRaises(InvalidTypeError) as e: 
+            created = self._api.set_virtual_directory('bill', 'bob',invalid_object)
+         
+       #print e.exception.message
+        self.assertEqual(HttpListenerPolicy, e.exception.argument)
+        self.assertIn('object type does not match expected for type', e.exception.message)
+
+    @mock.patch("forumsentry.api.requests.delete")
+    def test_json_policies_api_delete_virtual_directory1(self, mock_delete):
+        '''
+            Tests when requests gets a successful response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        
+        mock_resp = helper._mock_response()
+        mock_delete.return_value = mock_resp
+        
+      
+        deleted = self._api.delete_virtual_directory("bill","bob")
+                
+        self.assertTrue(deleted)
+
+    @mock.patch("forumsentry.api.requests.delete")
+    def test_json_policies_api_delete_virtual_directory2(self, mock_delete):
+        '''
+            Tests when requests gets a 404 response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        
+        mock_resp = helper._mock_response(status=404,raise_for_status="bill not found")
+        mock_delete.return_value = mock_resp
+        
+      
+        deleted = self._api.delete_virtual_directory("bill","bob")
+                
+        self.assertTrue(deleted)
+
+    @mock.patch("forumsentry.api.requests.delete")
+    def test_json_policies_api_delete_virtual_directory3(self, mock_delete):
+        '''
+            Tests requests gets a 500 response from forum
+        '''
+        test_name = sys._getframe().f_code.co_name
+         
+        
+        mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
+        mock_delete.return_value = mock_resp
+        
+      
+        with self.assertRaises(ForumHTTPError) as e: 
+            deleted = self._api.delete_virtual_directory("bill","bob")
+         
+        #print e.exception.message
+        self.assertEqual(500, e.exception.cause.response.status_code)
+        self.assertIn('internal error', e.exception.message)
         
 
 if __name__ == "__main__":

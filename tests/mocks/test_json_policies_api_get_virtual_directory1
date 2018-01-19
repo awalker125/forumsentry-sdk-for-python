@@ -1,0 +1,18 @@
+{
+  "aclPolicy": "",
+  "remotePath": "",
+  "virtualHost": "",
+  "name": "bob",
+  "enabled": false,
+  "listenerPolicy": "",
+  "description": "",
+  "requestProcessType": "",
+  "virtualPath": "/bob",
+  "errorTemplate": "",
+  "useRemotePolicy": false,
+  "responseProcessType": "",
+  "remotePolicy": "",
+  "requestProcess": "",
+  "requestFilterPolicy": "",
+  "responseProcess": ""
+}

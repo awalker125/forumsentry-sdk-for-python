@@ -6,7 +6,8 @@ Created on 20 Nov 2017
 import forumsentry_api.models
 from forumsentry.config import Config
 from forumsentry.serialization import Serialization
-from forumsentry.errors import BadVerbError, DeSerializationError, NotSupportedError, InvalidTypeError, ConfigError
+from forumsentry.errors import BadVerbError, DeSerializationError, NotSupportedError, InvalidTypeError, ConfigError,\
+    ForumHTTPError
 
 from forumsentry_api.models import http_listener_policy
 from forumsentry_api.models import http_remote_policy
@@ -163,18 +164,11 @@ class Api(object):
     
     def _export_fsg(self,endpoint,fsg,password):
         
-        
         form_data = {}
         form_data['password'] = password   
         
-        try:
-            # this method will be patched for unit test
-            return self._request_file(endpoint, fsg, form_data,download=True)
+        return self._request_file(endpoint, fsg, form_data,download=True)
             
-           
-        except HTTPError as e:
-            self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
-            raise e
                 
     def _import_fsg(self,fsg,password):
         
@@ -191,6 +185,8 @@ class Api(object):
             
            
         except HTTPError as e:
-            self._logger.error("An unexpected HTTP response occurred: {0}".format(e.message))
-            raise e
+            wrapped_error = ForumHTTPError(e)
+            self._logger.error(wrapped_error)
+            raise wrapped_error
+
         

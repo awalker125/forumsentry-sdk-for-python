@@ -13,6 +13,7 @@ import random
 from forumsentry import configuration_import_api
 from requests.exceptions import HTTPError
 from tests.forumsentry import helper
+from forumsentry.errors import ForumHTTPError
 
 
 
@@ -117,11 +118,11 @@ class TestApi(unittest.TestCase):
         mock_resp = self._mock_response(status=500,raise_for_status="internal error")
         mock_post.return_value = mock_resp
           
-        with self.assertRaises(HTTPError) as e: 
+        with self.assertRaises(ForumHTTPError) as e: 
             text = self._api.import_fsg(filename, password)
           
 
-        self.assertEqual(500, e.exception.response.status_code)
+        self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
  
 

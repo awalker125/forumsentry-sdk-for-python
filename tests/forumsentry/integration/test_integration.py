@@ -12,6 +12,7 @@ import sys
 from forumsentry import api, serialization
 from forumsentry.config import Config
 from tests.forumsentry import helper
+from forumsentry_api.models.virtual_directory import VirtualDirectory
 
 
 
@@ -103,6 +104,19 @@ class TestIntegration(unittest.TestCase):
             to_serialize = f.read()
             #model_type_class = self._api.str2Class(model_type)                
             model = self._serializer.deserialize(to_serialize, model_type)
+            
+            return model
+    
+    #This is a child type to html, xml, json, rest policies etc..
+    def loadVirtualDirectoryModel(self,test_name):
+        
+        testdata_dir = '{0}/../../testdata/'.format(self._whereami)
+        model_file = '{0}/{1}_virtual_directory.json'.format(testdata_dir,test_name)
+        
+        with open(model_file, 'r') as f:
+            to_serialize = f.read()
+            #model_type_class = self._api.str2Class(model_type)                
+            model = self._serializer.deserialize(to_serialize, VirtualDirectory)
             
             return model
     

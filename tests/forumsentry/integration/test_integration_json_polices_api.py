@@ -14,6 +14,7 @@ from tests.forumsentry.integration.test_integration import TestIntegration
 from forumsentry import  json_policies_api
 from forumsentry_api.models import JsonPolicies
 import tempfile
+from forumsentry_api.models.virtual_directory import VirtualDirectory
 
 
 
@@ -27,15 +28,23 @@ class TestIntegrationJsonPoliciesApi(TestIntegration):
         
         #setup
         test_name = sys._getframe().f_code.co_name
-        model = self.loadModel(test_name, JsonPolicies)
         name = test_name + self._unique_id
+        
+        model = self.loadModel(test_name, JsonPolicies)
         model.name = name
         
         #verify we loaded the right model
         self.assertIsInstance(model, JsonPolicies)
         self.assertEqual(model.name, name)
+        
+        virtual_directory_model = self.loadVirtualDirectoryModel(test_name)
+        virtual_directory_model.name = name
+
+        self.assertIsInstance(virtual_directory_model, VirtualDirectory)
+        self.assertEqual(virtual_directory_model.name, name)
+
   
-          #create the api to test
+        #create the api to test
         api = json_policies_api.JsonPoliciesApi(self._conf)      
         
 
@@ -82,6 +91,55 @@ class TestIntegrationJsonPoliciesApi(TestIntegration):
         #check what we created is correct
         self.assertIsInstance(created, JsonPolicies)
         self.assertEqual(created, model)
+        
+        
+        
+        #       _______. _______ .___________.  ____    ____  __  .______     .___________. __    __       ___       __             _______   __  .______       _______   ______ .___________.  ______   .______     ____    ____ 
+        #      /       ||   ____||           |  \   \  /   / |  | |   _  \    |           ||  |  |  |     /   \     |  |           |       \ |  | |   _  \     |   ____| /      ||           | /  __  \  |   _  \    \   \  /   / 
+        #     |   (----`|  |__   `---|  |----`   \   \/   /  |  | |  |_)  |   `---|  |----`|  |  |  |    /  ^  \    |  |           |  .--.  ||  | |  |_)  |    |  |__   |  ,----'`---|  |----`|  |  |  | |  |_)  |    \   \/   /  
+        #      \   \    |   __|      |  |         \      /   |  | |      /        |  |     |  |  |  |   /  /_\  \   |  |           |  |  |  ||  | |      /     |   __|  |  |         |  |     |  |  |  | |      /      \_    _/   
+        #  .----)   |   |  |____     |  |          \    /    |  | |  |\  \----.   |  |     |  `--'  |  /  _____  \  |  `----.      |  '--'  ||  | |  |\  \----.|  |____ |  `----.    |  |     |  `--'  | |  |\  \----.   |  |     
+        #  |_______/    |_______|    |__|     ______\__/     |__| | _| `._____|   |__|      \______/  /__/     \__\ |_______| _____|_______/ |__| | _| `._____||_______| \______|    |__|      \______/  | _| `._____|   |__|     
+        #                                    |______|                                                                        |______|                                                                                             
+
+        created_virtual_directory = api.set_virtual_directory(name, name, virtual_directory_model)
+        
+        #check what we created is correct
+        self.assertIsInstance(created_virtual_directory, VirtualDirectory)
+        self.assertEqual(created_virtual_directory, virtual_directory_model)
+
+
+        #    _______  _______ .___________.  ____    ____  __  .______     .___________. __    __       ___       __             _______   __  .______       _______   ______ .___________.  ______   .______     ____    ____ 
+        #   /  _____||   ____||           |  \   \  /   / |  | |   _  \    |           ||  |  |  |     /   \     |  |           |       \ |  | |   _  \     |   ____| /      ||           | /  __  \  |   _  \    \   \  /   / 
+        #  |  |  __  |  |__   `---|  |----`   \   \/   /  |  | |  |_)  |   `---|  |----`|  |  |  |    /  ^  \    |  |           |  .--.  ||  | |  |_)  |    |  |__   |  ,----'`---|  |----`|  |  |  | |  |_)  |    \   \/   /  
+        #  |  | |_ | |   __|      |  |         \      /   |  | |      /        |  |     |  |  |  |   /  /_\  \   |  |           |  |  |  ||  | |      /     |   __|  |  |         |  |     |  |  |  | |      /      \_    _/   
+        #  |  |__| | |  |____     |  |          \    /    |  | |  |\  \----.   |  |     |  `--'  |  /  _____  \  |  `----.      |  '--'  ||  | |  |\  \----.|  |____ |  `----.    |  |     |  `--'  | |  |\  \----.   |  |     
+        #   \______| |_______|    |__|     ______\__/     |__| | _| `._____|   |__|      \______/  /__/     \__\ |_______| _____|_______/ |__| | _| `._____||_______| \______|    |__|      \______/  | _| `._____|   |__|     
+        #                                 |______|                                                                        |______|                                                                                             
+
+        #check we can retrieve the model
+        retrieved_virtual_directory = api.get_virtual_directory(name,name)
+        self.assertIsInstance(retrieved_virtual_directory, VirtualDirectory)
+        self.assertEqual(retrieved_virtual_directory, virtual_directory_model)
+
+
+
+        #   _______   _______  __       _______ .___________. _______  ____    ____  __  .______     .___________. __    __       ___       __             _______   __  .______       _______   ______ .___________.  ______   .______     ____    ____ 
+        #  |       \ |   ____||  |     |   ____||           ||   ____| \   \  /   / |  | |   _  \    |           ||  |  |  |     /   \     |  |           |       \ |  | |   _  \     |   ____| /      ||           | /  __  \  |   _  \    \   \  /   / 
+        #  |  .--.  ||  |__   |  |     |  |__   `---|  |----`|  |__     \   \/   /  |  | |  |_)  |   `---|  |----`|  |  |  |    /  ^  \    |  |           |  .--.  ||  | |  |_)  |    |  |__   |  ,----'`---|  |----`|  |  |  | |  |_)  |    \   \/   /  
+        #  |  |  |  ||   __|  |  |     |   __|      |  |     |   __|     \      /   |  | |      /        |  |     |  |  |  |   /  /_\  \   |  |           |  |  |  ||  | |      /     |   __|  |  |         |  |     |  |  |  | |      /      \_    _/   
+        #  |  '--'  ||  |____ |  `----.|  |____     |  |     |  |____     \    /    |  | |  |\  \----.   |  |     |  `--'  |  /  _____  \  |  `----.      |  '--'  ||  | |  |\  \----.|  |____ |  `----.    |  |     |  `--'  | |  |\  \----.   |  |     
+        #  |_______/ |_______||_______||_______|    |__|     |_______|_____\__/     |__| | _| `._____|   |__|      \______/  /__/     \__\ |_______| _____|_______/ |__| | _| `._____||_______| \______|    |__|      \______/  | _| `._____|   |__|     
+        #                                                           |______|                                                                        |______|                                                                                             
+
+        #check we can delete the model
+        deleted_virtual_directory = api.delete_virtual_directory(name,name)
+        self.assertTrue(deleted_virtual_directory)
+
+        #Check its really gone  
+        notfound_virtual_directory = api.get_virtual_directory(name,name)
+        self.assertIsNone(notfound_virtual_directory)
+
 
         #    _______  _______ .___________.
         #   /  _____||   ____||           |

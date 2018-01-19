@@ -1,0 +1,18 @@
+{
+  "aclPolicy": "",
+  "remotePath": "",
+  "virtualHost": "",
+  "name": "change_me",
+  "enabled": false,
+  "listenerPolicy": "test_integration_json_policies_api-listener",
+  "description": "",
+  "requestProcessType": "TASK_LIST",
+  "virtualPath": "/bob",
+  "errorTemplate": "",
+  "useRemotePolicy": false,
+  "responseProcessType": "TASK_LIST",
+  "remotePolicy": "",
+  "requestProcess": "",
+  "requestFilterPolicy": "",
+  "responseProcess": ""
+}
