@@ -89,6 +89,15 @@ class TestIntegrationTaskListsApi(TestIntegration):
         self.assertTrue(export_found)
         
         
+        export_with_agent_filename = tempfile.mktemp()
+        
+        exported_with_agent = api.export(name,export_with_agent_filename, "password",agent='no_db')
+        export_with_agent_found = os.path.isfile(export_with_agent_filename)
+        
+        self.assertTrue(exported_with_agent)
+        self.assertTrue(export_with_agent_found)
+        
+        
         #   _______   _______ .______    __        ______   ____    ____ 
         #  |       \ |   ____||   _  \  |  |      /  __  \  \   \  /   / 
         #  |  .--.  ||  |__   |  |_)  | |  |     |  |  |  |  \   \/   /  
@@ -117,6 +126,7 @@ class TestIntegrationTaskListsApi(TestIntegration):
 
         #cleanup
         os.remove(export_filename)
+        os.remove(export_with_agent_filename)
         
 
 if __name__ == "__main__":
