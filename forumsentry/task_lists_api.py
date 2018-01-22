@@ -118,11 +118,12 @@ class TaskListsApi(Api):
             self._logger.error(wrapped_error)
             raise wrapped_error
      
-    def export(self,name,fsg,password):
+    def export(self,name,fsg,password, agent=None):
         ''' export a task list to an fsg file
         :param name: The name of the task list we want to export.
         :param fsg: The file to save the export to.
         :param password: The password to encrypt the export with.
+        :param agent: The agent to use if required
         :raises requests.exceptions.HTTPError: When response code is not successful.
         :returns: True/False.
         '''
@@ -134,7 +135,7 @@ class TaskListsApi(Api):
         try:
             # this method will be patched for unit test
             #We dont expect any data back in a delete. If it fails we'll either get a 404 which means it doesnt exist or some other error which will be thrown up the stack.
-            return self._export_fsg(target_endpoint, fsg, password)
+            return self._export_fsg(target_endpoint, fsg, password,agent)
            
         except HTTPError as e:
             self._logger.debug(e)

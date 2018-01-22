@@ -162,13 +162,18 @@ class Api(object):
             
             return True    
     
-    def _export_fsg(self,endpoint,fsg,password):
+    def _export_fsg(self,endpoint,fsg,password, agent=None):
         
         form_data = {}
-        form_data['password'] = password   
+        form_data['password'] = password
+        
+        if agent is not None:
+            endpoint = "{0}?agent={1}".format(endpoint,agent)
+               
         
         return self._request_file(endpoint, fsg, form_data,download=True)
-            
+    
+      
                 
     def _import_fsg(self,fsg,password):
         
