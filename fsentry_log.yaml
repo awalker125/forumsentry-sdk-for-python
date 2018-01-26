@@ -51,6 +51,10 @@ loggers:
     urllib3:
         level: CRITICAL
         handlers: [console, info_file_handler, error_file_handler]
+    ansible:
+        level: DEBUG
+        handlers: [debug_file_handler, info_file_handler, error_file_handler]
+        propagate: false
 root:
     level: CRITICAL
     handlers: [console, info_file_handler, error_file_handler]
