@@ -22,7 +22,7 @@ class TestIntegrationTaskListGroupsApi(TestIntegration):
 
     def test_integration_task_list_groups_api(self):
         '''
-            Intergration tests for TaskListGroupsApi
+            Integration tests for TaskListGroupsApi
         '''
         
         #setup

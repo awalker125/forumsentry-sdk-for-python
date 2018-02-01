@@ -14,6 +14,7 @@ import yaml
 
 import six
 from six.moves import http_client as httplib
+import sys
 
 
 class Config(object):
@@ -65,26 +66,7 @@ class Config(object):
             self._ssl_ca_file = ssl_ca_file
         
         self._verify_ssl = verify_ssl
-    
-            # Logging Settings
-        #self._logger = {}
-        #self._logger["package_logger"] = logging.getLogger("forumsentry")
-        # self._logger["urllib3_logger"] = logging.getLogger("urllib3")
-        # Log format
-        #self._logger_format = '%(asctime)s %(levelname)s %(message)s'
-        
-        #self._logger_formatter = logging.Formatter(self._logger_format)
-        # Log stream handler
-        #self._logger_stream_handler = None
-        # Log file handler
-        #self._logger_file_handler = None
-        # Debug file location
-        #self._logger_file = None
-        
-        #self._logger_stream = False
-        
-        #self._setup_logging()
-      
+          
         if os.getenv("FSENTRY_DEBUG", None) is not None:
             self.__setup_logging(default_level=logging.DEBUG)
         else:
@@ -110,43 +92,13 @@ class Config(object):
                 logging.config.dictConfig(config)
         else:
             #print "WARN: could not find {0}".format(logging_config)
-            logging.basicConfig(level=default_level, format=default_format)
+            #log to stderr. This works better with ansible
+            logging.basicConfig(level=default_level, format=default_format,stream=sys.stderr)
             
         self._logger = logging.getLogger("forumsentry")
         self._logger.debug("logging init complete")
         
         
-
- 
- 
-#     def _setup_logging(self):
-#         
-#         if self._logger_file:
-#             # If set logging file,
-#             # then add file handler
-#             self._logger_file_handler = logging.FileHandler(self._logger_file)
-#             self._logger_file_handler.setFormatter(self._logger_formatter)
-#             for k, l in six.iteritems(self._logger):
-#                 l.addHandler(self._logger_file_handler)
-#         else:
-#             if self._logger_file_handler:
-#                 for k, l in six.iteritems(self._logger):
-#                     l.removeHandler(self._logger_file_handler)
-#                 self._logger_file_handler = None
-# 
-#         if self.logger_stream:
-#             # If stream logging is set then create a handler and add to each logger
-# 
-#             self._logger_stream_handler = logging.StreamHandler()
-#             self._logger_stream_handler.setFormatter(self._logger_formatter)
-#             for k, l in six.iteritems(self._logger):
-#                 l.addHandler(self._logger_stream_handler)
-#         else:
-#             # If stream logging is not set then remove the handler from each logger and delete
-#             if self._logger_stream_handler:
-#                 for k, l in six.iteritems(self._logger):
-#                     l.removeHandler(self._logger_stream_handler)
-#                 self._logger_stream_handler = None
         
     @property
     def host(self):
@@ -332,107 +284,3 @@ class Config(object):
         
         self._logger.debug("ba_auth_header: {0}".format(ba_auth_header))
         return ba_auth_header
-
-
-#     @property
-#     def logger_stream(self):
-#         return self._logger_stream
-#     
-#     @logger_stream.setter
-#     def logger_stream(self, value):
-#         """Enable stream logger
-# 
-#         :param value: if stream logger should be enabled
-#         :type: bool
-#         """
-#         self._logger_stream = value
-#         self._setup_logging()
-    
-    
-#     @property
-#     def logger_file(self):
-#         """The logger file.
-# 
-#         If the logger_file is None, then add stream handler and remove file
-#         handler. Otherwise, add file handler and remove stream handler.
-# 
-#         :param value: The logger_file path.
-#         :type: str
-#         """
-#         return self._logger_file
-# 
-#     @logger_file.setter
-#     def logger_file(self, value):
-#         """The logger file.
-# 
-#         If the logger_file is None, then add stream handler and remove file
-#         handler. Otherwise, add file handler and remove stream handler.
-# 
-#         :param value: The logger_file path.
-#         :type: str
-#         """
-#         self._logger_file = value
-#         self._setup_logging()
-
-# 
-#     @property
-#     def debug(self):
-#         """Debug status
-# 
-#         :param value: The debug status, True or False.
-#         :type: bool
-#         """
-#         return self._debug
-# 
-#     @debug.setter
-#     def debug(self, value):
-#         """Debug status
-# 
-#         :param value: The debug status, True or False.
-#         :type: bool
-#         """
-#         self._debug = value
-#         if self._debug:
-#             # if debug status is True, turn on debug logging
-#             self._enable_debug()
-#         else:
-#             # if debug status is False, turn off debug logging,
-#             # setting log level to default `logging.WARNING`
-#             self._disable_debug()
-# 
-#     def _enable_debug(self):
-#         
-#         for k, l in six.iteritems(self._logger):
-#             l.setLevel(logging.DEBUG)
-#             # turn on httplib debug
-#         httplib.HTTPConnection.debuglevel = 1
-#     
-#     def _disable_debug(self):
-#         
-#         for k, l in six.iteritems(self._logger):
-#             l.setLevel(logging.WARNING)
-#             # turn on httplib debug
-#         httplib.HTTPConnection.debuglevel = 0    
-
-#     @property
-#     def logger_format(self):
-#         """The logger format.
-# 
-#         The logger_formatter will be updated when sets logger_format.
-# 
-#         :param value: The format string.
-#         :type: str
-#         """
-#         return self._logger_format
-# 
-#     @logger_format.setter
-#     def logger_format(self, value):
-#         """The logger format.
-# 
-#         The logger_formatter will be updated when sets logger_format.
-# 
-#         :param value: The format string.
-#         :type: str
-#         """
-#         self._logger_format = value
-#         self._logger_formatter = logging.Formatter(self._logger_format)
