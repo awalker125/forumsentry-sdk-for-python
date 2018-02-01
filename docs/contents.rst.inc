@@ -42,6 +42,16 @@ Developer Documentation
 
     dev 
 
+
+Developer Documentation
+-----------------------
+
+.. toctree::
+    :maxdepth: 2
+
+    logging
+
+
 Changelog
 ---------
 

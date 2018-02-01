@@ -26,3 +26,20 @@ forumsentry_api.models.http_listener_policy
 forumsentry_api.models.http_remote_policy
 -----------------------------------------
 .. autoclass:: forumsentry_api.models.http_remote_policy
+
+
+forumsentry_api.models.json_policies
+------------------------------------
+.. autoclass:: forumsentry_api.models.json_policies
+
+forumsentry_api.models.task_list_group
+--------------------------------------
+.. autoclass:: forumsentry_api.models.task_list_group
+
+forumsentry_api.models.task_list
+--------------------------------
+.. autoclass:: forumsentry_api.models.task_list
+
+forumsentry_api.models.virtual_directory
+----------------------------------------
+.. autoclass:: forumsentry_api.models.virtual_directory

@@ -18,9 +18,9 @@ from forumsentry_api.models.virtual_directory import VirtualDirectory
 
 class TestIntegration(unittest.TestCase):
     '''
-        This is the base intergration test class that all intergration tests will inherit from
+        This is the base integration test class that all integration tests will inherit from
     
-        Each API will have its own intergration test. The process is
+        Each API will have its own integration test. The process is
         
         None FSG
         ========

@@ -91,11 +91,11 @@ class Api(object):
         request_url = "{0}/{1}".format(self.config.forumsentry_url, endpoint)
 
         if verb == 'GET':
-            resp = requests.get(request_url, auth=auth, headers=headers,verify=False)
+            resp = requests.get(request_url, auth=auth, headers=headers,verify=self.config.verify_ssl)
         elif verb == 'PUT':
-            resp = requests.put(request_url, auth=auth, headers=headers, data=data,verify=False)
+            resp = requests.put(request_url, auth=auth, headers=headers, data=data,verify=self.config.verify_ssl)
         elif verb == 'DELETE':
-            resp = requests.delete(request_url, auth=auth, headers=headers,verify=False)
+            resp = requests.delete(request_url, auth=auth, headers=headers,verify=self.config.verify_ssl)
         else:
             raise BadVerbError(verb)
 
@@ -126,12 +126,12 @@ class Api(object):
             
             if form_data is not None:
                 if type(form_data) == type(dict()):
-                    resp = requests.post(request_url, auth=auth, verify=False, data=form_data)
+                    resp = requests.post(request_url, auth=auth, verify=self.config.verify_ssl, data=form_data)
                 else:
                     self._logger.error("Expected a dictionary of form params to post")
                     raise InvalidTypeError(form_data)
             else:
-                resp = requests.post(request_url, auth=auth, verify=False)
+                resp = requests.post(request_url, auth=auth, verify=self.config.verify_ssl)
             
             resp.raise_for_status()
             
@@ -149,12 +149,12 @@ class Api(object):
             
             if form_data is not None:
                 if type(form_data) == type(dict()):
-                    resp = requests.post(request_url, auth=auth, verify=False, files=files, data=form_data)
+                    resp = requests.post(request_url, auth=auth, verify=self.config.verify_ssl, files=files, data=form_data)
                 else:
                     self._logger.error("Expected a dictionary of form params to post")
                     raise InvalidTypeError(form_data)
             else:
-                resp = requests.post(request_url, auth=auth, verify=False, files=files)
+                resp = requests.post(request_url, auth=auth, verify=self.config.verify_ssl, files=files)
             
             resp.raise_for_status()
             
