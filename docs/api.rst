@@ -81,3 +81,10 @@ forumsentry.task_lists_api
 .. autoclass:: forumsentry.task_lists_api
     :members:
     :private-members:
+    
+forumsentry.documents_api
+-------------------------
+
+.. autoclass:: forumsentry.documents_api
+    :members:
+    :private-members:

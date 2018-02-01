@@ -43,3 +43,7 @@ forumsentry_api.models.task_list
 forumsentry_api.models.virtual_directory
 ----------------------------------------
 .. autoclass:: forumsentry_api.models.virtual_directory
+
+forumsentry_api.models.document
+-------------------------------
+.. autoclass:: forumsentry_api.models.document
