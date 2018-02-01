@@ -22,7 +22,7 @@ class TestIntegrationHttpRemotePolicyApi(TestIntegration):
 
     def test_integration_http_remote_policy_api(self):
         '''
-            Intergration tests for HttpRemotePolicyApi
+            Integration tests for HttpRemotePolicyApi
         '''
         
         #setup

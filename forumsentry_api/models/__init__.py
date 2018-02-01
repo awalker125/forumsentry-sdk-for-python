@@ -18,3 +18,4 @@ from forumsentry_api.models.task_list import TaskList
 from forumsentry_api.models.task_list_group import TaskListGroup
 from forumsentry_api.models.json_policies import JsonPolicies
 from forumsentry_api.models.virtual_directory import VirtualDirectory
+from forumsentry_api.models.document import Document

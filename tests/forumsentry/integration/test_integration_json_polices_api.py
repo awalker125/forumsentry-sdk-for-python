@@ -23,7 +23,7 @@ class TestIntegrationJsonPoliciesApi(TestIntegration):
 
     def test_integration_json_policies_api(self):
         '''
-            Intergration tests for JsonPoliciesApi
+            Integration tests for JsonPoliciesApi
         '''
         
         #setup

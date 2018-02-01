@@ -22,7 +22,7 @@ class TestIntegrationHttpListenerPolicyApi(TestIntegration):
 
     def test_integration_http_listener_policy_api(self):
         '''
-            Intergration tests for HttpListenerPolicyApi
+            Integration tests for HttpListenerPolicyApi
         '''
         
         #setup

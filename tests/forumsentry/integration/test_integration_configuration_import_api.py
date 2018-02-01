@@ -19,7 +19,7 @@ from forumsentry_api.models import HttpListenerPolicy
 
 class TestIntegrationConfigurationImportApi(TestIntegration):
     '''
-        Intergration tests for HttpListenerPolicyApi
+        Integration tests for HttpListenerPolicyApi
     '''
 
 

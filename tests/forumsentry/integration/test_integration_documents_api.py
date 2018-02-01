@@ -11,33 +11,33 @@ from tests.forumsentry.integration.test_integration import TestIntegration
 #import string
 #import random
 
-from forumsentry import  task_lists_api
-from forumsentry_api.models import TaskList
+from forumsentry import  documents_api
+from forumsentry_api.models import Document
 import tempfile
 
 
 
-class TestIntegrationTaskListsApi(TestIntegration):
+class TestIntegrationDocumentsApi(TestIntegration):
 
 
-    def test_integration_task_lists_api(self):
+    def test_integration_documents_api(self):
         '''
-            Integration tests for TaskListsApi
+            Integration tests for DocumentsApi
         '''
         
         #setup
         test_name = sys._getframe().f_code.co_name
-        model = self.loadModel(test_name, TaskList)
+        model = self.loadModel(test_name, Document)
         name = test_name + self._unique_id
         model.name = name
 
         
         #verify we loaded the right model
-        self.assertIsInstance(model, TaskList)
+        self.assertIsInstance(model, Document)
         self.assertEqual(model.name, name)
         
         #create the api to test
-        api = task_lists_api.TaskListsApi(self._conf)
+        api = documents_api.DocumentsApi(self._conf)
         
         
         #       _______. _______ .___________.
@@ -54,7 +54,7 @@ class TestIntegrationTaskListsApi(TestIntegration):
         created = api.set(name, model)
         
         #check what we created is correct
-        self.assertIsInstance(created, TaskList)
+        self.assertIsInstance(created, Document)
         self.assertEqual(created, model)
 
         #    _______  _______ .___________.
@@ -67,7 +67,7 @@ class TestIntegrationTaskListsApi(TestIntegration):
 
         #check we can retrieve the model
         retrieved = api.get(name)
-        self.assertIsInstance(retrieved, TaskList)
+        self.assertIsInstance(retrieved, Document)
         self.assertEqual(retrieved, model)
     
     
