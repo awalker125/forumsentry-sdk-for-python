@@ -8,7 +8,7 @@ from setuptools import find_packages
 #Change this on major/minor version number change. You must create a git tag at the same tag called with the same value
 # git tag "0.1"
 # git push --tags
-VERSION = "0.14"
+VERSION = "0.15"
 
 
 def __path(filename):
@@ -68,7 +68,7 @@ setup(
     ],
     keywords='forumsentry automation api sdk',
     packages=['forumsentry', 'forumsentry_api', 'forumsentry_api.models' ],
-    install_requires=['futures','requests','urllib3'],
+    install_requires=['futures','requests','urllib3','jmespath'],
     python_requires='>=2.7',
     include_package_data=True,
     zip_safe=False,
