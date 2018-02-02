@@ -77,5 +77,50 @@ Linting and Style
 
 This project follows the `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ style guidelines. You can install ``pylint`` in order to ensure that all of your code is compliant with this standard. 
 
+Generating p12 for testing
+--------------------------
+
+When working with the KeyPairs API we need a p12 to upload. To create one use the following
+
+.. code-block:: bash
+
+   #Create a temp server cert with SANs
+   export CNAME=forumsentry-sdk-for-python
+   export PASSWORD=password
+   #create private key
+   openssl genrsa -out ${CNAME}.key 4096
+   #create temp CA
+   openssl req -new -x509 -sha256 -nodes -days 3650  -key ${CNAME}.key -out ${CNAME}-ca.pem -subj "/CN=${CNAME}-ca"
+   #cp ${CNAME}-ca.pem /etc/pki/ca-trust/source/anchors/${CNAME}-ca.pem; update-ca-trust extract
+   #create config file for request/signing
+   cat /etc/pki/tls/openssl.cnf > ${CNAME}.cnf
+   cat >> ${CNAME}.cnf  << END
+   [req]
+   req_extensions = v3_req
+   
+   [ v3_req ]
+   
+   # Extensions to add to a certificate request
+   
+   basicConstraints = CA:FALSE
+   keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+   extendedKeyUsage = serverAuth
+   subjectAltName = @alt_names
+   
+   [alt_names]
+   DNS.1 = ${CNAME}
+   END
+   
+   #Generate CSR
+   openssl req -subj "/CN=${CNAME}" -sha256 -new -key ${CNAME}.key -out ${CNAME}.csr  -config ${CNAME}.cnf
+   #Sign the CSR with the temp CA
+   openssl x509 -req  -sha256 -in ${CNAME}.csr -CA ${CNAME}-ca.pem -CAkey ${CNAME}.key -CAcreateserial -out ${CNAME}.cer -days 730 -extfile ${CNAME}.cnf -extensions v3_req
+   #Create passphrase file 
+   echo -n ${PASSWORD} > .${CNAME}_passphrase
+   
+   #Create p12
+   openssl pkcs12 -export -out  ${CNAME}.p12  -in ${CNAME}.cer -inkey ${CNAME}.key -certfile ${CNAME}-ca.pem -password file:.${CNAME}_passphrase
+   #Create jks
+   keytool -importkeystore -srckeystore ${CNAME}.p12 -srcstoretype pkcs12 -destkeystore ${CNAME}.jks -deststoretype JKS -srcstorepass ${PASSWORD}  -deststorepass ${PASSWORD}
 
 

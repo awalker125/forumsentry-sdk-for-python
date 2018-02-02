@@ -6,13 +6,8 @@ Created on 20 Nov 2017
 import forumsentry_api.models
 from forumsentry.config import Config
 from forumsentry.serialization import Serialization
-from forumsentry.errors import BadVerbError, DeSerializationError, NotSupportedError, InvalidTypeError, ConfigError,\
-    ForumHTTPError
+from forumsentry.errors import BadVerbError,InvalidTypeError, ConfigError, ForumHTTPError
 
-from forumsentry_api.models import http_listener_policy
-from forumsentry_api.models import http_remote_policy
-from forumsentry_api.models import html_policies
-from forumsentry_api.models import html_policy
 import requests
 from requests.auth import HTTPBasicAuth
 import logging
@@ -105,7 +100,7 @@ class Api(object):
         self._logger.debug(resp.text)
         return resp.text
     
-    def _request_file(self,endpoint, filename,form_data=None, download=True):    
+    def _request_file(self,endpoint, filename,form_data=None, download=True,body_param="file"):    
         """
         :param endpoint: The api endpoint we want to call.
         :param filename: Path to the file to upload/download
@@ -145,7 +140,7 @@ class Api(object):
             if not os.path.isfile(filename):
                 raise IOError("{0} not found".format(filename)) 
             
-            files = {'file': (open(filename, 'rb'))}
+            files = { body_param : (open(filename, 'rb'))}
             
             if form_data is not None:
                 if type(form_data) == type(dict()):
