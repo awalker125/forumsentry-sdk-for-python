@@ -1,0 +1,11 @@
+{
+  "name": "test_ssl_termination_policy_api_set1",
+  "authenticateClient": false,
+  "enabledProtocols": [
+    "TLSv1.2",
+    "TLSv1.1"
+  ],
+  "keyPair": "test_ssl_termination_policy_api_set1",
+  "associateDnToUser": false,
+  "useUserAttrOnly": false
+}

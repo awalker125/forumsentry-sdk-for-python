@@ -1,0 +1,11 @@
+{
+  "name": "bill",
+  "authenticateClient": false,
+  "enabledProtocols": [
+    "TLSv1.2",
+    "TLSv1.1"
+  ],
+  "keyPair": "hello",
+  "associateDnToUser": false,
+  "useUserAttrOnly": false
+}
