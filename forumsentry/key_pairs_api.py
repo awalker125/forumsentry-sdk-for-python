@@ -5,8 +5,7 @@ Created on 11 Jan 2018
 '''
 from forumsentry.api import Api
 from requests.exceptions import HTTPError
-from forumsentry.errors import InvalidTypeError, ForumHTTPError,\
-    DeSerializationError
+from forumsentry.errors import ForumHTTPError
 import json
 import jmespath
 
