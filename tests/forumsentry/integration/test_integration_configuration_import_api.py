@@ -30,12 +30,13 @@ class TestIntegrationConfigurationImportApi(TestIntegration):
         #setup
         test_name = sys._getframe().f_code.co_name
        
+        
         fsg_filename = self.getFsgFileName(test_name)
 
         api = configuration_import_api.ConfigurationImportApi(self._conf)
         
         #Import our fsg file
-        import_result = api.import_fsg(fsg_filename,self._forum_fsg_import_password)
+        import_result = api.deploy(fsg_filename,self._forum_fsg_import_password)
         
         self.assertTrue(import_result)
 

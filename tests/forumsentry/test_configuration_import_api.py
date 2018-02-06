@@ -66,7 +66,7 @@ class TestApi(unittest.TestCase):
 
         
     @mock.patch("forumsentry.api.requests.post")
-    def test_configuration_import_api_import_fsg1(self, mock_post):
+    def test_configuration_import_api_deploy1(self, mock_post):
         '''
             Tests when requests gets a successful response from forum
         '''
@@ -81,12 +81,12 @@ class TestApi(unittest.TestCase):
         
         filename = '{0}/../mocks/{1}'.format(whereami,test_name)
          
-        import_result = self._api.import_fsg(filename, password)
+        import_result = self._api.deploy(filename, password)
          
         self.assertTrue(import_result)
 
 
-    def test_configuration_import_api_import_fsg2(self):
+    def test_configuration_import_api_deploy2(self):
         '''
             Tests when the import file doesnt exist
         '''
@@ -95,7 +95,7 @@ class TestApi(unittest.TestCase):
         password = test_name
         filename = 'doesntexist'
         with self.assertRaises(IOError) as e: 
-            self._api.import_fsg(filename, password)
+            self._api.deploy(filename, password)
          
 
         self.assertIn('not found', e.exception.message) 
@@ -103,7 +103,7 @@ class TestApi(unittest.TestCase):
  
  
     @mock.patch("forumsentry.api.requests.post")
-    def test_configuration_import_api_import_fsg3(self, mock_post):
+    def test_configuration_import_api_deploy3(self, mock_post):
         '''
             Tests when requests gets a 500 response from forum
         '''
@@ -119,7 +119,7 @@ class TestApi(unittest.TestCase):
         mock_post.return_value = mock_resp
           
         with self.assertRaises(ForumHTTPError) as e: 
-            text = self._api.import_fsg(filename, password)
+            text = self._api.deploy(filename, password)
           
 
         self.assertEqual(500, e.exception.cause.response.status_code)

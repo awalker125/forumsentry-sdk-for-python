@@ -24,7 +24,7 @@ class ConfigurationImportApi(Api):
         super(ConfigurationImportApi, self).__init__(config=config)
     
 
-    def import_fsg(self,fsg,password):
+    def deploy(self,fsg,password):
         return self._import_fsg(fsg, password)
         
         

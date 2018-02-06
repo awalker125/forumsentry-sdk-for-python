@@ -1,0 +1,11 @@
+{
+  "name": "changeme",
+  "authenticateClient": false,
+  "enabledProtocols": [
+    "TLSv1.2"
+  ],
+  "keyPair": "changeme",
+  "associateDnToUser": false,
+  "useUserAttrOnly": false,
+  "signerGroup": "DEFAULT"
+}

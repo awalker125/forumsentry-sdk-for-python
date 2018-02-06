@@ -1,0 +1,9 @@
+{
+  "name": "changeme",
+  "enabledProtocols": [
+    "TLSv1.1"
+  ],
+  "ignoreHostnameVerification": false,
+  "keyPair": "",
+  "signerGroup": "DEFAULT"
+}
