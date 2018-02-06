@@ -82,8 +82,8 @@ class TestApi(unittest.TestCase):
         self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
     
-    @mock.patch("forumsentry.api.requests.put")
-    def test_ssl_initiation_policy_api_set1(self, mock_put):
+    @mock.patch("forumsentry.api.requests.post")
+    def test_ssl_initiation_policy_api_set1(self, mock_post):
         '''
             Tests when requests gets a successful response from forum
         '''
@@ -91,7 +91,7 @@ class TestApi(unittest.TestCase):
          
         #mock_get.return_value  = self.loadMock(test_name)
         mock_resp = helper._mock_response(test_name=test_name)
-        mock_put.return_value = mock_resp
+        mock_post.return_value = mock_resp
          
         model = SslInitiationPolicy()  # noqa: E501
         model.name = test_name
@@ -106,8 +106,8 @@ class TestApi(unittest.TestCase):
         self.assertEqual(created, model)
         self.assertEqual(created.name, test_name)
 
-    @mock.patch("forumsentry.api.requests.put")
-    def test_ssl_initiation_policy_api_set2(self, mock_put):
+    @mock.patch("forumsentry.api.requests.post")
+    def test_ssl_initiation_policy_api_set2(self, mock_post):
         '''
             Tests when requests gets a 500 response from forum
         '''
@@ -116,7 +116,7 @@ class TestApi(unittest.TestCase):
         model = SslInitiationPolicy(key_pair="bill")  # noqa: E501
         model.name = "bill"
         mock_resp = helper._mock_response(status=500,raise_for_status="internal error")
-        mock_put.return_value = mock_resp
+        mock_post.return_value = mock_resp
          
         with self.assertRaises(ForumHTTPError) as e: 
             created = self._api.set("bill",model)  
@@ -125,8 +125,8 @@ class TestApi(unittest.TestCase):
         self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
 
-    @mock.patch("forumsentry.api.requests.put")
-    def test_ssl_initiation_policy_api_set3(self, mock_put):
+    @mock.patch("forumsentry.api.requests.post")
+    def test_ssl_initiation_policy_api_set3(self, mock_post):
         '''
             Tests when an invalid object for type is passed
         '''
