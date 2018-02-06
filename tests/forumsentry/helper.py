@@ -42,7 +42,9 @@ def _mock_response(
 
         if os.path.isfile(filename):
             with open(filename, 'r') as f:
-                mock_resp.text = f.read()       
+                mock_resp.text = f.read()
+#         else:
+#             print "could not find {0}".format(filename)     
         
         return mock_resp
 

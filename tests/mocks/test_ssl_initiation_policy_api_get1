@@ -1,0 +1,10 @@
+{
+  "name": "bill",
+  "enabledProtocols": [
+    "TLSv1.2",
+    "TLSv1.1"
+  ],
+  "ignoreHostnameVerification": false,
+  "keyPair": "",
+  "signerGroup": "bill"
+}

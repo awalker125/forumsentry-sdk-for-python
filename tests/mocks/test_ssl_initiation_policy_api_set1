@@ -1,0 +1,10 @@
+{
+  "name": "test_ssl_initiation_policy_api_set1",
+  "enabledProtocols": [
+    "TLSv1.2",
+    "TLSv1.1"
+  ],
+  "ignoreHostnameVerification": false,
+  "keyPair": "test_ssl_initiation_policy_api_set1",
+  "signerGroup": "test_ssl_initiation_policy_api_set1"
+}

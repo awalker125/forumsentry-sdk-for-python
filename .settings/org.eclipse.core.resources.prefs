@@ -9,6 +9,7 @@ encoding//forumsentry_api/models/html_policy.py=utf-8
 encoding//forumsentry_api/models/http_listener_policy.py=utf-8
 encoding//forumsentry_api/models/http_remote_policy.py=utf-8
 encoding//forumsentry_api/models/json_policies.py=utf-8
+encoding//forumsentry_api/models/ssl_initiation_policy.py=utf-8
 encoding//forumsentry_api/models/ssl_termination_policy.py=utf-8
 encoding//forumsentry_api/models/task_list.py=utf-8
 encoding//forumsentry_api/models/task_list_group.py=utf-8
