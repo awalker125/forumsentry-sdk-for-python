@@ -10,5 +10,7 @@ from forumsentry.json_policies_api import JsonPoliciesApi
 from forumsentry.key_pairs_api import KeyPairsApi
 from forumsentry.task_list_groups_api import TaskListGroupsApi
 from forumsentry.task_lists_api import TaskListsApi
+from forumsentry.ssl_initiation_policy_api import SslInitiationPolicyApi
+from forumsentry.ssl_termination_policy_api import SslTerminationPolicyApi
 
 
