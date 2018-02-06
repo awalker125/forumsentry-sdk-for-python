@@ -92,7 +92,8 @@ class SslTerminationPolicyApi(Api):
         if not isinstance(obj, self.str2Class(self.policy_type)):
             raise InvalidTypeError(obj)
         
-        target_endpoint = "{0}/{1}".format(self.path, name)
+        #This doesnt follow the normal pattern. It doesnt take /name
+        target_endpoint = "{0}".format(self.path)
         
         self._logger.debug("target_endpoint: {0}".format(target_endpoint))
         
@@ -103,7 +104,7 @@ class SslTerminationPolicyApi(Api):
         
         try:
             # this method will be patched for unit test
-            j = self._request("PUT", target_endpoint, serialized_json)
+            j = self._request("POST", target_endpoint, serialized_json)
             
             self._logger.debug(j)
             

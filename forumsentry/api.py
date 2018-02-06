@@ -66,7 +66,7 @@ class Api(object):
     def _request(self, verb, endpoint, body=None):
         """Request a url.
         :param endpoint: The api endpoint we want to call.
-        :param verb: GET, PUT, or DELETE.
+        :param verb: GET, PUT, POST or DELETE.
         :param body: json to be sent in body of request
         :type params: dict
         :raises requests.exceptions.HTTPError: When response code is not successful.
@@ -89,6 +89,8 @@ class Api(object):
             resp = requests.get(request_url, auth=auth, headers=headers,verify=self.config.verify_ssl)
         elif verb == 'PUT':
             resp = requests.put(request_url, auth=auth, headers=headers, data=data,verify=self.config.verify_ssl)
+        elif verb == 'POST':
+            resp = requests.post(request_url, auth=auth, headers=headers, data=data,verify=self.config.verify_ssl)
         elif verb == 'DELETE':
             resp = requests.delete(request_url, auth=auth, headers=headers,verify=self.config.verify_ssl)
         else:

@@ -83,7 +83,7 @@ class TestApi(unittest.TestCase):
         self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
     
-    @mock.patch("forumsentry.api.requests.put")
+    @mock.patch("forumsentry.api.requests.post")
     def test_ssl_termination_policy_api_set1(self, mock_put):
         '''
             Tests when requests gets a successful response from forum
@@ -107,7 +107,7 @@ class TestApi(unittest.TestCase):
         self.assertEqual(created, model)
         self.assertEqual(created.name, test_name)
 
-    @mock.patch("forumsentry.api.requests.put")
+    @mock.patch("forumsentry.api.requests.post")
     def test_ssl_termination_policy_api_set2(self, mock_put):
         '''
             Tests when requests gets a 500 response from forum
@@ -126,7 +126,7 @@ class TestApi(unittest.TestCase):
         self.assertEqual(500, e.exception.cause.response.status_code)
         self.assertIn('internal error', e.exception.message)
 
-    @mock.patch("forumsentry.api.requests.put")
+    @mock.patch("forumsentry.api.requests.post")
     def test_ssl_termination_policy_api_set3(self, mock_put):
         '''
             Tests when an invalid object for type is passed
