@@ -8,7 +8,7 @@ from setuptools import find_packages
 #Change this on major/minor version number change. You must create a git tag at the same tag called with the same value
 # git tag "0.1"
 # git push --tags
-VERSION = "0.17"
+VERSION = "0.18"
 
 
 def __path(filename):

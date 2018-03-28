@@ -1,0 +1,16 @@
+{
+  "useBasicAuth": false,
+  "proxyPolicy": "",
+  "SSLInitiationPolicy": "",
+  "tcpConnectionTimeout": 0,
+  "httpAuthenticationUserPolicy": "",
+  "useChunking": false,
+  "tcpReadTimeout": 0,
+  "name": "bill",
+  "enableSSL": false,
+  "remoteAuthentication": "",
+  "remotePort": 0,
+  "enabled": false,
+  "remoteServer": "",
+  "processResponse": false
+}
